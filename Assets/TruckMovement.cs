@@ -17,6 +17,8 @@ public class TruckMovement : MonoBehaviour
 
     [SerializeField] private float _currentSpeed;
 
+    [SerializeField] private bool _isActive;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,11 +28,20 @@ public class TruckMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!_isActive)
+            return;
+
         Turn(Input.GetAxis("Horizontal"));
         Accelerate(Input.GetAxis("Vertical"));
 
         _currentSpeed = transform.InverseTransformDirection(_rigidbody.velocity).z;
         _velocity = _rigidbody.velocity;
+
+        if (_currentSpeed < .5f && Input.GetButtonDown("Action"))
+        {
+            ToggleActive();
+            FindObjectOfType<TruckDoor>().ExitTruck();
+        }
 
     }
 
@@ -46,5 +57,10 @@ public class TruckMovement : MonoBehaviour
             return;
 
         _rigidbody.AddForce(transform.forward * (yAxis * _accelerationForce), ForceMode.Acceleration);
+    }
+
+    public void ToggleActive()
+    {
+        _isActive = !_isActive;
     }
 }
