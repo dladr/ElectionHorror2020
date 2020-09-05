@@ -9,11 +9,12 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private bool _isActive;
     [SerializeField] private Rigidbody _rigidbody;
+    [SerializeField] private OrbManager _orbManager;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        _orbManager = GetComponentInChildren<OrbManager>();
     }
 
     // Update is called once per frame
@@ -21,6 +22,9 @@ public class PlayerController : MonoBehaviour
     {
         if (!_isActive)
             return;
+
+        if(Input.GetButtonDown("Action"))
+            _orbManager.StartAttack();
 
         float xInput = Input.GetAxisRaw("Horizontal");
         float yInput = Input.GetAxisRaw("Vertical");
