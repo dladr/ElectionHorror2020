@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private OrbManager _orbManager;
 
+    [SerializeField] private float _currentYRotation;
+
    
     void Awake()
     {
@@ -50,6 +52,11 @@ public class PlayerController : MonoBehaviour
     {
         GetComponent<Renderer>().enabled = true;
         _orbManager.HideOrbs(false);
+    }
+
+    public void ResetRotation()
+    {
+        transform.eulerAngles = new Vector3(0, _currentYRotation, 0);
     }
 
     [Button]

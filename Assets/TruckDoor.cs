@@ -56,7 +56,9 @@ public class TruckDoor : MonoBehaviour
 
     public void ExitTruck()
     {
+        
         _playerObject.transform.SetParent(null);
+        _playerObject.GetComponent<PlayerController>().ResetRotation();
         _mainCamera.transform.SetParent(_playerCameraTransform);
         StartCoroutine(MoveCamera(_playerCameraTransform));
     }
