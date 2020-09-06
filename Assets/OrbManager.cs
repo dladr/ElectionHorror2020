@@ -19,10 +19,13 @@ public class OrbManager : MonoBehaviour
 
     [SerializeField] private bool _canAttack;
 
+    [SerializeField] private bool _externalCanAttack;
+
     // Start is called before the first frame update
     void Awake()
     {
         _numberUnlocked = 1;
+        _canAttack = _externalCanAttack = true;
     }
 
     // Update is called once per frame
@@ -41,15 +44,39 @@ public class OrbManager : MonoBehaviour
         _numberUnlocked++;
     }
 
+    public void SetCanAttack(bool canAttack)
+    {
+        _externalCanAttack = canAttack;
+    }
+
     [Button]
     public void StartAttack()
     {
-        if (!_canAttack)
+        if (!_canAttack || !_externalCanAttack)
             return;
 
         _canAttack = false;
 
         StartCoroutine(Attack());
+    }
+
+    public void HideOrbs(bool isHiding)
+    {
+        if (isHiding)
+        {
+            foreach (Transform orbTransform in _orbTransforms)
+            {
+                orbTransform.GetComponent<Renderer>().enabled = false;
+            }
+        }
+
+        else
+        {
+            foreach (Transform orbTransform in _orbTransforms)
+            {
+                orbTransform.GetComponent<Renderer>().enabled = true;
+            }
+        }
     }
 
     IEnumerator Attack()

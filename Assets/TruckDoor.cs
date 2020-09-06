@@ -29,6 +29,7 @@ public class TruckDoor : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             _isPlayerPresent = true;
+            other.GetComponentInChildren<OrbManager>().SetCanAttack(false);
         }
     }
 
@@ -37,6 +38,7 @@ public class TruckDoor : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             _isPlayerPresent = false;
+            other.GetComponentInChildren<OrbManager>().SetCanAttack(true);
         }
     }
 
@@ -47,7 +49,7 @@ public class TruckDoor : MonoBehaviour
         _playerObject.transform.SetParent(_drivingCameraTransform);
 
         //TODO: Cool disappear of character
-        _playerObject.GetComponent<MeshRenderer>().enabled = false;
+        _playerObject.GetComponent<PlayerController>().Disappear();
 
         StartCoroutine(MoveCamera(_drivingCameraTransform));
     }
@@ -64,7 +66,8 @@ public class TruckDoor : MonoBehaviour
     {
         while (Vector3.Distance(_mainCamera.transform.position, destinationTransform.position) > _threshold || Vector3.Distance(_mainCamera.transform.eulerAngles, destinationTransform.eulerAngles) > _threshold)
         {
-            _mainCamera.transform.eulerAngles = Vector3.MoveTowards(_mainCamera.transform.eulerAngles, destinationTransform.eulerAngles, _cameraSpeed * 20 * Time.deltaTime);
+            _mainCamera.transform.rotation = Quaternion.RotateTowards(_mainCamera.transform.rotation, destinationTransform.rotation, _cameraSpeed * 20 * Time.deltaTime);
+           // _mainCamera.transform.eulerAngles = Vector3.MoveTowards(_mainCamera.transform.eulerAngles, destinationTransform.eulerAngles, _cameraSpeed * 20 * Time.deltaTime);
             _mainCamera.transform.position = Vector3.MoveTowards(_mainCamera.transform.position, destinationTransform.position, _cameraSpeed  * Time.deltaTime);
            
             yield return new  WaitForEndOfFrame();
@@ -74,8 +77,9 @@ public class TruckDoor : MonoBehaviour
             _truckMovement.ToggleActive();
         else
         {
+            _playerObject.GetComponent<PlayerController>().Reappear();
             _playerObject.GetComponent<PlayerController>().ToggleIsActive();
-            _playerObject.GetComponent<MeshRenderer>().enabled = true;
+            
         }
 
         yield return null;
