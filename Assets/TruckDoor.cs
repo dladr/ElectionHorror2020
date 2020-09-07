@@ -13,11 +13,13 @@ public class TruckDoor : MonoBehaviour
     [SerializeField] private float _cameraSpeed;
     [SerializeField] private float _threshold;
     [SerializeField] private TruckMovement _truckMovement;
+    [SerializeField] private float _cooldownTime;
+    [SerializeField] private bool _isCoolingDown;
 
     
     void Update()
     {
-        if (_isPlayerPresent && Input.GetButtonDown("Action"))
+        if (_isPlayerPresent && Input.GetButtonDown("Action") && !_isCoolingDown)
         {
             _isPlayerPresent = false;
             EnterTruck();
@@ -44,6 +46,8 @@ public class TruckDoor : MonoBehaviour
 
     void EnterTruck()
     {
+        _isCoolingDown = true;
+
         _playerObject.GetComponent<PlayerController>().ToggleIsActive();
         _mainCamera.transform.SetParent(_drivingCameraTransform);
         _playerObject.transform.SetParent(_drivingCameraTransform);
@@ -56,13 +60,22 @@ public class TruckDoor : MonoBehaviour
 
     public void ExitTruck()
     {
-        
+        if (_isCoolingDown)
+            return;
+
+        _isCoolingDown = true;
+
+        _truckMovement.ToggleActive();
         _playerObject.transform.SetParent(null);
         _playerObject.GetComponent<PlayerController>().ResetRotation();
         _mainCamera.transform.SetParent(_playerCameraTransform);
         StartCoroutine(MoveCamera(_playerCameraTransform));
     }
 
+    void ResetCoolDown()
+    {
+        _isCoolingDown = false;
+    }
 
     IEnumerator MoveCamera(Transform destinationTransform)
     {
@@ -80,9 +93,9 @@ public class TruckDoor : MonoBehaviour
         else
         {
             _playerObject.GetComponent<PlayerController>().Reappear();
-            _playerObject.GetComponent<PlayerController>().ToggleIsActive();
-            
         }
+
+        Invoke(nameof(ResetCoolDown), _cooldownTime);
 
         yield return null;
     }

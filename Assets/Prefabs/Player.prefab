@@ -487,7 +487,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6644634434649582046}
   m_LocalRotation: {x: 0.2588191, y: -0, z: -0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: 2.1, z: -14.249992}
+  m_LocalPosition: {x: 0, y: 2, z: -18.29}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6644634434407966201}
@@ -695,7 +695,6 @@ GameObject:
   - component: {fileID: 6644634434730259212}
   - component: {fileID: 6644634434730259213}
   - component: {fileID: 6644634434730259210}
-  - component: {fileID: 6644634434730259211}
   - component: {fileID: 6644634434730259208}
   - component: {fileID: 535146750}
   - component: {fileID: 535146751}
@@ -771,19 +770,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6644634434730259211
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6644634434730259209}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &6644634434730259208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -800,6 +786,8 @@ MonoBehaviour:
   _isActive: 1
   _rigidbody: {fileID: 535146750}
   _orbManager: {fileID: 0}
+  _collider: {fileID: 0}
+  _currentYRotation: 0
 --- !u!54 &535146750
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -808,7 +796,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6644634434730259209}
   serializedVersion: 2
-  m_Mass: 0.0000001
+  m_Mass: 0.01
   m_Drag: 1
   m_AngularDrag: 1
   m_UseGravity: 1
@@ -896,6 +884,7 @@ MonoBehaviour:
   _numberOfRotations: 3
   _coolDownTime: 2
   _canAttack: 1
+  _externalCanAttack: 0
 --- !u!1 &6644634435418728764
 GameObject:
   m_ObjectHideFlags: 0

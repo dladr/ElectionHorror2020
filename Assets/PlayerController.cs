@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool _isActive;
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private OrbManager _orbManager;
+    [SerializeField] private Collider _collider;
 
     [SerializeField] private float _currentYRotation;
 
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         _orbManager = GetComponentInChildren<OrbManager>();
+        _collider = GetComponent<Collider>();
     }
 
     
@@ -45,13 +47,18 @@ public class PlayerController : MonoBehaviour
     public void Disappear()
     {
         GetComponent<Renderer>().enabled = false;
+        _rigidbody.isKinematic = true;
+        _collider.enabled = false;
         _orbManager.HideOrbs(true);
     }
 
     public void Reappear()
     {
         GetComponent<Renderer>().enabled = true;
+        _rigidbody.isKinematic = false;
+        _collider.enabled = true;
         _orbManager.HideOrbs(false);
+        ToggleIsActive();
     }
 
     public void ResetRotation()

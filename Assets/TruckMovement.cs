@@ -39,7 +39,6 @@ public class TruckMovement : MonoBehaviour
 
         if (_currentSpeed < .5f && Input.GetButtonDown("Action"))
         {
-            ToggleActive();
             FindObjectOfType<TruckDoor>().ExitTruck();
         }
 
