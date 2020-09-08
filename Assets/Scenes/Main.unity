@@ -395,7 +395,7 @@ GameObject:
   - component: {fileID: 1349463319}
   - component: {fileID: 1349463318}
   m_Layer: 0
-  m_Name: Plane
+  m_Name: ActualCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -900,30 +900,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 8510927, guid: 9cd05b2f646491347b425739cc192672, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8510927, guid: 9cd05b2f646491347b425739cc192672, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8510927, guid: 9cd05b2f646491347b425739cc192672, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8510928, guid: 9cd05b2f646491347b425739cc192672, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 519420028, guid: 9cd05b2f646491347b425739cc192672, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1079690647, guid: 9cd05b2f646491347b425739cc192672, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.25
-      objectReference: {fileID: 0}
     - target: {fileID: 1123001864, guid: 9cd05b2f646491347b425739cc192672, type: 3}
       propertyPath: _playerObject
       value: 
@@ -936,30 +912,6 @@ PrefabInstance:
       propertyPath: _mainCamera
       value: 
       objectReference: {fileID: 1656645130}
-    - target: {fileID: 1123001864, guid: 9cd05b2f646491347b425739cc192672, type: 3}
-      propertyPath: _cooldownTime
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1238495568, guid: 9cd05b2f646491347b425739cc192672, type: 3}
-      propertyPath: m_Mass
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1238495568, guid: 9cd05b2f646491347b425739cc192672, type: 3}
-      propertyPath: m_Drag
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1238495568, guid: 9cd05b2f646491347b425739cc192672, type: 3}
-      propertyPath: m_AngularDrag
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1238495570, guid: 9cd05b2f646491347b425739cc192672, type: 3}
-      propertyPath: _accelerationForce
-      value: 4.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 1660856216, guid: 9cd05b2f646491347b425739cc192672, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 919358898343668700, guid: 9cd05b2f646491347b425739cc192672, type: 3}
       propertyPath: m_Name
       value: Truck
