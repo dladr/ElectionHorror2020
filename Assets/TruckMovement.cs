@@ -55,7 +55,7 @@ public class TruckMovement : MonoBehaviour
         if (_currentSpeed >= _maxSpeed && yAxis > 0 || _currentSpeed <= _minSpeed && yAxis < 0)
             return;
 
-        _rigidbody.AddForce(transform.forward * (yAxis * _accelerationForce), ForceMode.Acceleration);
+        _rigidbody.AddForce(transform.forward * (yAxis * _accelerationForce), ForceMode.Force);
     }
 
     public void ToggleActive()
