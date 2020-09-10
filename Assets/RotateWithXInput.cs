@@ -5,6 +5,8 @@ using UnityEngine;
 public class RotateWithXInput : MonoBehaviour
 {
     [SerializeField] private float maxYRotation;
+
+    [SerializeField] private Vector3 rotationVector3;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +21,8 @@ public class RotateWithXInput : MonoBehaviour
 
     void RotateTransform(float xInput)
     {
-        transform.localEulerAngles = new Vector3(0, xInput * maxYRotation, 0);
+        transform.localEulerAngles = rotationVector3 * xInput * maxYRotation;
     }
 }
+
+
