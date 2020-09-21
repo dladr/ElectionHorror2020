@@ -8,12 +8,24 @@ public class MaterialSetter : MonoBehaviour
 
     [SerializeField] private Material _material2;
 
-    private Renderer[] _renderers;
+    [SerializeField] private bool _switchMaterialsOnAwake = true;
+
+    [SerializeField] private Color _ghostColor;
+
+    [SerializeField] private bool _isGhost;
+    [SerializeField] private string _initialMaterialsReplacementExtension;
+
+   [SerializeField] private Renderer[] _renderers;
     // Start is called before the first frame update
     void Awake()
     {
         _renderers = GetComponentsInChildren<Renderer>();
-        SwitchMaterials(_material1, _material2);
+
+        if(_switchMaterialsOnAwake)
+           SwitchMaterials(_material1, _material2);
+
+        if(_isGhost)
+            SetupGhosts();
     }
 
     // Update is called once per frame
@@ -28,6 +40,19 @@ public class MaterialSetter : MonoBehaviour
         {
             if (renderer.sharedMaterial == OriginalMaterial)
                 renderer.material = replacementMaterial;
+        }
+    }
+
+    void SetupGhosts()
+    {
+        MaterialPropertyBlock ghostMaterialPropertyBlock = new MaterialPropertyBlock();
+        ghostMaterialPropertyBlock.SetColor("_Color", _ghostColor);
+        ghostMaterialPropertyBlock.SetColor("_EmissionColor", _ghostColor);
+
+        foreach (Renderer renderer in _renderers)
+        {
+            renderer.SetPropertyBlock(ghostMaterialPropertyBlock);
+            // renderer.material.EnableKeyword("_Emission");
         }
     }
 
