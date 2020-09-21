@@ -11,6 +11,8 @@ public class PostalBox : MonoBehaviour
    [SerializeField] private bool CanCollectMail;
 
     OrbManager _orbManager;
+
+    [SerializeField] private MaterialSetter[] _materialSetters;
     // Start is called before the first frame update
     void Awake()
     {
@@ -36,6 +38,11 @@ public class PostalBox : MonoBehaviour
         _orbManager.UnlockOrb();
         _orbManager.SetCanAttack(true);
         _orbManager.StartAttack();
+
+        foreach (MaterialSetter materialSetter in _materialSetters)
+        {
+            materialSetter.TurnOffGlow();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
