@@ -6,6 +6,7 @@ using UnityEngine;
 public class OrbManager : MonoBehaviour
 {
     [SerializeField] private Transform[] _orbTransforms;
+    [SerializeField] private Orb[] _orbs;
 
     [SerializeField] private int _numberUnlocked;
 
@@ -81,6 +82,12 @@ public class OrbManager : MonoBehaviour
 
     IEnumerator Attack()
     {
+        foreach (Orb orb in _orbs)
+        {
+            orb.Arm();
+            orb.Reactivate();
+        }
+
         float degreesRotated = 0;
 
         int orbDirection = 1;
@@ -106,6 +113,11 @@ public class OrbManager : MonoBehaviour
             orbTransform.localPosition = Vector3.zero;
         }
 
+        foreach (Orb orb in _orbs)
+        {
+            orb.Deactivate();
+        }
+
         float timeElapsed = 0;
 
         while (timeElapsed < _coolDownTime)
@@ -115,6 +127,12 @@ public class OrbManager : MonoBehaviour
         }
 
         _canAttack = true;
+
+        foreach (Orb orb in _orbs)
+        {
+           orb.Reactivate();
+           orb.Disarm();
+        }
 
         yield return null;
     }

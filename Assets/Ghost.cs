@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Helpers;
 using Sirenix.OdinInspector;
@@ -14,6 +15,9 @@ public class Ghost : MonoBehaviour
     [SerializeField] private Collider _collider;
     [SerializeField] private Animator _paperAnim;
     [SerializeField] private Transform _paperTransform;
+    [SerializeField] private ParticleSystem _particleSystem;
+
+    [SerializeField] private int _health;
     private PlayerController _playerController;
 
     private static readonly int IsHorizontal = Animator.StringToHash("IsHorizontal");
@@ -71,6 +75,7 @@ public class Ghost : MonoBehaviour
         _paperTransform.gameObject.SetActive(false);
         _rigidbody.isKinematic = true;
         _collider.enabled = false;
+        _particleSystem.Stop();
     }
 
     public void Reappear()
@@ -85,5 +90,20 @@ public class Ghost : MonoBehaviour
     public void ToggleIsActive()
     {
         _isActive = !_isActive;
+    }
+
+    public void TakeDamage(int damageAmount)
+    {
+        _health -= damageAmount;
+        if(_health <= 0)
+            Disappear();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            other.GetComponent<PlayerController>().TakeDamage();
+        }
     }
 }
