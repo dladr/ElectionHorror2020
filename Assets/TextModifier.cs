@@ -22,17 +22,29 @@ public class TextModifier : MonoBehaviour
         
     }
 
-    void UpdateText(string text)
+   public void UpdateText(string text)
     {
         _textMeshPro.text = text;
     }
 
-    void UpdateColor(Color color)
+  public  void UpdateColor(Color color)
     {
         _textMeshPro.color = color;
     }
+
+  public void UpdateFontStyle(FontStyles fontStyle)
+  {
+      _textMeshPro.fontStyle = fontStyle;
+  }
+
+  public void UpdateTextTrio(string text, Color color, FontStyles fontStyle)
+  {
+      UpdateText(text);
+      UpdateColor(color);
+      UpdateFontStyle(fontStyle);
+  }
     [Button]
-    void Fade(float speed = -1, bool isFadingIn = true)
+   public void Fade(float speed = -1, bool isFadingIn = true)
     {
         if (speed < 0)
             speed = standardFade;
