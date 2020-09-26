@@ -11160,7 +11160,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1418784278}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
@@ -11198,9 +11198,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f1c71b4769a6e143bba4be079fe5909, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _textMeshPro: {fileID: 0}
+  _textMeshPro: {fileID: 856388086}
   _anim: {fileID: 856388084}
-  standardFade: 0.5
+  standardFade: 1
 --- !u!114 &856388086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11230,8 +11230,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 16777215
+  m_fontColor: {r: 1, g: 1, b: 1, a: 0}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -14282,7 +14282,7 @@ RectTransform:
   m_LocalScale: {x: 20.94, y: 19.01, z: 1}
   m_Children: []
   m_Father: {fileID: 1418784278}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -17842,8 +17842,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 856388083}
   - {fileID: 1091911167}
+  - {fileID: 856388083}
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -24665,11 +24665,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf527ae34f763d843ba55cc63aa25f44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _textModifier: {fileID: 0}
-  _screenFader: {fileID: 0}
-  _dialogueStrings: []
-  _dialogueColors: []
-  _dialogueFontStyles: 
+  _textModifier: {fileID: 856388085}
+  _screenFader: {fileID: 1091911168}
+  _dialogueStrings:
+  - Mr. President, paranormal activities have risen drastically in your first term.
+  - FAKE NEWS!
+  - They all died because of Obamacare.
+  - My beautiful GHOST FORCE is cleaning up his mess.
+  - What about concerns that using captured ghosts to power reactors destroys their
+    souls?
+  - It's very green energy.
+  - Very beautiful energy.
+  - Those ghosts were damned anyway. SAD.
+  - Violent ghosts come from violent people.
+  - Real Americans don't haunt you. Read your bible.
+  - You alright, gram gram? Where are your pills?
+  - I'll get them next week when my check comes.
+  - I can put it on my credit card.
+  - Hush now. You wanna help, fill out your ballot so we can mail our votes!
+  _dialogueColors:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 0, g: 1, b: 0.8048501, a: 1}
+  - {r: 1, g: 0, b: 0.87243366, a: 1}
+  - {r: 0, g: 1, b: 0.8048501, a: 1}
+  - {r: 1, g: 0, b: 0.87243366, a: 1}
+  _dialogueFontStyles: 0000000001000000010000000100000000000000010000000100000001000000010000000100000000000000020000000000000002000000
 --- !u!1 &1960614819
 GameObject:
   m_ObjectHideFlags: 0

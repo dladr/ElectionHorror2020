@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class TextModifier : MonoBehaviour
 {
-    [SerializeField] private TextMeshPro _textMeshPro;
+    [SerializeField] private TextMeshProUGUI _textMeshPro;
     [SerializeField] private Animator _anim;
 
     [SerializeField] private float standardFade;
@@ -44,7 +44,7 @@ public class TextModifier : MonoBehaviour
       UpdateFontStyle(fontStyle);
   }
     [Button]
-   public void Fade(float speed = -1, bool isFadingIn = true)
+   public void Fade(bool isFadingIn = true, float speed = -1 )
     {
         if (speed < 0)
             speed = standardFade;
