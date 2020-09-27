@@ -7,6 +7,10 @@ public class GrandmaHouseSequence : MonoBehaviour
 {
     [SerializeField] private TextModifier _textModifier;
     [SerializeField] private ScreenFader _screenFader;
+    [SerializeField] private Animator _grandmaAnim;
+    [SerializeField] private Animator _playerAnim;
+    [SerializeField] private Camera _camera;
+    [SerializeField] private float[] _cameraFOVs;
 
     private bool _hasPlayerHitSpace;
 
@@ -27,6 +31,21 @@ public class GrandmaHouseSequence : MonoBehaviour
     {
         if (Input.GetButtonDown("Action"))
             _hasPlayerHitSpace = true;
+    }
+
+    IEnumerator ZoomCamera(float fOV, float zoomTime)
+    {
+        float timePassed = 0;
+        float startingFOV = _camera.fieldOfView;
+
+        while (timePassed < zoomTime)
+        {
+            timePassed += Time.deltaTime;
+            _camera.fieldOfView = Mathf.Lerp(startingFOV, fOV, timePassed / zoomTime);
+            yield return new WaitForEndOfFrame();
+        }
+
+        yield return null;
     }
 
     IEnumerator Sequence()
@@ -72,6 +91,8 @@ public class GrandmaHouseSequence : MonoBehaviour
         {
             yield return new WaitForEndOfFrame();
         }
+
+        StartCoroutine(ZoomCamera(65, 5f));
 
         _textModifier.Fade(false);
         yield return new WaitForSeconds(.5f);
@@ -135,13 +156,16 @@ public class GrandmaHouseSequence : MonoBehaviour
         _textModifier.Fade();
         _hasPlayerHitSpace = false;
 
-        Debug.Log("Granny started coughing");
+        _grandmaAnim.Play("GrandmaCough");
+
         while (!_hasPlayerHitSpace)
         {
             yield return new WaitForEndOfFrame();
         }
 
-        Debug.Log("Granny stopped coughing");
+        _camera.fieldOfView = 35f;
+
+        _grandmaAnim.Play("GrandmaSit");
 
         _textModifier.Fade(false);
         yield return new WaitForSeconds(.5f);

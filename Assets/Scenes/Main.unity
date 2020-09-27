@@ -14269,7 +14269,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1091911167
 RectTransform:
   m_ObjectHideFlags: 0
@@ -24667,6 +24667,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _textModifier: {fileID: 856388085}
   _screenFader: {fileID: 1091911168}
+  _grandmaAnim: {fileID: 8350296738563220441}
+  _playerAnim: {fileID: 365514435}
+  _camera: {fileID: 962046524}
+  _cameraFOVs:
+  - 95
+  - 35
   _dialogueStrings:
   - Mr. President, paranormal activities have risen drastically in your first term.
   - FAKE NEWS!
