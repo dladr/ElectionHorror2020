@@ -21,11 +21,12 @@ public class OrbManager : MonoBehaviour
     [SerializeField] private bool _canAttack;
 
     [SerializeField] private bool _externalCanAttack;
+    [SerializeField] private Animator _playerAnimator;
 
     // Start is called before the first frame update
     void Awake()
     {
-        _numberUnlocked = 1;
+        _numberUnlocked = 0;
         _canAttack = _externalCanAttack = true;
     }
 
@@ -53,7 +54,7 @@ public class OrbManager : MonoBehaviour
     [Button]
     public void StartAttack()
     {
-        if (!_canAttack || !_externalCanAttack)
+        if (!_canAttack || !_externalCanAttack || _numberUnlocked < 1)
             return;
 
         _canAttack = false;
@@ -82,6 +83,8 @@ public class OrbManager : MonoBehaviour
 
     IEnumerator Attack()
     {
+        _playerAnimator.SetBool("IsHoldingEnvelope", true);
+
         foreach (Orb orb in _orbs)
         {
             orb.Arm();
@@ -117,6 +120,8 @@ public class OrbManager : MonoBehaviour
         {
             orb.Deactivate();
         }
+
+        _playerAnimator.SetBool("IsHoldingEnvelope", false);
 
         float timeElapsed = 0;
 

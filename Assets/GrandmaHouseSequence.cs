@@ -9,6 +9,8 @@ public class GrandmaHouseSequence : MonoBehaviour
     [SerializeField] private ScreenFader _screenFader;
     [SerializeField] private Animator _grandmaAnim;
     [SerializeField] private Animator _playerAnim;
+    [SerializeField] private GameObject _playerGameObject;
+    [SerializeField] private GameObject _dummyPlayer;
     [SerializeField] private Camera _camera;
     [SerializeField] private float[] _cameraFOVs;
     [SerializeField] private GameObject _ballotGameObject;
