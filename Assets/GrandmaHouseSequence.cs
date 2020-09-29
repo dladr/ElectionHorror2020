@@ -11,8 +11,12 @@ public class GrandmaHouseSequence : MonoBehaviour
     [SerializeField] private Animator _playerAnim;
     [SerializeField] private Camera _camera;
     [SerializeField] private float[] _cameraFOVs;
+    [SerializeField] private GameObject _ballotGameObject;
+    [SerializeField] private GameObject _dummyEnvelope;
+    [SerializeField] private GameObject _actualEnvelope;
 
     private bool _hasPlayerHitSpace;
+    private bool _resumeSequence;
 
     [SerializeField] private string[] _dialogueStrings;
     [SerializeField] private Color[] _dialogueColors;
@@ -31,6 +35,11 @@ public class GrandmaHouseSequence : MonoBehaviour
     {
         if (Input.GetButtonDown("Action"))
             _hasPlayerHitSpace = true;
+    }
+
+    public void ResumeSequence()
+    {
+        _resumeSequence = true;
     }
 
     IEnumerator ZoomCamera(float fOV, float zoomTime)
@@ -92,7 +101,7 @@ public class GrandmaHouseSequence : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-        StartCoroutine(ZoomCamera(65, 5f));
+        Coroutine zoomCoroutine = StartCoroutine(ZoomCamera(65, 20f));
 
         _textModifier.Fade(false);
         yield return new WaitForSeconds(.5f);
@@ -163,6 +172,7 @@ public class GrandmaHouseSequence : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
+        StopCoroutine(zoomCoroutine);
         _camera.fieldOfView = 35f;
 
         _grandmaAnim.Play("GrandmaSit");
@@ -212,7 +222,23 @@ public class GrandmaHouseSequence : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-        Debug.Log("Time To Vote");
+        _textModifier.Fade(false, 1);
+        _screenFader.Fade(1, false);
+        yield return new WaitForSeconds(1f);
+        _ballotGameObject.SetActive(true);
+
+        while (!_resumeSequence)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        _resumeSequence = false;
+
+        _grandmaAnim.Play("GrandmaDead");
+        _dummyEnvelope.SetActive(false);
+        _actualEnvelope.SetActive(true);
+        _ballotGameObject.SetActive(false);
+        _screenFader.Fade();
 
         yield return null;
     }

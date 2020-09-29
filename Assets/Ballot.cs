@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Sirenix.Utilities;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 public class Ballot : MonoBehaviour
@@ -10,6 +11,8 @@ public class Ballot : MonoBehaviour
     [SerializeField] private GameObject _lastSelectedGameObject;
     [SerializeField] List<bool> _ballotAnswers;
     [SerializeField] private GameManager _gameManager;
+
+    public UnityEvent OnBallotComplete;
     // Start is called before the first frame update
     void Awake()
     {
@@ -35,5 +38,6 @@ public class Ballot : MonoBehaviour
     public void SubmitBallotToGameManager()
     {
         _gameManager.BallotAnswers = _ballotAnswers;
+        OnBallotComplete.Invoke();
     }
 }
