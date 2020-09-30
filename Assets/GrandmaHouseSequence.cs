@@ -16,6 +16,9 @@ public class GrandmaHouseSequence : MonoBehaviour
     [SerializeField] private GameObject _ballotGameObject;
     [SerializeField] private GameObject _dummyEnvelope;
     [SerializeField] private GameObject _actualEnvelope;
+    [SerializeField] private Vector3 _deadGrannyCamAngle;
+    [SerializeField] private float _deadGrannyFOV;
+    [SerializeField] private Vector3 _ballotCamAngle;
 
     private bool _hasPlayerHitSpace;
     private bool _resumeSequence;
@@ -178,6 +181,7 @@ public class GrandmaHouseSequence : MonoBehaviour
         _camera.fieldOfView = 35f;
 
         _grandmaAnim.Play("GrandmaSit");
+        _playerAnim.Play("PlayerConcerned");
 
         _textModifier.Fade(false);
         yield return new WaitForSeconds(.5f);
@@ -241,6 +245,20 @@ public class GrandmaHouseSequence : MonoBehaviour
         _actualEnvelope.SetActive(true);
         _ballotGameObject.SetActive(false);
         _screenFader.Fade();
+
+        float timePassed = 0;
+        float zoomTime = 10;
+        float startingFOV = _camera.fieldOfView;
+
+        while (timePassed < zoomTime)
+        {
+            timePassed += Time.deltaTime;
+            _camera.fieldOfView = Mathf.Lerp(startingFOV, _deadGrannyFOV, timePassed / zoomTime);
+            _camera.transform.eulerAngles = Vector3.Lerp(Vector3.zero, _deadGrannyCamAngle, timePassed/zoomTime);
+            yield return new WaitForEndOfFrame();
+        }
+
+        yield return null;
 
         yield return null;
     }
