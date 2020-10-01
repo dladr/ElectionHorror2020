@@ -19,6 +19,7 @@ public class GrandmaHouseSequence : MonoBehaviour
     [SerializeField] private Vector3 _deadGrannyCamAngle;
     [SerializeField] private float _deadGrannyFOV;
     [SerializeField] private Vector3 _ballotCamAngle;
+    [SerializeField] private GameObject _ghostToRaise;
 
     private bool _hasPlayerHitSpace;
     private bool _resumeSequence;
@@ -257,6 +258,8 @@ public class GrandmaHouseSequence : MonoBehaviour
             _camera.transform.eulerAngles = Vector3.Lerp(Vector3.zero, _deadGrannyCamAngle, timePassed/zoomTime);
             yield return new WaitForEndOfFrame();
         }
+
+        _ghostToRaise.GetComponent<GhostRaiser>().RaiseGhost();
 
         yield return null;
 
