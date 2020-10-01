@@ -18,8 +18,11 @@ public class GrandmaHouseSequence : MonoBehaviour
     [SerializeField] private GameObject _actualEnvelope;
     [SerializeField] private Vector3 _deadGrannyCamAngle;
     [SerializeField] private float _deadGrannyFOV;
+    [SerializeField] private float _ballotFOV;
     [SerializeField] private Vector3 _ballotCamAngle;
     [SerializeField] private GameObject _ghostToRaise;
+    [SerializeField] private GameObject _playerPaper;
+    [SerializeField] private float _startingFOV;
 
     private bool _hasPlayerHitSpace;
     private bool _resumeSequence;
@@ -33,6 +36,7 @@ public class GrandmaHouseSequence : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _startingFOV = _camera.fieldOfView;
         StartCoroutine(Sequence());
     }
 
@@ -261,7 +265,42 @@ public class GrandmaHouseSequence : MonoBehaviour
 
         _ghostToRaise.GetComponent<GhostRaiser>().RaiseGhost();
 
-        yield return null;
+         timePassed = 0;
+         zoomTime = 5;
+
+         while (timePassed < 10)
+         {
+             timePassed += Time.deltaTime;
+             yield return new WaitForEndOfFrame();
+         }
+
+         timePassed = 0;
+
+
+        while (timePassed < zoomTime)
+        {
+            timePassed += Time.deltaTime;
+            _camera.fieldOfView = Mathf.Lerp(_deadGrannyFOV, _ballotFOV, timePassed / zoomTime);
+            _camera.transform.eulerAngles = Vector3.Lerp(_deadGrannyCamAngle, _ballotCamAngle, timePassed / zoomTime);
+            yield return new WaitForEndOfFrame();
+        }
+
+        timePassed = 0;
+
+        while (timePassed < 3)
+        {
+            timePassed += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+
+        _camera.fieldOfView = _startingFOV;
+        _camera.transform.eulerAngles = Vector3.zero;
+        _dummyPlayer.SetActive(false);
+        _playerPaper.SetActive(true);
+        _playerGameObject.GetComponent<PlayerController>().ToggleIsActive();
+        //TODO: return camera to normal, enable player, disable player stand in!
+
+
 
         yield return null;
     }

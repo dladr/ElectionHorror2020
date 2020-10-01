@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Helpers;
+using JetBrains.Annotations;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
@@ -16,6 +17,9 @@ public class Ghost : MonoBehaviour
     [SerializeField] private Animator _paperAnim;
     [SerializeField] private Transform _paperTransform;
     [SerializeField] private ParticleSystem _particleSystem;
+
+    [SerializeField] private Transform _alternateDestination;
+    public bool IsUsingAlternateDestination;
 
     [SerializeField] private int _health;
     private PlayerController _playerController;
@@ -35,13 +39,13 @@ public class Ghost : MonoBehaviour
         if (!_isActive)
             return;
 
-        TurnTowardsPlayer();
+        TurnTowardsTarget();
         Move(Vector2.zero);
     }
 
     void Move(Vector2 inputDirection)
     {
-
+        
         _rigidbody.velocity = transform.forward * _speed;
 
         UpdatePaperAnim(inputDirection);
@@ -64,9 +68,21 @@ public class Ghost : MonoBehaviour
     }
 
 
-    void TurnTowardsPlayer()
+    void TurnTowardsTarget()
     {
-        transform.LookAt(_playerController.transform);
+        if (IsUsingAlternateDestination)
+        {
+            transform.LookAt(_alternateDestination);
+        }
+
+        else
+        {
+            transform.LookAt(_playerController.transform);
+        }
+
+        _paperTransform.LookAt(_playerController.transform);
+        _paperTransform.Rotate(0, 180, 0);
+
     }
 
 
