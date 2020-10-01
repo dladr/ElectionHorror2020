@@ -251,6 +251,9 @@ public class GrandmaHouseSequence : MonoBehaviour
         _ballotGameObject.SetActive(false);
         _screenFader.Fade();
 
+        //_textModifier.UpdateTextTrio(_dialogueStrings[14], _dialogueColors[14], _dialogueFontStyles[14]);
+        //_textModifier.Fade();
+        
         float timePassed = 0;
         float zoomTime = 10;
         float startingFOV = _camera.fieldOfView;
