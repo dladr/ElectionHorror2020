@@ -100,7 +100,7 @@ public class PlayerController : MonoBehaviour
         _isActive = !_isActive;
     }
 
-    public void TakeDamage()
+    public void TakeDamage(int damage = 1)
     {
         Debug.Log("Ow!");
     }

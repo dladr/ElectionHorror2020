@@ -6444,7 +6444,6 @@ GameObject:
   - component: {fileID: 331272606}
   - component: {fileID: 331272609}
   - component: {fileID: 331272608}
-  - component: {fileID: 331272607}
   m_Layer: 0
   m_Name: Outline
   m_TagString: Untagged
@@ -6466,20 +6465,6 @@ Transform:
   m_Father: {fileID: 1456902304}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &331272607
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 331272605}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &331272608
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -21042,7 +21027,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3043101840131889288, guid: 4b556b1cfe1b8224c8bcd1450789fdf8, type: 3}
       propertyPath: m_Name
-      value: Ghost
+      value: GrandmaGhost
       objectReference: {fileID: 0}
     - target: {fileID: 3043101840131889288, guid: 4b556b1cfe1b8224c8bcd1450789fdf8, type: 3}
       propertyPath: m_IsActive
@@ -21105,6 +21090,10 @@ PrefabInstance:
       value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 3043101840131889335, guid: 4b556b1cfe1b8224c8bcd1450789fdf8, type: 3}
+      propertyPath: DyingEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3043101840131889335, guid: 4b556b1cfe1b8224c8bcd1450789fdf8, type: 3}
       propertyPath: _isActive
       value: 0
       objectReference: {fileID: 0}
@@ -21119,6 +21108,54 @@ PrefabInstance:
     - target: {fileID: 3043101840131889335, guid: 4b556b1cfe1b8224c8bcd1450789fdf8, type: 3}
       propertyPath: IsUsingAlternateDestination
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3043101840131889335, guid: 4b556b1cfe1b8224c8bcd1450789fdf8, type: 3}
+      propertyPath: _fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3043101840131889335, guid: 4b556b1cfe1b8224c8bcd1450789fdf8, type: 3}
+      propertyPath: _fontColor.b
+      value: 0.85642624
+      objectReference: {fileID: 0}
+    - target: {fileID: 3043101840131889335, guid: 4b556b1cfe1b8224c8bcd1450789fdf8, type: 3}
+      propertyPath: _fontColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3043101840131889335, guid: 4b556b1cfe1b8224c8bcd1450789fdf8, type: 3}
+      propertyPath: DyingWords
+      value: make... vote... count...
+      objectReference: {fileID: 0}
+    - target: {fileID: 3043101840131889335, guid: 4b556b1cfe1b8224c8bcd1450789fdf8, type: 3}
+      propertyPath: _fontStyles
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3043101840131889335, guid: 4b556b1cfe1b8224c8bcd1450789fdf8, type: 3}
+      propertyPath: KillingWords
+      value: BACK!
+      objectReference: {fileID: 0}
+    - target: {fileID: 3043101840131889335, guid: 4b556b1cfe1b8224c8bcd1450789fdf8, type: 3}
+      propertyPath: DyingEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3043101840131889335, guid: 4b556b1cfe1b8224c8bcd1450789fdf8, type: 3}
+      propertyPath: DyingEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3043101840131889335, guid: 4b556b1cfe1b8224c8bcd1450789fdf8, type: 3}
+      propertyPath: DyingEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1456902305}
+    - target: {fileID: 3043101840131889335, guid: 4b556b1cfe1b8224c8bcd1450789fdf8, type: 3}
+      propertyPath: DyingEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GrannyDoor, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3043101840131889335, guid: 4b556b1cfe1b8224c8bcd1450789fdf8, type: 3}
+      propertyPath: DyingEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetDoorOpen
+      objectReference: {fileID: 0}
+    - target: {fileID: 3043101840131889335, guid: 4b556b1cfe1b8224c8bcd1450789fdf8, type: 3}
+      propertyPath: DyingEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 3043101840416149356, guid: 4b556b1cfe1b8224c8bcd1450789fdf8, type: 3}
       propertyPath: m_LocalRotation.x
@@ -22900,7 +22937,6 @@ GameObject:
   - component: {fileID: 1210625440}
   - component: {fileID: 1210625443}
   - component: {fileID: 1210625442}
-  - component: {fileID: 1210625441}
   m_Layer: 0
   m_Name: BG
   m_TagString: Untagged
@@ -22922,20 +22958,6 @@ Transform:
   m_Father: {fileID: 1456902304}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &1210625441
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1210625439}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &1210625442
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -26271,6 +26293,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1456902304}
+  - component: {fileID: 1456902306}
+  - component: {fileID: 1456902305}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -26294,6 +26318,33 @@ Transform:
   m_Father: {fileID: 81933711}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!114 &1456902305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1456902303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 382cbb4dc8141bf42b880a4551dfbebb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isOpen: 0
+  _isPlayerPresent: 0
+--- !u!65 &1456902306
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1456902303}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.37, y: 1, z: 0.17}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1458698242
 GameObject:
   m_ObjectHideFlags: 0

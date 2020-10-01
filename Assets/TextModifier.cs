@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using TMPro;
@@ -43,6 +44,22 @@ public class TextModifier : MonoBehaviour
       UpdateColor(color);
       UpdateFontStyle(fontStyle);
   }
+
+  public void AutoTimeFades()
+  {
+      StopAllCoroutines();
+      Fade();
+      StartCoroutine(FadeAfterSeconds(5));
+
+  }
+
+  IEnumerator FadeAfterSeconds(float seconds)
+  {
+      yield return new WaitForSeconds(seconds);
+      Fade(false);
+      yield return null;
+  }
+
     [Button]
    public void Fade(bool isFadingIn = true, float speed = -1 )
     {

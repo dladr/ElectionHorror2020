@@ -4,8 +4,11 @@ using System.Collections.Generic;
 using Assets.Scripts.Helpers;
 using JetBrains.Annotations;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Ghost : MonoBehaviour
 {
@@ -17,11 +20,19 @@ public class Ghost : MonoBehaviour
     [SerializeField] private Animator _paperAnim;
     [SerializeField] private Transform _paperTransform;
     [SerializeField] private ParticleSystem _particleSystem;
+    [SerializeField] private TextModifier _textModifier;
+    [SerializeField] private string DyingWords;
+    [SerializeField] private string KillingWords;
+    [SerializeField] private FontStyles _fontStyles;
+    [SerializeField] private Color _fontColor;
 
     [SerializeField] private Transform _alternateDestination;
     public bool IsUsingAlternateDestination;
 
     [SerializeField] private int _health;
+    [SerializeField] private int _damage;
+
+    public UnityEvent DyingEvent;
     private PlayerController _playerController;
 
     private static readonly int IsHorizontal = Animator.StringToHash("IsHorizontal");
@@ -29,6 +40,7 @@ public class Ghost : MonoBehaviour
 
     void Awake()
     {
+        _textModifier = SingletonManager.Get<TextModifier>();
         _collider = GetComponent<Collider>();
         _playerController = SingletonManager.Get<PlayerController>();
     }
@@ -88,6 +100,12 @@ public class Ghost : MonoBehaviour
 
     public void Disappear()
     {
+        if (!DyingWords.IsNullOrWhitespace())
+        {
+            _textModifier.UpdateTextTrio(DyingWords, _fontColor, _fontStyles);
+            _textModifier.AutoTimeFades();
+        }
+        DyingEvent.Invoke();
         _paperTransform.gameObject.SetActive(false);
         _rigidbody.isKinematic = true;
         _collider.enabled = false;
@@ -120,6 +138,8 @@ public class Ghost : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             other.GetComponent<PlayerController>().TakeDamage();
+            _textModifier.UpdateTextTrio(KillingWords, _fontColor, _fontStyles);
+            _textModifier.AutoTimeFades();
         }
     }
 }
