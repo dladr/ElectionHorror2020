@@ -2054,6 +2054,7 @@ GameObject:
   - component: {fileID: 8506524336191921022}
   - component: {fileID: 3043101840131889335}
   - component: {fileID: 8115259258023054667}
+  - component: {fileID: 2117440581171896425}
   m_Layer: 0
   m_Name: Ghost
   m_TagString: Ghost
@@ -2136,6 +2137,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ba9a92dc864874419b0794d7d5fbb46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _startingColor: {r: 0, g: 0, b: 0, a: 0}
+--- !u!114 &2117440581171896425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3043101840131889288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 518988c48b405574486371166b7b8a2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3043101840148746628
@@ -3411,7 +3425,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3043101840829932526}
-  - component: {fileID: 8098090270975167801}
   m_Layer: 0
   m_Name: Side
   m_TagString: Untagged
@@ -3437,25 +3450,6 @@ Transform:
   m_Father: {fileID: 3043101839753982232}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8098090270975167801
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3043101840829932525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5496d4ba452521448848a4de957d0a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _material1: {fileID: 0}
-  _material2: {fileID: 0}
-  _switchMaterialsOnAwake: 0
-  _ghostColor: {r: 0.3066733, g: 1, b: 0, a: 1}
-  _isGhost: 1
-  _initialMaterialsReplacementExtension: 
-  _renderers: []
 --- !u!1 &3043101840848651028
 GameObject:
   m_ObjectHideFlags: 0
@@ -3465,7 +3459,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3043101840848651029}
-  - component: {fileID: 8098090271665922015}
   m_Layer: 0
   m_Name: Front
   m_TagString: Untagged
@@ -3491,25 +3484,6 @@ Transform:
   m_Father: {fileID: 3043101839753982232}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8098090271665922015
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3043101840848651028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5496d4ba452521448848a4de957d0a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _material1: {fileID: 0}
-  _material2: {fileID: 0}
-  _switchMaterialsOnAwake: 0
-  _ghostColor: {r: 0.3066733, g: 1, b: 0, a: 1}
-  _isGhost: 1
-  _initialMaterialsReplacementExtension: 
-  _renderers: []
 --- !u!1 &3043101840877877286
 GameObject:
   m_ObjectHideFlags: 0
