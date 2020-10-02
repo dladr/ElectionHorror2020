@@ -45,11 +45,13 @@ public class TextModifier : MonoBehaviour
       UpdateFontStyle(fontStyle);
   }
 
-  public void AutoTimeFades()
+  public void AutoTimeFades(float fadeTime = -1)
   {
-      StopAllCoroutines();
+      if (fadeTime == -1)
+          fadeTime = 5;
+
       Fade();
-      StartCoroutine(FadeAfterSeconds(5));
+      StartCoroutine(FadeAfterSeconds(fadeTime));
 
   }
 
@@ -63,6 +65,8 @@ public class TextModifier : MonoBehaviour
     [Button]
    public void Fade(bool isFadingIn = true, float speed = -1 )
     {
+        StopAllCoroutines();
+
         if (speed < 0)
             speed = standardFade;
 

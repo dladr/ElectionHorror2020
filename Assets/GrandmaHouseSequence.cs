@@ -11,7 +11,7 @@ public class GrandmaHouseSequence : MonoBehaviour
     [SerializeField] private Animator _playerAnim;
     [SerializeField] private GameObject _playerGameObject;
     [SerializeField] private GameObject _dummyPlayer;
-    [SerializeField] private Camera _camera;
+    [SerializeField] private Camera[] _cameras;
     [SerializeField] private float[] _cameraFOVs;
     [SerializeField] private GameObject _ballotGameObject;
     [SerializeField] private GameObject _dummyEnvelope;
@@ -36,7 +36,7 @@ public class GrandmaHouseSequence : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _startingFOV = _camera.fieldOfView;
+        _startingFOV = _cameras[0].fieldOfView;
         StartCoroutine(Sequence());
     }
 
@@ -55,12 +55,16 @@ public class GrandmaHouseSequence : MonoBehaviour
     IEnumerator ZoomCamera(float fOV, float zoomTime)
     {
         float timePassed = 0;
-        float startingFOV = _camera.fieldOfView;
+        float startingFOV = _cameras[0].fieldOfView;
 
         while (timePassed < zoomTime)
         {
             timePassed += Time.deltaTime;
-            _camera.fieldOfView = Mathf.Lerp(startingFOV, fOV, timePassed / zoomTime);
+            foreach (Camera camera1 in _cameras)
+            {
+                camera1.fieldOfView = Mathf.Lerp(startingFOV, fOV, timePassed / zoomTime);
+            }
+           
             yield return new WaitForEndOfFrame();
         }
 
@@ -183,7 +187,12 @@ public class GrandmaHouseSequence : MonoBehaviour
         }
 
         StopCoroutine(zoomCoroutine);
-        _camera.fieldOfView = 35f;
+
+        foreach (Camera camera1 in _cameras)
+        {
+            camera1.fieldOfView = 35f;
+        }
+        
 
         _grandmaAnim.Play("GrandmaSit");
         _playerAnim.Play("PlayerConcerned");
@@ -251,18 +260,46 @@ public class GrandmaHouseSequence : MonoBehaviour
         _ballotGameObject.SetActive(false);
         _screenFader.Fade();
 
-        //_textModifier.UpdateTextTrio(_dialogueStrings[14], _dialogueColors[14], _dialogueFontStyles[14]);
-        //_textModifier.Fade();
+        _textModifier.UpdateTextTrio(_dialogueStrings[14], _dialogueColors[14], _dialogueFontStyles[14]);
+        _textModifier.AutoTimeFades(2);
         
         float timePassed = 0;
         float zoomTime = 10;
-        float startingFOV = _camera.fieldOfView;
+        float startingFOV = _cameras[0].fieldOfView;
+        float nextTime = 3f;
+        int timesHit = 0;
 
         while (timePassed < zoomTime)
         {
             timePassed += Time.deltaTime;
-            _camera.fieldOfView = Mathf.Lerp(startingFOV, _deadGrannyFOV, timePassed / zoomTime);
-            _camera.transform.eulerAngles = Vector3.Lerp(Vector3.zero, _deadGrannyCamAngle, timePassed/zoomTime);
+
+            foreach (Camera camera1 in _cameras)
+            {
+                camera1.fieldOfView = Mathf.Lerp(startingFOV, _deadGrannyFOV, timePassed / zoomTime);
+                camera1.transform.eulerAngles = Vector3.Lerp(Vector3.zero, _deadGrannyCamAngle, timePassed / zoomTime);
+            }
+
+            if (timePassed > nextTime)
+            {
+                if (timesHit == 0)
+                {
+                    _textModifier.UpdateTextTrio(_dialogueStrings[15], _dialogueColors[15], _dialogueFontStyles[15]);
+                    _textModifier.AutoTimeFades(2);
+                    nextTime = 6;
+                    timesHit++;
+
+                }
+
+                else if (timesHit == 1)
+                {
+                    _textModifier.UpdateTextTrio(_dialogueStrings[16], _dialogueColors[16], _dialogueFontStyles[16]);
+                    _textModifier.AutoTimeFades(2);
+                    nextTime = zoomTime + 1;
+                    timesHit++;
+                }
+
+              
+            }
             yield return new WaitForEndOfFrame();
         }
 
@@ -283,8 +320,13 @@ public class GrandmaHouseSequence : MonoBehaviour
         while (timePassed < zoomTime)
         {
             timePassed += Time.deltaTime;
-            _camera.fieldOfView = Mathf.Lerp(_deadGrannyFOV, _ballotFOV, timePassed / zoomTime);
-            _camera.transform.eulerAngles = Vector3.Lerp(_deadGrannyCamAngle, _ballotCamAngle, timePassed / zoomTime);
+
+            foreach (Camera camera1 in _cameras)
+            {
+                camera1.fieldOfView = Mathf.Lerp(_deadGrannyFOV, _ballotFOV, timePassed / zoomTime);
+                camera1.transform.eulerAngles = Vector3.Lerp(_deadGrannyCamAngle, _ballotCamAngle, timePassed / zoomTime);
+            }
+            
             yield return new WaitForEndOfFrame();
         }
 
@@ -296,8 +338,12 @@ public class GrandmaHouseSequence : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-        _camera.fieldOfView = _startingFOV;
-        _camera.transform.eulerAngles = Vector3.zero;
+        foreach (Camera camera1 in _cameras)
+        {
+            camera1.fieldOfView = _startingFOV;
+            camera1.transform.eulerAngles = Vector3.zero;
+        }
+      
         _dummyPlayer.SetActive(false);
         _playerPaper.SetActive(true);
         _playerGameObject.GetComponent<PlayerController>().ToggleIsActive();
