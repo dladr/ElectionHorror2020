@@ -181,7 +181,7 @@ public class Ghost : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            other.GetComponent<PlayerController>().TakeDamage();
+            other.GetComponent<PlayerController>().TakeDamage(_damage);
             _textModifier.UpdateTextTrio(KillingWords, _fontColor, _fontStyles);
             _textModifier.AutoTimeFades();
         }

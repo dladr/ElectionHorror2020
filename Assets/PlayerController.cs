@@ -105,10 +105,21 @@ public class PlayerController : MonoBehaviour
         _isActive = !_isActive;
     }
 
+    public void SetActive()
+    {
+        _isActive = true;
+    }
+
+    public void Deactivate()
+    {
+        _isActive = false;
+    }
+
     public void TakeDamage(int damage = 1)
     {
         if (damage > 0)
         {
+            ToggleIsActive();
             _gameManager.LastCheckPoint.Reset();
         }
     }

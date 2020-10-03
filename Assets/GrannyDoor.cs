@@ -9,6 +9,10 @@ public class GrannyDoor : MonoBehaviour
 
     [SerializeField] private bool _isPlayerPresent;
 
+    [SerializeField] private CheckPoint _firstCheckPoint;
+
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,7 +31,7 @@ public class GrannyDoor : MonoBehaviour
         if (_isOpen)
         {
             Debug.Log("Heading outside!");
-            //TODO: Fade out, reposition player, set new checkpoint, fade in
+            _firstCheckPoint.InitializeCheckpoint();
         }
 
         else
