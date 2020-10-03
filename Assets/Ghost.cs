@@ -25,6 +25,7 @@ public class Ghost : MonoBehaviour
     [SerializeField] private string KillingWords;
     [SerializeField] private FontStyles _fontStyles;
     [SerializeField] private Color _fontColor;
+    [SerializeField] private SpriteColorManipulator _spriteColorManipulator;
 
     [SerializeField] private Transform _alternateDestination;
     public bool IsUsingAlternateDestination;
@@ -34,6 +35,7 @@ public class Ghost : MonoBehaviour
 
     public UnityEvent DyingEvent;
     private PlayerController _playerController;
+
 
     private static readonly int IsHorizontal = Animator.StringToHash("IsHorizontal");
 
@@ -124,6 +126,18 @@ public class Ghost : MonoBehaviour
     public void ToggleIsActive()
     {
         _isActive = !_isActive;
+
+        if (!_isActive)
+        {
+            _spriteColorManipulator.UpdateSpriteRendererAlphas(0);
+            _particleSystem.Stop();
+        }
+            
+        else
+        {
+            _spriteColorManipulator.UpdateSpriteRendererColors(_spriteColorManipulator.StartingColor);
+            _particleSystem.Play();
+        }
     }
 
     public void TakeDamage(int damageAmount)

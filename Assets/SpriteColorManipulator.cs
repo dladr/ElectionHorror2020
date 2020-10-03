@@ -6,12 +6,12 @@ public class SpriteColorManipulator : MonoBehaviour
 {
     private SpriteRenderer[] _spriteRenderers;
 
-    [SerializeField] private Color _startingColor;
+    public Color StartingColor;
     // Start is called before the first frame update
     void Awake()
     {
         GetSpriteRenderers();
-        UpdateSpriteRendererColors(_startingColor);
+        UpdateSpriteRendererColors(StartingColor);
     }
 
     void GetSpriteRenderers()
