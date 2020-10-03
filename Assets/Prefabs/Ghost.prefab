@@ -354,79 +354,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &1813311496210648878
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2446074569774479574}
-  - component: {fileID: 3866486263846820095}
-  - component: {fileID: 3262357548671663105}
-  m_Layer: 0
-  m_Name: GhostTrigger
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2446074569774479574
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1813311496210648878}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.844, y: 0, z: -1.502}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 3043101840131889293}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &3866486263846820095
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1813311496210648878}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.76, y: 0.64, z: 2.23}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3262357548671663105
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1813311496210648878}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77cc8caca50a020438381cdd125888b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerGhost:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3043101840131889335}
-        m_TargetAssemblyTypeName: Ghost, Assembly-CSharp
-        m_MethodName: ToggleIsActive
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  IsUsingTrigger: 0
 --- !u!1 &2313926907407966994
 GameObject:
   m_ObjectHideFlags: 0
@@ -2148,7 +2075,6 @@ Transform:
   m_Children:
   - {fileID: 3043101839753982232}
   - {fileID: 8098090271105314301}
-  - {fileID: 2446074569774479574}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2206,6 +2132,7 @@ MonoBehaviour:
   _fontStyles: 0
   _fontColor: {r: 0.7563026, g: 1, b: 0, a: 0.39215687}
   _spriteColorManipulator: {fileID: 8115259258023054667}
+  _ghostTrigger: {fileID: 0}
   _alternateDestination: {fileID: 0}
   IsUsingAlternateDestination: 0
   _health: 1
@@ -2213,6 +2140,7 @@ MonoBehaviour:
   DyingEvent:
     m_PersistentCalls:
       m_Calls: []
+  _isStartingActive: 0
 --- !u!114 &8115259258023054667
 MonoBehaviour:
   m_ObjectHideFlags: 0

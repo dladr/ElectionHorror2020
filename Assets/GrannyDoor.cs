@@ -27,6 +27,7 @@ public class GrannyDoor : MonoBehaviour
         if (_isOpen)
         {
             Debug.Log("Heading outside!");
+            //TODO: Fade out, reposition player, set new checkpoint, fade in
         }
 
         else

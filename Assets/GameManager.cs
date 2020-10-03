@@ -5,6 +5,9 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public List<bool> BallotAnswers;
+
+    public CheckPoint LastCheckPoint;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,5 +18,10 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void UpdateLastCheckPoint(CheckPoint checkPoint)
+    {
+        LastCheckPoint = checkPoint;
     }
 }

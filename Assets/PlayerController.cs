@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Helpers;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
@@ -18,6 +19,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Animator _paperAnim;
     [SerializeField] private Transform _paperTransform;
 
+    private GameManager _gameManager;
+
+
     private static readonly int IsHorizontal = Animator.StringToHash("IsHorizontal");
     private static readonly int HorizontalInput = Animator.StringToHash("HorizontalInput");
     private static readonly int VerticalInput = Animator.StringToHash("VerticalInput");
@@ -27,6 +31,7 @@ public class PlayerController : MonoBehaviour
     {
         _orbManager = GetComponentInChildren<OrbManager>();
         _collider = GetComponent<Collider>();
+        _gameManager = SingletonManager.Get<GameManager>();
     }
 
     
@@ -102,6 +107,9 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(int damage = 1)
     {
-        Debug.Log("Ow!");
+        if (damage > 0)
+        {
+            _gameManager.LastCheckPoint.Reset();
+        }
     }
 }

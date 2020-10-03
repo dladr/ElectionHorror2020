@@ -9,10 +9,12 @@ public class GhostTrigger : MonoBehaviour
     public UnityEvent TriggerGhost;
 
     public bool IsUsingTrigger;
+
+    public bool HasTriggered;
     // Start is called before the first frame update
     void Start()
     {
-        TriggerGhost.Invoke();
+       // TriggerGhost.Invoke();
     }
 
     // Update is called once per frame
@@ -23,10 +25,10 @@ public class GhostTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (IsUsingTrigger && other.CompareTag("Player"))
+        if (!HasTriggered && IsUsingTrigger && other.CompareTag("Player"))
         {
+            HasTriggered = true;
             TriggerGhost.Invoke();
-            TriggerGhost.RemoveAllListeners();
         }
     }
 }

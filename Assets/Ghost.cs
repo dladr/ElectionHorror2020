@@ -26,15 +26,20 @@ public class Ghost : MonoBehaviour
     [SerializeField] private FontStyles _fontStyles;
     [SerializeField] private Color _fontColor;
     [SerializeField] private SpriteColorManipulator _spriteColorManipulator;
+    [SerializeField] private GhostTrigger _ghostTrigger;
 
     [SerializeField] private Transform _alternateDestination;
     public bool IsUsingAlternateDestination;
 
     [SerializeField] private int _health;
+    private int _currentHealth;
     [SerializeField] private int _damage;
+
+    private Vector3 _initialPosition;
 
     public UnityEvent DyingEvent;
     private PlayerController _playerController;
+    [SerializeField] bool _isStartingActive;
 
 
     private static readonly int IsHorizontal = Animator.StringToHash("IsHorizontal");
@@ -42,9 +47,20 @@ public class Ghost : MonoBehaviour
 
     void Awake()
     {
+
+        _initialPosition = transform.position;
         _textModifier = SingletonManager.Get<TextModifier>();
         _collider = GetComponent<Collider>();
         _playerController = SingletonManager.Get<PlayerController>();
+        _currentHealth = _health;
+
+      
+    }
+
+    private void Start()
+    {
+        if (!_isStartingActive)
+            ToggleIsActive();
     }
 
 
@@ -102,24 +118,34 @@ public class Ghost : MonoBehaviour
 
     public void Disappear()
     {
+        if (!_isActive)
+            return;
+
         if (!DyingWords.IsNullOrWhitespace())
         {
             _textModifier.UpdateTextTrio(DyingWords, _fontColor, _fontStyles);
             _textModifier.AutoTimeFades();
         }
         DyingEvent.Invoke();
-        _paperTransform.gameObject.SetActive(false);
-        _rigidbody.isKinematic = true;
-        _collider.enabled = false;
-        _particleSystem.Stop();
+        ToggleIsActive();
+        
+       
+        
     }
 
-    public void Reappear()
+    public void Reset()
     {
-        _paperTransform.gameObject.SetActive(true);
-        _rigidbody.isKinematic = false;
-        _collider.enabled = true;
-        ToggleIsActive();
+        if(_isStartingActive != _isActive)
+            ToggleIsActive();
+
+        transform.position = _initialPosition;
+
+        _currentHealth = _health;
+
+        if(!_ghostTrigger.SafeIsUnityNull())
+            _ghostTrigger.HasTriggered = false;
+
+
     }
 
     [Button]
@@ -131,19 +157,23 @@ public class Ghost : MonoBehaviour
         {
             _spriteColorManipulator.UpdateSpriteRendererAlphas(0);
             _particleSystem.Stop();
+            _collider.enabled = false;
+            _rigidbody.isKinematic = true;
         }
             
         else
         {
             _spriteColorManipulator.UpdateSpriteRendererColors(_spriteColorManipulator.StartingColor);
             _particleSystem.Play();
+            _collider.enabled = true;
+            _rigidbody.isKinematic = false;
         }
     }
 
     public void TakeDamage(int damageAmount)
     {
-        _health -= damageAmount;
-        if(_health <= 0)
+        _currentHealth -= damageAmount;
+        if(_currentHealth <= 0)
             Disappear();
     }
 
