@@ -11,12 +11,16 @@ public class PostalBox : MonoBehaviour
    [SerializeField] private bool CanCollectMail;
 
     OrbManager _orbManager;
+    private PlayerController _playerController;
+
+    [SerializeField] private RoadMarker _roadMarker;
 
     [SerializeField] private MaterialSetter[] _materialSetters;
     // Start is called before the first frame update
     void Awake()
     {
         _orbManager = SingletonManager.Get<OrbManager>();
+        _playerController = SingletonManager.Get<PlayerController>();
     }
 
     // Update is called once per frame
@@ -35,6 +39,7 @@ public class PostalBox : MonoBehaviour
 
         HasMail = false;
         CanCollectMail = false;
+        _roadMarker.OpenRoad();
         _orbManager.UnlockOrb();
         _orbManager.SetCanAttack(true);
         _orbManager.StartAttack();
@@ -61,5 +66,20 @@ public class PostalBox : MonoBehaviour
             CanCollectMail = false;
             _orbManager.SetCanAttack(true);
         }
+    }
+
+    public void Reset()
+    {
+        if (!HasMail)
+        {
+            _roadMarker.CloseRoad();
+            HasMail = true;
+
+            foreach (MaterialSetter materialSetter in _materialSetters)
+            {
+                materialSetter.TurnOnGlow();
+            }
+        }
+        
     }
 }

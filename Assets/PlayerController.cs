@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Animator _paperAnim;
     [SerializeField] private Transform _paperTransform;
 
+    public bool HasBag;
+    public bool IsBagFull;
+
     private GameManager _gameManager;
 
 
@@ -122,5 +125,20 @@ public class PlayerController : MonoBehaviour
             ToggleIsActive();
             _gameManager.LastCheckPoint.Reset();
         }
+    }
+
+    public void GetBag()
+    {
+        HasBag = true;
+    }
+
+    public void DepositBag()
+    {
+        HasBag = false;
+    }
+
+    public void DropBag()
+    {
+        HasBag = false;
     }
 }

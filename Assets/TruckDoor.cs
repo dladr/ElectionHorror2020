@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Helpers;
+using TMPro;
 using UnityEngine;
 
 public class TruckDoor : MonoBehaviour
@@ -15,14 +17,30 @@ public class TruckDoor : MonoBehaviour
     [SerializeField] private TruckMovement _truckMovement;
     [SerializeField] private float _cooldownTime;
     [SerializeField] private bool _isCoolingDown;
+    [SerializeField] private RearDoor _rearDoor;
+    private TextModifier _textModifier;
 
-    
+    private void Awake()
+    {
+        _textModifier = SingletonManager.Get<TextModifier>();
+    }
+
+
     void Update()
     {
         if (_isPlayerPresent && Input.GetButtonDown("Action") && !_isCoolingDown)
         {
-            _isPlayerPresent = false;
-            EnterTruck();
+            if (_rearDoor.IsOpen)
+            {
+                _textModifier.UpdateTextTrio("I shouldn't drive with the back door open...", Color.white, FontStyles.Normal);
+            }
+
+            else
+            {
+                _isPlayerPresent = false;
+                EnterTruck();
+            }
+            
         }
     }
 
@@ -32,6 +50,8 @@ public class TruckDoor : MonoBehaviour
         {
             _isPlayerPresent = true;
             other.GetComponentInChildren<OrbManager>().SetCanAttack(false);
+            _textModifier.UpdateTextTrio("Front Door", Color.white, FontStyles.Normal);
+            _textModifier.Fade(true, 10f);
         }
     }
 
@@ -41,12 +61,14 @@ public class TruckDoor : MonoBehaviour
         {
             _isPlayerPresent = false;
             other.GetComponentInChildren<OrbManager>().SetCanAttack(true);
+            _textModifier.Fade(false, 10f);
         }
     }
 
     void EnterTruck()
     {
         _isCoolingDown = true;
+        _textModifier.Fade(false, 10f);
 
         _playerObject.GetComponent<PlayerController>().ToggleIsActive();
         _mainCamera.transform.SetParent(_drivingCameraTransform);

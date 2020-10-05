@@ -10,6 +10,8 @@ public class CheckPoint : MonoBehaviour
 {
     public Transform PlayerPosition;
 
+    public int NumberOfOrbs;
+
     public GameObject PlayerObject;
 
     public Transform TruckPosition;
@@ -71,6 +73,8 @@ public class CheckPoint : MonoBehaviour
 
         PlayerObject.transform.position = PlayerPosition.position;
 
+        SingletonManager.Get<OrbManager>().SetNumberOfOrbs(NumberOfOrbs);
+
         if (Ghosts.IsNullOrEmpty())
             Ghosts = GetComponentsInChildren<Ghost>();
 
@@ -78,6 +82,17 @@ public class CheckPoint : MonoBehaviour
         {
             ghost.Reset();
         }
+
+        if (PostalBoxes.IsNullOrEmpty())
+        {
+            PostalBoxes = GetComponentsInChildren<PostalBox>();
+        }
+
+        foreach (PostalBox postalBox in PostalBoxes)
+        {
+            postalBox.Reset();
+        }
+
         _textModifier.Fade(false, 10);
 
         PlayerObject.GetComponentInChildren<PlayerController>().SetActive();

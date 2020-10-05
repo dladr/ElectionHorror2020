@@ -60,4 +60,9 @@ public class MaterialSetter : MonoBehaviour
     {
         SwitchMaterials(_material2, _material1);
     }
+
+    public void TurnOnGlow()
+    {
+        SwitchMaterials(_material1, _material2);
+    }
 }

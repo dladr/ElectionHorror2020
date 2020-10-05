@@ -46,6 +46,15 @@ public class OrbManager : MonoBehaviour
         _numberUnlocked++;
     }
 
+    void RemoveOrb()
+    {
+        if (_numberUnlocked == 0)
+            return;
+
+        _orbTransforms[_numberUnlocked - 1].gameObject.SetActive(false);
+        _numberUnlocked--;
+    }
+
     public void SetCanAttack(bool canAttack)
     {
         _externalCanAttack = canAttack;
@@ -79,6 +88,32 @@ public class OrbManager : MonoBehaviour
                 orbTransform.GetComponent<Renderer>().enabled = true;
             }
         }
+    }
+
+    public void SetNumberOfOrbs(int numberOfOrbs)
+    {
+        if (numberOfOrbs == _numberUnlocked)
+            return;
+
+        int difference = numberOfOrbs - _numberUnlocked;
+
+        if (difference > 0)
+        {
+            for (int i = 0; i < difference; i++)
+            {
+                UnlockOrb();
+            }
+        }
+
+        else
+        {
+            for (int i = 0; i < -difference; i++)
+            {
+                RemoveOrb();
+            }
+        }
+
+
     }
 
     IEnumerator Attack()
