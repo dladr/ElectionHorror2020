@@ -62870,6 +62870,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 20593bbda1a67bf4fafd6b087a28e06b, type: 2}
+    - target: {fileID: 2769684252603475771, guid: e91d0b678a8a17a40895a7c34fb89eea, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 2a8770c38ba19244fac50df266d233f5, type: 2}
     - target: {fileID: 3110129662245010120, guid: e91d0b678a8a17a40895a7c34fb89eea, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -62881,6 +62885,22 @@ PrefabInstance:
     - target: {fileID: 4577144194191064702, guid: e91d0b678a8a17a40895a7c34fb89eea, type: 3}
       propertyPath: m_Center.y
       value: -2.52
+      objectReference: {fileID: 0}
+    - target: {fileID: 6454277233965934865, guid: e91d0b678a8a17a40895a7c34fb89eea, type: 3}
+      propertyPath: _minimumAcceleration
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6454277233965934865, guid: e91d0b678a8a17a40895a7c34fb89eea, type: 3}
+      propertyPath: _accelerationForce
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6454277233965934865, guid: e91d0b678a8a17a40895a7c34fb89eea, type: 3}
+      propertyPath: _frictionFactor
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6454277233965934867, guid: e91d0b678a8a17a40895a7c34fb89eea, type: 3}
+      propertyPath: m_Drag
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6454277234148539979, guid: e91d0b678a8a17a40895a7c34fb89eea, type: 3}
       propertyPath: _playerObject

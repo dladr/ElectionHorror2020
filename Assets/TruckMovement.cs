@@ -5,6 +5,8 @@ using UnityEngine;
 public class TruckMovement : MonoBehaviour
 {
     [SerializeField] private float _accelerationForce;
+    [SerializeField] private float _minimumAcceleration;
+    [SerializeField] private float _frictionFactor;
 
     [SerializeField] private float _maxSpeed;
 
@@ -32,10 +34,12 @@ public class TruckMovement : MonoBehaviour
             return;
 
         Turn(Input.GetAxis("Horizontal"));
-        Accelerate(Input.GetAxis("Vertical"));
+        CalculateManualSpeed(Input.GetAxis("Vertical"));
 
-        _currentSpeed = transform.InverseTransformDirection(_rigidbody.velocity).z;
-        _velocity = _rigidbody.velocity;
+        //Accelerate(Input.GetAxis("Vertical"));
+
+        //_currentSpeed = transform.InverseTransformDirection(_rigidbody.velocity).z;
+        //_velocity = _rigidbody.velocity;
 
         if (_currentSpeed < .5f && Input.GetButtonDown("Action"))
         {
@@ -56,6 +60,23 @@ public class TruckMovement : MonoBehaviour
             return;
 
         _rigidbody.AddForce(transform.forward * (yAxis * _accelerationForce), ForceMode.Force);
+    }
+
+    void CalculateManualSpeed(float yAxis)
+    {
+        _currentSpeed = transform.InverseTransformDirection(_rigidbody.velocity).z;
+        _currentSpeed += Time.deltaTime * yAxis * (_minimumAcceleration + _accelerationForce * _currentSpeed/_maxSpeed);
+        _currentSpeed -= CalculateDrag();
+        
+        _rigidbody.velocity = transform.forward * _currentSpeed;
+    }
+
+    float CalculateDrag()
+    {
+        if (_currentSpeed == 0)
+            return 0f;
+
+        return _frictionFactor * _currentSpeed * Time.deltaTime;
     }
 
     public void ToggleActive()
