@@ -62888,15 +62888,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6454277233965934865, guid: e91d0b678a8a17a40895a7c34fb89eea, type: 3}
       propertyPath: _minimumAcceleration
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6454277233965934865, guid: e91d0b678a8a17a40895a7c34fb89eea, type: 3}
       propertyPath: _accelerationForce
-      value: 10
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6454277233965934865, guid: e91d0b678a8a17a40895a7c34fb89eea, type: 3}
       propertyPath: _frictionFactor
       value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6454277233965934865, guid: e91d0b678a8a17a40895a7c34fb89eea, type: 3}
+      propertyPath: _breakForce
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6454277233965934867, guid: e91d0b678a8a17a40895a7c34fb89eea, type: 3}
       propertyPath: m_Drag

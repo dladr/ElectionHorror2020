@@ -7,6 +7,7 @@ public class TruckMovement : MonoBehaviour
     [SerializeField] private float _accelerationForce;
     [SerializeField] private float _minimumAcceleration;
     [SerializeField] private float _frictionFactor;
+    [SerializeField] private float _breakForce;
 
     [SerializeField] private float _maxSpeed;
 
@@ -65,9 +66,46 @@ public class TruckMovement : MonoBehaviour
     void CalculateManualSpeed(float yAxis)
     {
         _currentSpeed = transform.InverseTransformDirection(_rigidbody.velocity).z;
-        _currentSpeed += Time.deltaTime * yAxis * (_minimumAcceleration + _accelerationForce * _currentSpeed/_maxSpeed);
+        float speedMagnitude = Mathf.Abs(_currentSpeed);
+        float speedPercent = speedMagnitude / _maxSpeed;
+        if (_currentSpeed > 0)
+        {
+            if (yAxis > 0)
+            {
+                _currentSpeed += Time.deltaTime * yAxis * (_minimumAcceleration + _accelerationForce * speedPercent);
+            }
+
+            else
+            {
+                _currentSpeed += Time.deltaTime * yAxis * _breakForce * speedPercent;
+            }
+        }
+          
+        else if (_currentSpeed < 0)
+        {
+            if (yAxis <= 0)
+            {
+                _currentSpeed += Time.deltaTime * yAxis * (_minimumAcceleration + _accelerationForce * speedPercent);
+            }
+
+            else
+            {
+                _currentSpeed += Time.deltaTime * yAxis * _breakForce * speedPercent;
+            }
+            
+        }
+
+        else
+        {
+            _currentSpeed += Time.deltaTime * yAxis * (_minimumAcceleration + _accelerationForce * speedPercent);
+        }
         _currentSpeed -= CalculateDrag();
-        
+
+        if (_currentSpeed > _maxSpeed)
+            _currentSpeed = _maxSpeed;
+        if (_currentSpeed < _minSpeed)
+            _currentSpeed = _minSpeed;
+
         _rigidbody.velocity = transform.forward * _currentSpeed;
     }
 
@@ -76,7 +114,17 @@ public class TruckMovement : MonoBehaviour
         if (_currentSpeed == 0)
             return 0f;
 
-        return _frictionFactor * _currentSpeed * Time.deltaTime;
+        float multiplier = 1;
+        if (_currentSpeed < 0)
+            multiplier = -1;
+
+        float friction = (_frictionFactor*_minimumAcceleration * multiplier * Time.deltaTime) + (_frictionFactor * _currentSpeed * Time.deltaTime);
+        if (Mathf.Abs(friction) > Mathf.Abs(_currentSpeed))
+        {
+            friction = _currentSpeed;
+        }
+
+        return friction;
     }
 
     public void ToggleActive()
