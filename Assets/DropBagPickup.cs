@@ -14,6 +14,8 @@ public class DropBagPickup : MonoBehaviour
     private TextModifier _textModifier;
 
     private OrbManager _orbManager;
+
+    [SerializeField] private Rigidbody _rigidbody;
     // Start is called before the first frame update
     void Start()
     {
@@ -58,7 +60,12 @@ public class DropBagPickup : MonoBehaviour
 
     private void Pickup()
     {
+        if (!_orbManager.CheckInternalCanAttack())
+            return;
+
+        _rigidbody.isKinematic = false;
         _textModifier.Fade(false, 10);
+        _orbManager.SetCanAttack(true);
         _playerController.PickupBag(IsFull);
     }
 }

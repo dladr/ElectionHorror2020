@@ -1,18 +1,26 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Net.Mime;
 using Assets.Scripts.Helpers;
 using TMPro;
 using UnityEngine;
 
-public class EnvelopePickup : MonoBehaviour
+public class TriggerMessage : MonoBehaviour
 {
-    private bool _isPlayerPresent;
+    public string Title;
+
+    public string Description;
+
+    public Color TextColor;
+
+    public FontStyles FontStyles;
 
     private TextModifier _textModifier;
 
     private OrbManager _orbManager;
+
+    private bool _isPlayerPresent;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -23,8 +31,10 @@ public class EnvelopePickup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(_isPlayerPresent && Input.GetButtonDown("Action"))
-            Pickup();
+        if (_isPlayerPresent && Input.GetButtonDown("Action"))
+        {
+            _textModifier.UpdateTextTrio(Description, TextColor, FontStyles);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -32,8 +42,9 @@ public class EnvelopePickup : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             _isPlayerPresent = true;
-            _textModifier.UpdateTextTrio("Gram Gram's Ballot", Color.white, FontStyles.Normal);
+            _textModifier.UpdateTextTrio(Title, TextColor, FontStyles);
             _textModifier.Fade(true, 10);
+            _orbManager.SetCanAttack(false);
         }
     }
 
@@ -43,15 +54,7 @@ public class EnvelopePickup : MonoBehaviour
         {
             _isPlayerPresent = false;
             _textModifier.Fade(false, 10);
+            _orbManager.SetCanAttack(true);
         }
-    }
-
-    private void Pickup()
-    {
-        
-        _textModifier.UpdateText("Picked up Gram Gram's ballot.");
-        _textModifier.AutoTimeFades();
-       SingletonManager.Get<OrbManager>().UnlockOrb();
-        Destroy(gameObject);
     }
 }

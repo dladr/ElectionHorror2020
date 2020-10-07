@@ -16,6 +16,7 @@ public class RearDoor : MonoBehaviour
     [SerializeField] private OrbManager _orbManager;
 
     public bool IsMailToCollectNearby;
+    public bool IsMailBagNearby;
 
     private Animator _anim;
 
@@ -32,8 +33,8 @@ public class RearDoor : MonoBehaviour
 
     private void Start()
     {
-        _anim.SetBool("IsOpen", true);
-        IsOpen = true;
+        //_anim.SetBool("IsOpen", true);
+        //IsOpen = true;
     }
 
     void Update()
@@ -48,8 +49,13 @@ public class RearDoor : MonoBehaviour
     {
         if (!IsOpen)
         {
-            if(IsMailToCollectNearby)
+            if (IsMailToCollectNearby)
+            {
                 OpenDoor();
+                _textModifier.UpdateTextTrio(GetLabel(), Color.white, FontStyles.Normal);
+
+            }
+            
             else
             {
                 _textModifier.UpdateTextTrio("I don't need a bag right now...", Color.white, FontStyles.Normal);
@@ -59,7 +65,17 @@ public class RearDoor : MonoBehaviour
 
         else if (IsOpen && !_playerController.HasBag && IsMailToCollectNearby)
         {
-           _playerController.GetBag();
+            if (IsMailBagNearby)
+            {
+                _textModifier.UpdateTextTrio("I don't need ANOTHER bag now...", Color.white, FontStyles.Normal);
+            }
+
+            else
+            {
+                _playerController.GetBag();
+                _textModifier.UpdateTextTrio(GetLabel(), Color.white, FontStyles.Normal);
+            }
+           
         }
 
         else if (IsOpen && _playerController.HasBag)
@@ -68,6 +84,8 @@ public class RearDoor : MonoBehaviour
             {
                 _playerController.DepositBag();
                 IsMailToCollectNearby = false;
+                IsMailBagNearby = false;
+                _textModifier.UpdateTextTrio(GetLabel(), Color.white, FontStyles.Normal);
             }
 
             else
@@ -79,9 +97,9 @@ public class RearDoor : MonoBehaviour
         else if (IsOpen && !_playerController.HasBag && !IsMailToCollectNearby)
         {
             CloseDoor();
+            _textModifier.UpdateTextTrio(GetLabel(), Color.white, FontStyles.Normal);
         }
 
-        _textModifier.UpdateTextTrio(GetLabel(), Color.white, FontStyles.Normal);
         _textModifier.Fade(true, 10);
     }
 

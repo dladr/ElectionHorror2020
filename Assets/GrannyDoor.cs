@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Helpers;
+using TMPro;
 using UnityEngine;
 
 public class GrannyDoor : MonoBehaviour
@@ -11,12 +13,16 @@ public class GrannyDoor : MonoBehaviour
 
     [SerializeField] private CheckPoint _firstCheckPoint;
 
+    private TextModifier _textModifier;
+    private OrbManager _orbManager;
+
     
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        _textModifier = SingletonManager.Get<TextModifier>();
+        _orbManager = SingletonManager.Get<OrbManager>();
     }
 
     // Update is called once per frame
@@ -30,13 +36,15 @@ public class GrannyDoor : MonoBehaviour
     {
         if (_isOpen)
         {
-            Debug.Log("Heading outside!");
+            _orbManager.SetCanAttack(true);
+            _textModifier.UpdateTextTrio("Heading outside", Color.white, FontStyles.Normal);
+            _textModifier.AutoTimeFades();
             _firstCheckPoint.InitializeCheckpoint();
         }
 
         else
         {
-            Debug.Log("Door is blocked by ghost!");
+            _textModifier.UpdateTextTrio("Door blocked by ghost...", Color.white, FontStyles.Normal);
         }
     }
 
@@ -48,12 +56,23 @@ public class GrannyDoor : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
+        {
             _isPlayerPresent = true;
+            _textModifier.UpdateTextTrio("Door", Color.white, FontStyles.Normal);
+            _textModifier.Fade(true, 10);
+            _orbManager.SetCanAttack(false);
+        }
+            
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
+        {
             _isPlayerPresent = false;
+            _textModifier.Fade(false, 10);
+            _orbManager.SetCanAttack(true);
+        }
+          
     }
 }

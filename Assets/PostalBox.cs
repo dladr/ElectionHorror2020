@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Helpers;
+using TMPro;
 using UnityEngine;
 
 public class PostalBox : MonoBehaviour
@@ -38,12 +39,12 @@ public class PostalBox : MonoBehaviour
 
             else if(HasMail)
             {
-                Debug.Log("cannot collect mail without bag");
+                _textModifier.UpdateText("I need a mail bag...");
             }
 
             else 
             {
-                Debug.Log("No mail to collect");
+                _textModifier.UpdateText("Empty");
             }
         }
 
@@ -57,11 +58,12 @@ public class PostalBox : MonoBehaviour
 
         HasMail = false;
         CanCollectMail = false;
+        _playerController.IsBagFull = true;
         _roadMarker.OpenRoad();
         _orbManager.UnlockOrb();
         _orbManager.SetCanAttack(true);
         _orbManager.StartAttack();
-        _playerController.PickupBag(true);
+        _textModifier.UpdateText("Mail collected");
 
         foreach (MaterialSetter materialSetter in _materialSetters)
         {
@@ -80,6 +82,8 @@ public class PostalBox : MonoBehaviour
 
             IsPlayerPresent = true;
             _orbManager.SetCanAttack(false);
+            _textModifier.UpdateTextTrio("Collection Box", Color.blue, FontStyles.Normal);
+            _textModifier.Fade(true, 10f);
         }
     }
 
@@ -90,6 +94,7 @@ public class PostalBox : MonoBehaviour
             CanCollectMail = false;
             _orbManager.SetCanAttack(true);
             IsPlayerPresent = false;
+            _textModifier.Fade(false, 10f);
         }
     }
 

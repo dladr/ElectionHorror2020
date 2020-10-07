@@ -172,6 +172,7 @@ public class PlayerController : MonoBehaviour
         _dropBag.transform.rotation = _carryBagTransform.rotation;
         _dropBag.SetActive(true);
         _dropBagAnimator.SetBool("IsFull", IsBagFull);
+        _dropBagAnimator.SetBool("IsVisible", true);
         _dropBag.GetComponentInChildren<DropBagPickup>().IsFull = IsBagFull;
 
     }

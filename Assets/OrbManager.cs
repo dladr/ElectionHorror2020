@@ -118,6 +118,11 @@ public class OrbManager : MonoBehaviour
 
     }
 
+    public bool CheckInternalCanAttack()
+    {
+        return _canAttack;
+    }
+
     IEnumerator Attack()
     {
         _playerController.DropBag();
