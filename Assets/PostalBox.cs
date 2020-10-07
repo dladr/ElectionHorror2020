@@ -10,26 +10,44 @@ public class PostalBox : MonoBehaviour
 
    [SerializeField] private bool CanCollectMail;
 
+   public bool IsPlayerPresent;
+
     OrbManager _orbManager;
     private PlayerController _playerController;
 
     [SerializeField] private RoadMarker _roadMarker;
 
     [SerializeField] private MaterialSetter[] _materialSetters;
+
+    private TextModifier _textModifier;
     // Start is called before the first frame update
     void Awake()
     {
         _orbManager = SingletonManager.Get<OrbManager>();
         _playerController = SingletonManager.Get<PlayerController>();
+        _textModifier = SingletonManager.Get<TextModifier>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Action") && CanCollectMail)
+        if (Input.GetButtonDown("Action") && IsPlayerPresent)
         {
-            CollectMail();
+            if(CanCollectMail)
+              CollectMail();
+
+            else if(HasMail)
+            {
+                Debug.Log("cannot collect mail without bag");
+            }
+
+            else 
+            {
+                Debug.Log("No mail to collect");
+            }
         }
+
+      
     }
 
     public void CollectMail()
@@ -43,6 +61,7 @@ public class PostalBox : MonoBehaviour
         _orbManager.UnlockOrb();
         _orbManager.SetCanAttack(true);
         _orbManager.StartAttack();
+        _playerController.PickupBag(true);
 
         foreach (MaterialSetter materialSetter in _materialSetters)
         {
@@ -52,9 +71,14 @@ public class PostalBox : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player") && HasMail)
+        if(other.CompareTag("Player"))
         {
-            CanCollectMail = true;
+            if (_playerController.HasBag && HasMail)
+            {
+                CanCollectMail = true;
+            }
+
+            IsPlayerPresent = true;
             _orbManager.SetCanAttack(false);
         }
     }
@@ -65,6 +89,7 @@ public class PostalBox : MonoBehaviour
         {
             CanCollectMail = false;
             _orbManager.SetCanAttack(true);
+            IsPlayerPresent = false;
         }
     }
 

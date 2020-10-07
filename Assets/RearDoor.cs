@@ -82,6 +82,7 @@ public class RearDoor : MonoBehaviour
         }
 
         _textModifier.UpdateTextTrio(GetLabel(), Color.white, FontStyles.Normal);
+        _textModifier.Fade(true, 10);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -132,6 +133,6 @@ public class RearDoor : MonoBehaviour
         _anim.SetBool("IsOpen", false);
         IsOpen = false;
         _textModifier.UpdateTextTrio(GetLabel(), Color.white, FontStyles.Normal);
-        _textModifier.AutoTimeFades();
+       // _textModifier.AutoTimeFades();
     }
 }

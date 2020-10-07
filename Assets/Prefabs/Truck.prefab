@@ -6882,6 +6882,7 @@ MonoBehaviour:
   _truckMovement: {fileID: 1238495570}
   _cooldownTime: 1
   _isCoolingDown: 0
+  _rearDoor: {fileID: 0}
 --- !u!1 &1143483646
 GameObject:
   m_ObjectHideFlags: 0
@@ -14512,6 +14513,7 @@ Transform:
   - {fileID: 8510927}
   - {fileID: 608112072}
   - {fileID: 5802012987366508634}
+  - {fileID: 3444504609575414500}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -14544,6 +14546,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _accelerationForce: 68
+  _minimumAcceleration: 0
+  _frictionFactor: 0
+  _breakForce: 0
   _maxSpeed: 4
   _minSpeed: -2
   _turnForce: 5
@@ -16339,6 +16344,50 @@ Transform:
   m_Father: {fileID: 1449027939}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 45, z: 0}
+--- !u!1 &4612728994848181044
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3444504609575414500}
+  - component: {fileID: 975754424738538068}
+  m_Layer: 8
+  m_Name: BigBoxCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3444504609575414500
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4612728994848181044}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2898127896054499648}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &975754424738538068
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4612728994848181044}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.9, y: 1, z: 1.75}
+  m_Center: {x: 0, y: 0, z: 0.5}
 --- !u!1 &4782105136542234872
 GameObject:
   m_ObjectHideFlags: 0

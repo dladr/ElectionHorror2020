@@ -21,6 +21,8 @@ public class TruckMovement : MonoBehaviour
     [SerializeField] private float _currentSpeed;
 
     [SerializeField] private bool _isActive;
+    [SerializeField] private GameObject _boxColliderGameObject;
+    [SerializeField] private GameObject _capsuleColliderGameObject;
 
     // Start is called before the first frame update
     void Start()
@@ -40,7 +42,7 @@ public class TruckMovement : MonoBehaviour
         //Accelerate(Input.GetAxis("Vertical"));
 
         //_currentSpeed = transform.InverseTransformDirection(_rigidbody.velocity).z;
-        //_velocity = _rigidbody.velocity;
+        _velocity = _rigidbody.velocity;
 
         if (_currentSpeed < .5f && Input.GetButtonDown("Action"))
         {
@@ -67,6 +69,8 @@ public class TruckMovement : MonoBehaviour
     {
         _currentSpeed = transform.InverseTransformDirection(_rigidbody.velocity).z;
         float speedMagnitude = Mathf.Abs(_currentSpeed);
+        if (speedMagnitude < .01f)
+            _currentSpeed = speedMagnitude = 0;
         float speedPercent = speedMagnitude / _maxSpeed;
         if (_currentSpeed > 0)
         {
@@ -130,5 +134,8 @@ public class TruckMovement : MonoBehaviour
     public void ToggleActive()
     {
         _isActive = !_isActive;
+        _rigidbody.isKinematic = !_isActive;
+        _capsuleColliderGameObject.SetActive(_isActive);
+        _boxColliderGameObject.SetActive(!_isActive);
     }
 }

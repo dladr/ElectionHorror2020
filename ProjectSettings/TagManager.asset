@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ghost
   - Orb
+  - Truck
   layers:
   - Default
   - TransparentFX

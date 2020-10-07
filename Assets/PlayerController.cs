@@ -18,6 +18,10 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Animator _paperAnim;
     [SerializeField] private Transform _paperTransform;
+    [SerializeField] private GameObject _dropBag;
+    [SerializeField] private Transform _carryBagTransform;
+    [SerializeField] private Animator _carryBagAnimator;
+    [SerializeField] private Animator _dropBagAnimator;
 
     public bool HasBag;
     public bool IsBagFull;
@@ -130,15 +134,45 @@ public class PlayerController : MonoBehaviour
     public void GetBag()
     {
         HasBag = true;
+        _paperAnim.SetBool("IsHoldingBag", true);
+        _carryBagAnimator.SetBool("IsFull", IsBagFull);
+        _carryBagAnimator.SetBool("IsVisible", HasBag);
     }
 
     public void DepositBag()
     {
         HasBag = false;
+        IsBagFull = false;
+        _carryBagAnimator.SetBool("IsFull", IsBagFull);
+        _carryBagAnimator.SetBool("IsVisible", HasBag);
+        _paperAnim.SetBool("IsHoldingBag", false);
+       
+    }
+
+    public void PickupBag(bool isFull)
+    {
+        IsBagFull = isFull;
+
+        HasBag = true;
+        _paperAnim.SetBool("IsHoldingBag", true);
+        _carryBagAnimator.SetBool("IsFull", IsBagFull);
+        _carryBagAnimator.SetBool("IsVisible", HasBag);
+        _dropBag.SetActive(false);
     }
 
     public void DropBag()
     {
+        if (!HasBag)
+            return;
+
         HasBag = false;
+        _paperAnim.SetBool("IsHoldingBag", false);
+        _carryBagAnimator.SetBool("IsVisible", HasBag);
+        _dropBag.transform.position = _carryBagTransform.position;
+        _dropBag.transform.rotation = _carryBagTransform.rotation;
+        _dropBag.SetActive(true);
+        _dropBagAnimator.SetBool("IsFull", IsBagFull);
+        _dropBag.GetComponentInChildren<DropBagPickup>().IsFull = IsBagFull;
+
     }
 }

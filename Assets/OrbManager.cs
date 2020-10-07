@@ -22,12 +22,14 @@ public class OrbManager : MonoBehaviour
 
     [SerializeField] private bool _externalCanAttack;
     [SerializeField] private Animator _playerAnimator;
+    private PlayerController _playerController;
 
     // Start is called before the first frame update
     void Awake()
     {
         _numberUnlocked = 0;
         _canAttack = _externalCanAttack = true;
+        _playerController = GetComponentInParent<PlayerController>();
     }
 
     // Update is called once per frame
@@ -118,6 +120,7 @@ public class OrbManager : MonoBehaviour
 
     IEnumerator Attack()
     {
+        _playerController.DropBag();
         _playerAnimator.SetBool("IsHoldingEnvelope", true);
 
         foreach (Orb orb in _orbs)
