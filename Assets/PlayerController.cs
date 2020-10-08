@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
 
     public bool HasBag;
     public bool IsBagFull;
+    public bool IsUpdatingRotation;
 
     private GameManager _gameManager;
 
@@ -47,6 +48,9 @@ public class PlayerController : MonoBehaviour
     {
         if (!_isActive)
             return;
+
+        if(IsUpdatingRotation)
+            ResetRotation();
 
         if(Input.GetButtonDown("Action"))
             _orbManager.StartAttack();
