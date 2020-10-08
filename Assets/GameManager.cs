@@ -8,10 +8,12 @@ public class GameManager : MonoBehaviour
 
     public CheckPoint LastCheckPoint;
 
+    public List<RotationReference> RotationReferences;
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+       RotationReferences = new List<RotationReference>(); 
     }
 
     // Update is called once per frame
@@ -23,5 +25,11 @@ public class GameManager : MonoBehaviour
     public void UpdateLastCheckPoint(CheckPoint checkPoint)
     {
         LastCheckPoint = checkPoint;
+    }
+
+    public void AddRotationReference(RotationReference rotationReference)
+    {
+        if(!RotationReferences.Contains(rotationReference))
+            RotationReferences.Add(rotationReference);
     }
 }

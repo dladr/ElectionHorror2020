@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Helpers;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
@@ -101,9 +102,46 @@ public class PlayerController : MonoBehaviour
         ToggleIsActive();
     }
 
+    [Button]
     public void ResetRotation()
     {
+        UpdateRotation();
         transform.eulerAngles = new Vector3(0, _currentYRotation, 0);
+    }
+
+    [Button]
+    void UpdateRotation()
+    {
+        if (_gameManager.RotationReferences.Count > 1)
+        {
+            //_gameManager.RotationReferences.OrderBy(x => Vector3.Distance(x.transform.position, transform.position));
+            //float distance1 =
+            //    Vector3.Distance(_gameManager.RotationReferences[0].transform.position, transform.position);
+            //float distance2 =
+            //    Vector3.Distance(_gameManager.RotationReferences[1].transform.position, transform.position);
+
+            float shortestDistance = 999999;
+            float secondShortestDistance = 999999;
+            int shortestDistanceIndex = 0;
+            int secondShortestDistanceIndex = 0;
+
+            for (int i = 0; i < _gameManager.RotationReferences.Count; i++)
+            {
+                float iDistance = Vector3.Distance(_gameManager.RotationReferences[i].transform.position,
+                    transform.position);
+                if (iDistance < shortestDistance)
+                {
+                    secondShortestDistance = shortestDistance;
+                    secondShortestDistanceIndex = shortestDistanceIndex;
+                    shortestDistance = iDistance;
+                    shortestDistanceIndex = i;
+                }
+            }
+
+            float percentBetween = shortestDistance / (shortestDistance + secondShortestDistance);
+            _currentYRotation = Mathf.Lerp(_gameManager.RotationReferences[shortestDistanceIndex].transform.eulerAngles.y,
+                _gameManager.RotationReferences[secondShortestDistanceIndex].transform.eulerAngles.y, percentBetween);
+        }
     }
 
     [Button]
