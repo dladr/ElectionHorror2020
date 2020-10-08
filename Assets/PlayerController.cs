@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Helpers;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -16,13 +18,23 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Collider _collider;
 
     [SerializeField] private float _currentYRotation;
+    Quaternion _currentRotation;
+
+    private RotationReference _rotationReference1;
+    private RotationReference _rotationReference2;
+    private float _distance1;
+    private float _distance2;
+    private float _totalDistance;
 
     [SerializeField] private Animator _paperAnim;
     [SerializeField] private Transform _paperTransform;
     [SerializeField] private GameObject _dropBag;
     [SerializeField] private Transform _carryBagTransform;
+    [SerializeField] private Transform _aheadTransform;
     [SerializeField] private Animator _carryBagAnimator;
     [SerializeField] private Animator _dropBagAnimator;
+
+    private bool hasMovedY;
 
     public bool HasBag;
     public bool IsBagFull;
@@ -49,8 +61,7 @@ public class PlayerController : MonoBehaviour
         if (!_isActive)
             return;
 
-        if(IsUpdatingRotation)
-            ResetRotation();
+       
 
         if(Input.GetButtonDown("Action"))
             _orbManager.StartAttack();
@@ -60,6 +71,12 @@ public class PlayerController : MonoBehaviour
         Move(new Vector2(xInput, yInput).normalized);
     }
 
+    private void LateUpdate()
+    {
+        if (IsUpdatingRotation && hasMovedY)
+            ResetRotation();
+    }
+
     void Move(Vector2 inputDirection)
     {
     
@@ -67,6 +84,9 @@ public class PlayerController : MonoBehaviour
                               transform.right * inputDirection.x * _speed;
 
         UpdatePaperAnim(inputDirection);
+
+        if (Mathf.Abs(inputDirection.y) > 0)
+            hasMovedY = true;
     }
 
     void UpdatePaperAnim(Vector2 inputDirection)
@@ -109,8 +129,83 @@ public class PlayerController : MonoBehaviour
     [Button]
     public void ResetRotation()
     {
-        UpdateRotation();
-        transform.eulerAngles = new Vector3(0, _currentYRotation, 0);
+        //UpdateRotation();
+       // transform.eulerAngles = new Vector3(0, _currentYRotation, 0);
+       hasMovedY = false;
+       UpdateRotationFromCurrentReferences();
+       transform.rotation = _currentRotation;
+    }
+
+    void DetermineRotationReferences()
+    {
+        _gameManager.RotationReferences = _gameManager.RotationReferences.OrderBy(x => Vector3.Distance(x.transform.position, transform.position)).ToList();
+
+        int firstInFrontIndex = -1;
+        int firstBehindIndex = -1;
+
+        for (int i = 0; i < _gameManager.RotationReferences.Count; i++)
+        {
+            if (IsPositionInFront(_gameManager.RotationReferences[i].transform.position))
+            {
+                if (firstInFrontIndex < 0)
+                    firstInFrontIndex = i;
+            }
+
+            else
+            {
+                if (firstBehindIndex < 0)
+                    firstBehindIndex = 1;
+            }
+
+            if(firstInFrontIndex > -1 && firstBehindIndex > -1)
+                break;
+        }
+
+        if (firstInFrontIndex < 0 || firstBehindIndex < 0)
+        {
+            firstInFrontIndex = 0;
+            firstBehindIndex = 1;
+        }
+
+        _rotationReference1 = _gameManager.RotationReferences[firstInFrontIndex];
+        _rotationReference2 = _gameManager.RotationReferences[firstBehindIndex];
+        _distance1 = Vector3.Distance(transform.position, _rotationReference1.transform.position);
+        _distance2 = Vector3.Distance(transform.position, _rotationReference2.transform.position);
+        _totalDistance = _distance1 + _distance2;
+    }
+
+    bool IsPositionInFront(Vector3 position)
+    {
+        return Vector3.Distance(position, transform.position) > Vector3.Distance(position, _aheadTransform.position);
+        
+    }
+
+    void UpdateRotationFromCurrentReferences()
+    {
+        hasMovedY = false;
+
+        if(_rotationReference1.SafeIsUnityNull())
+            DetermineRotationReferences();
+
+        float distance1 = Vector3.Distance(transform.position, _rotationReference1.transform.position);
+        float distance2 = Vector3.Distance(transform.position, _rotationReference2.transform.position);
+
+        if (distance1 > _distance1 && distance2 > _distance2)
+        {
+            DetermineRotationReferences();
+        }
+
+        else
+        {
+            _distance1 = distance1;
+            _distance2 = distance2;
+        }
+
+        _totalDistance = _distance1 + _distance2;
+        float percentLerp = _distance1 / _totalDistance;
+
+        _currentRotation = Quaternion.Lerp(_rotationReference1.transform.rotation,
+            _rotationReference2.transform.rotation, percentLerp);
     }
 
     [Button]
@@ -118,33 +213,42 @@ public class PlayerController : MonoBehaviour
     {
         if (_gameManager.RotationReferences.Count > 1)
         {
-            //_gameManager.RotationReferences.OrderBy(x => Vector3.Distance(x.transform.position, transform.position));
-            //float distance1 =
-            //    Vector3.Distance(_gameManager.RotationReferences[0].transform.position, transform.position);
-            //float distance2 =
-            //    Vector3.Distance(_gameManager.RotationReferences[1].transform.position, transform.position);
+            _gameManager.RotationReferences = _gameManager.RotationReferences.OrderBy(x => Vector3.Distance(x.transform.position, transform.position)).ToList();
+            float distance1 =
+                Vector3.Distance(_gameManager.RotationReferences[0].transform.position, transform.position);
+            float distance2 =
+                Vector3.Distance(_gameManager.RotationReferences[1].transform.position, transform.position);
 
-            float shortestDistance = 999999;
-            float secondShortestDistance = 999999;
-            int shortestDistanceIndex = 0;
-            int secondShortestDistanceIndex = 0;
+            //float shortestDistance = 999999;
+            //float secondShortestDistance = 999999;
+            //int shortestDistanceIndex = 0;
+            //int secondShortestDistanceIndex = 0;
 
-            for (int i = 0; i < _gameManager.RotationReferences.Count; i++)
-            {
-                float iDistance = Vector3.Distance(_gameManager.RotationReferences[i].transform.position,
-                    transform.position);
-                if (iDistance < shortestDistance)
-                {
-                    secondShortestDistance = shortestDistance;
-                    secondShortestDistanceIndex = shortestDistanceIndex;
-                    shortestDistance = iDistance;
-                    shortestDistanceIndex = i;
-                }
-            }
+            //for (int i = 0; i < _gameManager.RotationReferences.Count; i++)
+            //{
+            //    float iDistance = Vector3.Distance(_gameManager.RotationReferences[i].transform.position,
+            //        transform.position);
+            //    if (iDistance < shortestDistance)
+            //    {
+            //        secondShortestDistance = shortestDistance;
+            //        secondShortestDistanceIndex = shortestDistanceIndex;
+            //        shortestDistance = iDistance;
+            //        shortestDistanceIndex = i;
+            //    }
+            //}
 
-            float percentBetween = shortestDistance / (shortestDistance + secondShortestDistance);
-            _currentYRotation = Mathf.Lerp(_gameManager.RotationReferences[shortestDistanceIndex].transform.eulerAngles.y,
-                _gameManager.RotationReferences[secondShortestDistanceIndex].transform.eulerAngles.y, percentBetween);
+            //shortestDistanceIndex = 0;
+            //secondShortestDistanceIndex = 1;
+            //shortestDistance = distance1;
+            //secondShortestDistance = distance2;
+
+            //float percentBetween = shortestDistance / (shortestDistance + secondShortestDistance);
+            //_currentYRotation = Mathf.Lerp(_gameManager.RotationReferences[shortestDistanceIndex].transform.eulerAngles.y,
+            //    _gameManager.RotationReferences[secondShortestDistanceIndex].transform.eulerAngles.y, percentBetween);
+            //_currentRotation = Quaternion.Lerp(_gameManager.RotationReferences[shortestDistanceIndex].transform.rotation, _gameManager.RotationReferences[secondShortestDistanceIndex].transform.rotation, percentBetween);
+
+            float percentBetween = distance1 / (distance1 + distance2);
+            _currentRotation = Quaternion.Lerp(_gameManager.RotationReferences[0].transform.rotation, _gameManager.RotationReferences[1].transform.rotation, percentBetween);
         }
     }
 

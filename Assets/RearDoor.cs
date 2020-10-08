@@ -22,6 +22,12 @@ public class RearDoor : MonoBehaviour
 
     private TextModifier _textModifier;
 
+    [SerializeField] private GameObject[] _emptyBags;
+    [SerializeField] private GameObject[] _fullBags;
+
+    private int _emptyBagIndex;
+    private int _fullBagIndex;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -73,6 +79,7 @@ public class RearDoor : MonoBehaviour
             else
             {
                 _playerController.GetBag();
+                RemoveEmptyBag();
                 _textModifier.UpdateTextTrio(GetLabel(), Color.white, FontStyles.Normal);
             }
            
@@ -83,6 +90,7 @@ public class RearDoor : MonoBehaviour
             if (_playerController.IsBagFull)
             {
                 _playerController.DepositBag();
+                AddFullBag();
                 IsMailToCollectNearby = false;
                 IsMailBagNearby = false;
                 _textModifier.UpdateTextTrio(GetLabel(), Color.white, FontStyles.Normal);
@@ -139,6 +147,17 @@ public class RearDoor : MonoBehaviour
         }
     }
 
+    void RemoveEmptyBag()
+    {
+        _emptyBags[_emptyBagIndex].SetActive(false);
+        _emptyBagIndex++;
+    }
+
+    void AddFullBag()
+    {
+        _fullBags[_fullBagIndex].SetActive(true);
+        _fullBagIndex++;
+    }
     void OpenDoor()
     {
         _anim.SetBool("IsOpen", true);

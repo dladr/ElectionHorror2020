@@ -14492,7 +14492,7 @@ GameObject:
   - component: {fileID: 1238495570}
   m_Layer: 8
   m_Name: Truck
-  m_TagString: Untagged
+  m_TagString: Truck
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14556,6 +14556,8 @@ MonoBehaviour:
   _velocity: {x: 0, y: 0, z: 0}
   _currentSpeed: 0
   _isActive: 0
+  _boxColliderGameObject: {fileID: 0}
+  _capsuleColliderGameObject: {fileID: 0}
 --- !u!1 &1171054748582361163
 GameObject:
   m_ObjectHideFlags: 0
