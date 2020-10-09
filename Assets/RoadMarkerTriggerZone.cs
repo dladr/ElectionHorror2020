@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class RoadMarkerTriggerZone : MonoBehaviour
 {
-    private bool _isOpen;
+    [SerializeField] bool _isOpen;
 
     private TextModifier _textModifier;
 

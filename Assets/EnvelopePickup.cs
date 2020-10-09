@@ -13,6 +13,12 @@ public class EnvelopePickup : MonoBehaviour
     private TextModifier _textModifier;
 
     private OrbManager _orbManager;
+
+    public bool _isNotGramBallot;
+
+    public string label;
+    public string actionDescription;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -32,7 +38,14 @@ public class EnvelopePickup : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             _isPlayerPresent = true;
-            _textModifier.UpdateTextTrio("Gram Gram's Ballot", Color.white, FontStyles.Normal);
+
+            if(!_isNotGramBallot)
+              _textModifier.UpdateTextTrio("Gram Gram's Ballot", Color.white, FontStyles.Normal);
+
+            else
+            {
+                _textModifier.UpdateTextTrio(label, Color.white, FontStyles.Normal);
+            }
             _textModifier.Fade(true, 10);
         }
     }
@@ -48,10 +61,17 @@ public class EnvelopePickup : MonoBehaviour
 
     private void Pickup()
     {
-        
-        _textModifier.UpdateText("Picked up Gram Gram's ballot.");
+        if(!_isNotGramBallot)
+            _textModifier.UpdateText("Picked up Gram Gram's ballot.");
+        else
+        {
+            _textModifier.UpdateText(actionDescription);
+        }
         _textModifier.AutoTimeFades();
-       SingletonManager.Get<OrbManager>().UnlockOrb();
+
+        if(!_isNotGramBallot)
+          SingletonManager.Get<OrbManager>().UnlockOrb();
+
         Destroy(gameObject);
     }
 }

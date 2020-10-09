@@ -29,11 +29,21 @@ public class CheckPoint : MonoBehaviour
     private TextModifier _textModifier;
 
     public GameObject[] ObjectsToSetActive;
+
+    public int EmptyBagIndex;
+
+    public int FullBagIndex;
+
+    public bool IsMailToCollect;
+
+    public bool IsTruckDoorOpen;
+
     // Start is called before the first frame update
     void Awake()
     {
         _screenFader = SingletonManager.Get<ScreenFader>();
         _textModifier = SingletonManager.Get<TextModifier>();
+        _gameManager = SingletonManager.Get<GameManager>();
     }
 
     private void Start()
@@ -73,6 +83,12 @@ public class CheckPoint : MonoBehaviour
 
         PlayerObject.transform.position = PlayerPosition.position;
 
+        if (!TruckPosition.SafeIsUnityNull())
+        {
+            SingletonManager.Get<TruckMovement>().transform.position = TruckPosition.position;
+            SingletonManager.Get<TruckMovement>().transform.rotation = TruckPosition.rotation;
+        }
+
         SingletonManager.Get<OrbManager>().SetNumberOfOrbs(NumberOfOrbs);
 
         if (Ghosts.IsNullOrEmpty())
@@ -93,10 +109,14 @@ public class CheckPoint : MonoBehaviour
             postalBox.Reset();
         }
 
+        PlayerObject.GetComponent<PlayerController>().Reset();
+
         _textModifier.Fade(false, 10);
 
         PlayerObject.GetComponentInChildren<PlayerController>().SetActive();
         _screenFader.Fade();
+
+        SingletonManager.Get<RearDoor>().Reset(IsTruckDoorOpen, EmptyBagIndex, FullBagIndex, IsMailToCollect);
 
         yield return null;
     }
@@ -116,6 +136,12 @@ public class CheckPoint : MonoBehaviour
         ResetCheckPoint.Invoke();
 
         PlayerObject.transform.position = PlayerPosition.position;
+        if (!TruckPosition.SafeIsUnityNull())
+        {
+            SingletonManager.Get<TruckMovement>().transform.position = TruckPosition.position;
+            SingletonManager.Get<TruckMovement>().transform.rotation = TruckPosition.rotation;
+        }
+            
 
       
         _textModifier.Fade(false, 10);

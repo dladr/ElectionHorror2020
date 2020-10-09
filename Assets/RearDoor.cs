@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Helpers;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 
@@ -126,7 +127,7 @@ public class RearDoor : MonoBehaviour
     {
         if (!IsOpen)
             return "Back Door";
-        else if (IsOpen && !_playerController.HasBag)
+        else if (IsOpen && !_playerController.HasBag && IsMailToCollectNearby)
         {
             return "Mail Bags";
         }
@@ -153,10 +154,48 @@ public class RearDoor : MonoBehaviour
         _emptyBagIndex++;
     }
 
+    void SetEmptyBagIndex(int index)
+    {
+        if (_emptyBagIndex == index)
+            return;
+
+        _emptyBagIndex = index;
+
+        foreach (GameObject emptyBag in _emptyBags)
+        {
+            emptyBag.SetActive(true);
+        }
+
+        if (_emptyBagIndex > 0)
+            for (int i = 0; i < _emptyBagIndex; i++)
+            {
+                _emptyBags[i].SetActive(false);
+            }
+    }
+
     void AddFullBag()
     {
         _fullBags[_fullBagIndex].SetActive(true);
         _fullBagIndex++;
+    }
+
+    void SetFullBagIndex(int index)
+    {
+        if (_fullBagIndex == index)
+            return;
+
+        _fullBagIndex = index;
+
+        foreach (GameObject fullBag in _fullBags)
+        {
+            fullBag.SetActive(false);
+        }
+
+        if (_fullBagIndex > 0)
+            for (int i = 0; i < _fullBagIndex; i++)
+            {
+                _fullBags[i].SetActive(true);
+            }
     }
     void OpenDoor()
     {
@@ -171,5 +210,21 @@ public class RearDoor : MonoBehaviour
         IsOpen = false;
         _textModifier.UpdateTextTrio(GetLabel(), Color.white, FontStyles.Normal);
        // _textModifier.AutoTimeFades();
+    }
+
+    [Button]
+    public void Reset(bool isTruckDoorOpen, int emptyBagIndex, int fullBagIndex, bool isMailToCollect)
+    {
+        if(isTruckDoorOpen)
+            OpenDoor();
+        else
+        {
+            CloseDoor();
+        }
+
+        SetEmptyBagIndex(emptyBagIndex);
+        SetFullBagIndex(fullBagIndex);
+        IsMailToCollectNearby = isMailToCollect;
+
     }
 }

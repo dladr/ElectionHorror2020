@@ -136,6 +136,15 @@ public class PlayerController : MonoBehaviour
        transform.rotation = _currentRotation;
     }
 
+    public void Reset()
+    {
+        _dropBag.SetActive(false);
+        HasBag = false;
+        IsBagFull = false;
+        _paperAnim.SetBool("IsHoldingBag", false);
+        _carryBagAnimator.SetBool("IsFull", false);
+        _carryBagAnimator.SetBool("IsVisible", false);
+    }
     void DetermineRotationReferences()
     {
         _gameManager.RotationReferences = _gameManager.RotationReferences.OrderBy(x => Vector3.Distance(x.transform.position, transform.position)).ToList();
@@ -267,7 +276,7 @@ public class PlayerController : MonoBehaviour
     {
         _isActive = false;
     }
-
+    [Button]
     public void TakeDamage(int damage = 1)
     {
         if (damage > 0)
