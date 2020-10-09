@@ -43090,6 +43090,7 @@ GameObject:
   - component: {fileID: 1694231276}
   - component: {fileID: 1694231278}
   - component: {fileID: 1694231277}
+  - component: {fileID: 1694231279}
   m_Layer: 0
   m_Name: TriggerZone
   m_TagString: Untagged
@@ -43137,6 +43138,28 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 8.07, y: 2.49, z: 12.77}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1694231279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1694231275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 632cd032b1a74bb4f8fc531e957ab2bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerPosition: {fileID: 0}
+  NumberOfOrbs: 1
+  PlayerObject: {fileID: 0}
+  TruckPosition: {fileID: 0}
+  Ghosts: []
+  PostalBoxes: []
+  ResetCheckPoint:
+    m_PersistentCalls:
+      m_Calls: []
+  ObjectsToSetActive: []
 --- !u!1 &1699322886
 GameObject:
   m_ObjectHideFlags: 0

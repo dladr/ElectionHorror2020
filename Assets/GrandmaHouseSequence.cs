@@ -36,6 +36,7 @@ public class GrandmaHouseSequence : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Cursor.visible = false;
         _startingFOV = _cameras[0].fieldOfView;
         StartCoroutine(Sequence());
     }
