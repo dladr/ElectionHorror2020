@@ -120,6 +120,7 @@ public class CrashedCar : MonoBehaviour
         TruckGameObject.transform.position = _truckLocation.position;
         TruckGameObject.transform.rotation = _truckLocation.rotation;
         _playerController.transform.position = _playerLocation.position;
+        _rearDoor.ActivateStranger(true);
 
         yield return new WaitForSeconds(.5f);
 

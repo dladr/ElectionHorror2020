@@ -29,6 +29,9 @@ public class RearDoor : MonoBehaviour
     private int _emptyBagIndex;
     private int _fullBagIndex;
 
+    [SerializeField] private GameObject _strangerGameObject;
+    [SerializeField] private Animator _strangerAnim;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -226,5 +229,10 @@ public class RearDoor : MonoBehaviour
         SetFullBagIndex(fullBagIndex);
         IsMailToCollectNearby = isMailToCollect;
 
+    }
+
+    public void ActivateStranger(bool isActivating)
+    {
+        _strangerGameObject.SetActive(isActivating);
     }
 }
