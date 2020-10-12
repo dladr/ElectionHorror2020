@@ -9,7 +9,7 @@ using UnityEngine;
 public class RearDoor : MonoBehaviour
 {
     [SerializeField] public bool IsOpen;
-
+    public bool IsInteractable;
 
     [SerializeField] private bool _isPlayerPresent;
 
@@ -57,6 +57,9 @@ public class RearDoor : MonoBehaviour
 
     void TakeAction()
     {
+        if (!IsInteractable)
+            return;
+
         if (!IsOpen)
         {
             if (IsMailToCollectNearby)
@@ -200,7 +203,7 @@ public class RearDoor : MonoBehaviour
                 _fullBags[i].SetActive(true);
             }
     }
-    void OpenDoor()
+ public void OpenDoor()
     {
         _anim.SetBool("IsOpen", true);
         IsOpen = true;

@@ -32,6 +32,9 @@ public class CrashedCar : MonoBehaviour
 
     private PlayerController _playerController;
 
+    public GameObject TreeGameObject;
+    public GameObject TreeMovedGameObject;
+
 
 
     // Start is called before the first frame update
@@ -117,15 +120,87 @@ public class CrashedCar : MonoBehaviour
 
         _screenFader.Fade(isFadingIn:false);
 
+        TreeGameObject.SetActive(false);
+        TreeGameObject.SetActive(true);
         TruckGameObject.transform.position = _truckLocation.position;
         TruckGameObject.transform.rotation = _truckLocation.rotation;
         _playerController.transform.position = _playerLocation.position;
         _rearDoor.ActivateStranger(true);
+        _rearDoor.OpenDoor();
+        _rearDoor.IsInteractable = false;
 
         yield return new WaitForSeconds(.5f);
 
         _screenFader.Fade();
 
+        _textModifier.UpdateTextTrio(DialogueStrings[3], TextColors[3], FontStyles[3]);
+        _textModifier.Fade();
+        _hasPlayerHitSpace = false;
+        while (!_hasPlayerHitSpace)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        _textModifier.Fade(false);
+        yield return new WaitForSeconds(.5f);
+
+
+        _textModifier.UpdateTextTrio(DialogueStrings[4], TextColors[4], FontStyles[4]);
+        _textModifier.Fade();
+        _hasPlayerHitSpace = false;
+        while (!_hasPlayerHitSpace)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        _textModifier.Fade(false);
+        yield return new WaitForSeconds(.5f);
+
+        _textModifier.UpdateTextTrio(DialogueStrings[5], TextColors[5], FontStyles[5]);
+        _textModifier.Fade();
+        _hasPlayerHitSpace = false;
+        while (!_hasPlayerHitSpace)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        _textModifier.Fade(false);
+        yield return new WaitForSeconds(.5f);
+
+        _textModifier.UpdateTextTrio(DialogueStrings[6], TextColors[6], FontStyles[6]);
+        _textModifier.Fade();
+        _hasPlayerHitSpace = false;
+        while (!_hasPlayerHitSpace)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        _textModifier.Fade(false);
+        yield return new WaitForSeconds(.5f);
+
+        _textModifier.UpdateTextTrio(DialogueStrings[7], TextColors[7], FontStyles[7]);
+        _textModifier.Fade();
+        _hasPlayerHitSpace = false;
+        while (!_hasPlayerHitSpace)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        _textModifier.Fade(false);
+        yield return new WaitForSeconds(.5f);
+
+        _textModifier.UpdateTextTrio(DialogueStrings[8], TextColors[8], FontStyles[8]);
+        _textModifier.Fade();
+        _hasPlayerHitSpace = false;
+        while (!_hasPlayerHitSpace)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        _textModifier.Fade(false);
+
+        _rearDoor.IsInteractable = true;
+        _playerController.SetActive();
 
         yield return null;
     }
