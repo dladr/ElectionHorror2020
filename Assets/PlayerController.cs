@@ -331,4 +331,9 @@ public class PlayerController : MonoBehaviour
         _dropBag.GetComponentInChildren<DropBagPickup>().IsFull = IsBagFull;
 
     }
+
+    public void ResetAnim()
+    {
+        _paperAnim.SetBool("IsHorizontal", false);
+    }
 }

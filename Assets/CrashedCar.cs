@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Helpers;
+using Sirenix.Utilities;
 using TMPro;
 using UnityEngine;
 
@@ -28,7 +29,9 @@ public class CrashedCar : MonoBehaviour
 
     private RearDoor _rearDoor;
 
-    private bool _hasPlayerHitSpace;
+   [SerializeField] private bool _hasPlayerHitSpace;
+
+   private bool _hasStartedSequence;
 
     private PlayerController _playerController;
 
@@ -54,8 +57,9 @@ public class CrashedCar : MonoBehaviour
         if (Input.GetButtonDown("Action"))
             _hasPlayerHitSpace = true;
 
-        if (_isPlayerPresent && Input.GetButtonDown("Action"))
+        if (_isPlayerPresent && Input.GetButtonDown("Action") && !_hasStartedSequence)
         {
+            _hasStartedSequence = true;
             StartCoroutine(CrashSequence());
         }
     }
@@ -83,6 +87,9 @@ public class CrashedCar : MonoBehaviour
 
     IEnumerator CrashSequence()
     {
+        if (_rearDoor.SafeIsUnityNull())
+            _rearDoor = SingletonManager.Get<RearDoor>();
+
         _playerController.Deactivate();
 
         _textModifier.UpdateTextTrio(DialogueStrings[0], TextColors[0], FontStyles[0]);
@@ -120,18 +127,24 @@ public class CrashedCar : MonoBehaviour
 
         _screenFader.Fade(isFadingIn:false);
 
+        yield return new WaitForSeconds(.5f);
+        //TODO: Play SFX
+
         TreeGameObject.SetActive(false);
-        TreeGameObject.SetActive(true);
+        TreeMovedGameObject.SetActive(true);
         TruckGameObject.transform.position = _truckLocation.position;
         TruckGameObject.transform.rotation = _truckLocation.rotation;
         _playerController.transform.position = _playerLocation.position;
+        _playerController.ResetRotation();
+        _playerController.ResetAnim();
         _rearDoor.ActivateStranger(true);
         _rearDoor.OpenDoor();
         _rearDoor.IsInteractable = false;
 
-        yield return new WaitForSeconds(.5f);
 
         _screenFader.Fade();
+
+        yield return new WaitForSeconds(.5f);
 
         _textModifier.UpdateTextTrio(DialogueStrings[3], TextColors[3], FontStyles[3]);
         _textModifier.Fade();
