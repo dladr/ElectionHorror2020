@@ -24,6 +24,17 @@ public class TruckMovement : MonoBehaviour
     [SerializeField] private GameObject _boxColliderGameObject;
     [SerializeField] private GameObject _capsuleColliderGameObject;
 
+    public bool IsHidden;
+    public bool IsTryingToHide;
+    public bool CanHide;
+    public float HideTime;
+    public float HideCooldown;
+    public float TimeToHide;
+    public bool IsButtonDown;
+    public SpriteRenderer SteeringWheelSpriteRenderer;
+    public Color HideChargedColor;
+    public Color HideColor;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +46,11 @@ public class TruckMovement : MonoBehaviour
     {
         if (!_isActive)
             return;
+
+        IsButtonDown = Input.GetButton("Action");
+
+        if (CanHide && Input.GetButtonDown("Action"))
+            StartCoroutine(Hide());
 
         Turn(Input.GetAxis("Horizontal"));
         CalculateManualSpeed(Input.GetAxis("Vertical"));
@@ -51,6 +67,45 @@ public class TruckMovement : MonoBehaviour
 
     }
 
+    IEnumerator Hide()
+    {
+        float timePassed = 0;
+        IsTryingToHide = true;
+
+        while (IsButtonDown && timePassed < TimeToHide)
+        {
+            timePassed += Time.deltaTime;
+            SteeringWheelSpriteRenderer.color = Color.Lerp(HideChargedColor, HideColor, timePassed / TimeToHide);
+            yield return new WaitForEndOfFrame();
+        }
+
+        IsTryingToHide = false;
+
+        if (!IsButtonDown)
+            yield break;
+        
+            
+
+        timePassed = 0;
+        IsHidden = true;
+        CanHide = false;
+
+        yield return new WaitForSeconds(TimeToHide);
+
+        IsHidden = false;
+        SteeringWheelSpriteRenderer.color = Color.white;
+
+        while (timePassed < HideCooldown)
+        {
+            timePassed += Time.deltaTime;
+            SteeringWheelSpriteRenderer.color = Color.Lerp(Color.white, HideChargedColor, timePassed / HideCooldown);
+            yield return new WaitForEndOfFrame();
+        }
+
+        CanHide = true;
+        //TODO: Cool hiding effect (maybe turn all renderers off/invisible?)
+
+    }
     void Turn(float xAxis)
     {
         //_rigidbody.AddTorque(0, xAxis * _turnForce, 0, ForceMode.Force);
