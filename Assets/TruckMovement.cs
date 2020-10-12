@@ -35,6 +35,9 @@ public class TruckMovement : MonoBehaviour
     public Color HideChargedColor;
     public Color HideColor;
 
+    private float _storedSpeed;
+    private Vector3 _storedVelocity;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -53,14 +56,16 @@ public class TruckMovement : MonoBehaviour
             StartCoroutine(Hide());
 
         Turn(Input.GetAxis("Horizontal"));
-        CalculateManualSpeed(Input.GetAxis("Vertical"));
+
+        if(!IsHidden)
+            CalculateManualSpeed(Input.GetAxis("Vertical"));
 
         //Accelerate(Input.GetAxis("Vertical"));
 
         //_currentSpeed = transform.InverseTransformDirection(_rigidbody.velocity).z;
         _velocity = _rigidbody.velocity;
 
-        if (_currentSpeed < .5f && Input.GetButtonDown("Action"))
+        if (!IsHidden && _currentSpeed < .5f && Input.GetButtonDown("Action"))
         {
             FindObjectOfType<TruckDoor>().ExitTruck();
         }
@@ -90,10 +95,19 @@ public class TruckMovement : MonoBehaviour
         IsHidden = true;
         CanHide = false;
 
+        _storedSpeed = transform.InverseTransformDirection(_rigidbody.velocity).z;
+        _storedVelocity = _rigidbody.velocity;
+
+        _currentSpeed = 0;
+        _rigidbody.velocity = Vector3.zero;
+
         yield return new WaitForSeconds(TimeToHide);
 
         IsHidden = false;
         SteeringWheelSpriteRenderer.color = Color.white;
+
+        //_currentSpeed = _storedSpeed;
+        //_rigidbody.velocity = _storedVelocity;
 
         while (timePassed < HideCooldown)
         {
@@ -122,6 +136,13 @@ public class TruckMovement : MonoBehaviour
 
     void CalculateManualSpeed(float yAxis)
     {
+        if (IsHidden)
+        {
+            _currentSpeed = 0;
+            _rigidbody.velocity = Vector3.zero;
+            return;
+        }
+
         _currentSpeed = transform.InverseTransformDirection(_rigidbody.velocity).z;
         float speedMagnitude = Mathf.Abs(_currentSpeed);
         if (speedMagnitude < .01f)

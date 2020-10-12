@@ -12,8 +12,9 @@ public class CopZone : MonoBehaviour
     [SerializeField] private Transform PoliceCarDestination;
     [SerializeField] private float Speed;
     [SerializeField] private float CaptureDistance;
-
+    public float Distance;
     public bool IsActive;
+    public bool ShowDistance;
 
     // Start is called before the first frame update
     void Awake()
@@ -25,6 +26,11 @@ public class CopZone : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (ShowDistance)
+        {
+            Distance = Vector3.Distance(PoliceCar.transform.position, _truckTransform.position);
+        }
+
         if(IsActive)
             MovePoliceCar();
     }
