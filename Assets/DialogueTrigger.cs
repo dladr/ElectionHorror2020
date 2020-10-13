@@ -31,4 +31,9 @@ public class DialogueTrigger : MonoBehaviour
             _textModifier.AutoTimeFades();
         }
     }
+
+    public void Reset()
+    {
+        HasTriggered = false;
+    }
 }

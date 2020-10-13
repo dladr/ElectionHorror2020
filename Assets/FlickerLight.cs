@@ -20,6 +20,8 @@ public class FlickerLight : MonoBehaviour
 
     [SerializeField] private Light _secondaryLight;
 
+    public bool IgnoreAngle;
+
     public bool ChangeSecondaryLight;
 
 
@@ -41,7 +43,9 @@ public class FlickerLight : MonoBehaviour
     {
         float percent = Random.Range(.1f, 1);
         _light.intensity = Mathf.Lerp(_minIntensity, _maxIntensity, percent);
-        _light.spotAngle = Mathf.Lerp(_minAngle, _maxAngle, percent);
+
+        if(!IgnoreAngle)
+            _light.spotAngle = Mathf.Lerp(_minAngle, _maxAngle, percent);
 
         if (ChangeSecondaryLight)
             _secondaryLight.intensity = _light.intensity / 10;

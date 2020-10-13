@@ -29,4 +29,9 @@ public class TriggerEvent : MonoBehaviour
             TheEvent.Invoke();
         }
     }
+
+    public void Reset()
+    {
+        HasTriggered = false;
+    }
 }

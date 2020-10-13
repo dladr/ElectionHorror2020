@@ -20,6 +20,8 @@ public class CheckPoint : MonoBehaviour
 
     public PostalBox[] PostalBoxes;
 
+    public DialogueTrigger[] DialogueTriggers;
+
     public UnityEvent ResetCheckPoint;
 
     private GameManager _gameManager;
@@ -94,20 +96,34 @@ public class CheckPoint : MonoBehaviour
         if (Ghosts.IsNullOrEmpty())
             Ghosts = GetComponentsInChildren<Ghost>();
 
-        foreach (Ghost ghost in Ghosts)
+        if (!Ghosts.IsNullOrEmpty())
         {
-            ghost.Reset();
+            foreach (Ghost ghost in Ghosts)
+            {
+                ghost.Reset();
+            }
         }
+        
 
         if (PostalBoxes.IsNullOrEmpty())
         {
             PostalBoxes = GetComponentsInChildren<PostalBox>();
         }
 
-        foreach (PostalBox postalBox in PostalBoxes)
+        if (!PostalBoxes.IsNullOrEmpty())
         {
-            postalBox.Reset();
+            foreach (PostalBox postalBox in PostalBoxes)
+            {
+                postalBox.Reset();
+            }
         }
+
+        
+        if(!DialogueTriggers.IsNullOrEmpty())
+            foreach (DialogueTrigger dialogueTrigger in DialogueTriggers)
+            {
+                dialogueTrigger.Reset();
+            }
 
         PlayerObject.GetComponent<PlayerController>().Reset();
 

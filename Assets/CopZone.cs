@@ -15,6 +15,7 @@ public class CopZone : MonoBehaviour
     public float Distance;
     public bool IsActive;
     public bool ShowDistance;
+    public Transform PoliceCarStartTransform;
 
     // Start is called before the first frame update
     void Awake()
@@ -70,5 +71,11 @@ public class CopZone : MonoBehaviour
             Deactivate();
         }
 
+    }
+
+    public void Reset()
+    {
+        Deactivate();
+        PoliceCar.transform.position = PoliceCarStartTransform.position;
     }
 }
