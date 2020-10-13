@@ -11,6 +11,8 @@ public class TextModifier : MonoBehaviour
     [SerializeField] private Animator _anim;
 
     [SerializeField] private float standardFade;
+
+    public bool Islocked;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,29 +27,44 @@ public class TextModifier : MonoBehaviour
 
    public void UpdateText(string text)
     {
+        if(Islocked)
+            return;
+
         _textMeshPro.text = text;
     }
 
   public  void UpdateColor(Color color)
     {
+        if (Islocked)
+            return;
+
         _textMeshPro.color = color;
     }
 
   public void UpdateFontStyle(FontStyles fontStyle)
   {
-      _textMeshPro.fontStyle = fontStyle;
+      if (Islocked)
+          return;
+
+        _textMeshPro.fontStyle = fontStyle;
   }
 
   public void UpdateTextTrio(string text, Color color, FontStyles fontStyle)
   {
-      UpdateText(text);
+      if (Islocked)
+          return;
+
+        UpdateText(text);
       UpdateColor(color);
       UpdateFontStyle(fontStyle);
   }
 
   public void AutoTimeFades(float fadeTime = -1)
   {
-      if (fadeTime == -1)
+      if (Islocked)
+          return;
+
+        if (fadeTime == -1)
           fadeTime = 5;
 
       Fade();
@@ -57,7 +74,10 @@ public class TextModifier : MonoBehaviour
 
   IEnumerator FadeAfterSeconds(float seconds)
   {
-      yield return new WaitForSeconds(seconds);
+      if (Islocked)
+          yield break;
+
+        yield return new WaitForSeconds(seconds);
       Fade(false);
       yield return null;
   }
@@ -65,6 +85,9 @@ public class TextModifier : MonoBehaviour
     [Button]
    public void Fade(bool isFadingIn = true, float speed = -1 )
     {
+        if (Islocked)
+            return;
+
         StopAllCoroutines();
 
         if (speed < 0)

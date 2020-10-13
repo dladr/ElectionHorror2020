@@ -122,6 +122,9 @@ public class RearDoor : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            if (!_playerController.IsActive)
+                return;
+
             _isPlayerPresent = true;
             _textModifier.UpdateTextTrio(GetLabel(), Color.white, FontStyles.Normal);
             _textModifier.Fade(true, 10);
@@ -148,6 +151,9 @@ public class RearDoor : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            if (!_playerController.IsActive)
+                return;
+
             _isPlayerPresent = false;
             _textModifier.Fade(false, 10);
             _orbManager.SetCanAttack(true);

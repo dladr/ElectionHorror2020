@@ -48,6 +48,9 @@ public class TruckDoor : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            if (!other.GetComponentInChildren<PlayerController>().IsActive)
+                return;
+
             _isPlayerPresent = true;
             other.GetComponentInChildren<OrbManager>().SetCanAttack(false);
             _textModifier.UpdateTextTrio("Front Door", Color.white, FontStyles.Normal);
@@ -59,6 +62,9 @@ public class TruckDoor : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            if (!other.GetComponentInChildren<PlayerController>().IsActive)
+                return;
+
             _isPlayerPresent = false;
             other.GetComponentInChildren<OrbManager>().SetCanAttack(true);
             _textModifier.Fade(false, 10f);
@@ -100,7 +106,8 @@ public class TruckDoor : MonoBehaviour
         _playerObject.GetComponent<PlayerController>().ResetRotation();
         _mainCamera.transform.SetParent(_playerCameraTransform);
         _mainCamera.transform.position = _playerCameraTransform.position;
-        _playerObject.GetComponent<PlayerController>().Reappear();
+        _mainCamera.transform.rotation = _playerCameraTransform.rotation;
+        _playerObject.GetComponent<PlayerController>().ReappearWithouActivating();
     }
 
     void ResetCoolDown()

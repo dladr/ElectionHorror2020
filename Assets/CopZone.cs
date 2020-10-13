@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Helpers;
+using Sirenix.Utilities;
 using TMPro;
 using Unity.Profiling;
 using UnityEngine;
@@ -27,6 +28,7 @@ public class CopZone : MonoBehaviour
     private TextModifier _textModifier;
 
     private bool _hasPassedPlayer;
+    private ScreenFader _screenFader;
 
     // Start is called before the first frame update
     void Awake()
@@ -34,6 +36,7 @@ public class CopZone : MonoBehaviour
         _truckMovement = SingletonManager.Get<TruckMovement>();
         _truckTransform = _truckMovement.transform;
         _textModifier = SingletonManager.Get<TextModifier>();
+        _screenFader = SingletonManager.Get<ScreenFader>();
     }
 
     // Update is called once per frame
@@ -67,7 +70,7 @@ public class CopZone : MonoBehaviour
         PoliceCar.transform.position =
             Vector3.MoveTowards(PoliceCar.transform.position, PoliceCarDestination.position, Time.deltaTime * Speed);
 
-        if (_hasPassedPlayer && Vector3.Distance(PoliceCar.transform.position, _truckTransform.position) < CaptureDistance)
+        if (!_hasPassedPlayer && Vector3.Distance(PoliceCar.transform.position, _truckTransform.position) < CaptureDistance)
         {
             _hasPassedPlayer = true;
 
@@ -75,13 +78,20 @@ public class CopZone : MonoBehaviour
             {
                 _textModifier.UpdateTextTrio(TruckHiddenMessage, TextColorHidden, FontStylesHidden);
                 _textModifier.AutoTimeFades();
-                _truckMovement.CaughtByCops();
             }
 
             else
             {
+                if (_screenFader.SafeIsUnityNull())
+                    _screenFader = SingletonManager.Get<ScreenFader>();
+
+                _screenFader.Fade(10, false);
+
                 _textModifier.UpdateTextTrio(CaptureMessage, TextColor, FontStyles);
                 _textModifier.AutoTimeFades();
+                _textModifier.Islocked = true;
+
+                
                 _truckMovement.CaughtByCops();
             }
         }
@@ -97,5 +107,6 @@ public class CopZone : MonoBehaviour
     {
         Deactivate();
         PoliceCar.transform.position = PoliceCarStartTransform.position;
+        _hasPassedPlayer = false;
     }
 }

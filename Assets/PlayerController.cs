@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float _speed;
 
-    [SerializeField] private bool _isActive;
+    public bool IsActive;
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private OrbManager _orbManager;
     [SerializeField] private Collider _collider;
@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
     
     void Update()
     {
-        if (!_isActive)
+        if (!IsActive)
             return;
 
        
@@ -124,6 +124,14 @@ public class PlayerController : MonoBehaviour
         _collider.enabled = true;
         _orbManager.HideOrbs(false);
         ToggleIsActive();
+    }
+
+    public void ReappearWithouActivating()
+    {
+        _paperTransform.gameObject.SetActive(true);
+        _rigidbody.isKinematic = false;
+        _collider.enabled = true;
+        _orbManager.HideOrbs(false);
     }
 
     [Button]
@@ -264,17 +272,17 @@ public class PlayerController : MonoBehaviour
     [Button]
     public void ToggleIsActive()
     {
-        _isActive = !_isActive;
+        IsActive = !IsActive;
     }
 
     public void SetActive()
     {
-        _isActive = true;
+        IsActive = true;
     }
 
     public void Deactivate()
     {
-        _isActive = false;
+        IsActive = false;
     }
     [Button]
     public void TakeDamage(int damage = 1)

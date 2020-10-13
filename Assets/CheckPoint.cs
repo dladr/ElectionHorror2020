@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Helpers;
+using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using UnityEngine;
 using UnityEngine.Events;
@@ -39,6 +40,7 @@ public class CheckPoint : MonoBehaviour
     public bool IsMailToCollect;
 
     public bool IsTruckDoorOpen;
+    public bool InstantFade;
 
     // Start is called before the first frame update
     void Awake()
@@ -59,6 +61,7 @@ public class CheckPoint : MonoBehaviour
         
     }
 
+    [Button]
     public void Reset()
     {
         StartCoroutine(ResetSequence());
@@ -74,7 +77,9 @@ public class CheckPoint : MonoBehaviour
 
         PlayerObject.GetComponentInChildren<PlayerController>().Deactivate();
 
-        _screenFader.Fade(isFadingIn: false);
+        if(!InstantFade)
+            _screenFader.Fade(isFadingIn: false);
+       
         yield return new WaitForSeconds(1f);
 
         foreach (GameObject o in ObjectsToSetActive)
@@ -129,6 +134,7 @@ public class CheckPoint : MonoBehaviour
 
         PlayerObject.GetComponent<PlayerController>().Reset();
 
+        
         _textModifier.Fade(false, 10);
 
         PlayerObject.GetComponentInChildren<PlayerController>().SetActive();
@@ -136,6 +142,12 @@ public class CheckPoint : MonoBehaviour
 
         SingletonManager.Get<RearDoor>().Reset(IsTruckDoorOpen, EmptyBagIndex, FullBagIndex, IsMailToCollect);
 
+        if (_textModifier.Islocked)
+        {
+            _textModifier.Islocked = false;
+            _textModifier.Fade(false, 10);
+        }
+        
         yield return null;
     }
 
