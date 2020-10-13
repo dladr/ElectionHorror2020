@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Helpers;
 using UnityEngine;
 
 public class TruckMovement : MonoBehaviour
@@ -38,10 +39,14 @@ public class TruckMovement : MonoBehaviour
     private float _storedSpeed;
     private Vector3 _storedVelocity;
 
+    private TruckDoor _truckDoor;
+
+    public bool IsCopNearby;
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        _truckDoor = SingletonManager.Get<TruckDoor>();
     }
 
     // Update is called once per frame
@@ -67,9 +72,16 @@ public class TruckMovement : MonoBehaviour
 
         if (!IsHidden && _currentSpeed < .5f && Input.GetButtonDown("Action"))
         {
-            FindObjectOfType<TruckDoor>().ExitTruck();
+            _truckDoor.ExitTruck();
         }
 
+    }
+
+    public void CaughtByCops()
+    {
+        Deactivate();
+       _truckDoor.ExitTruckInstantly();
+       SingletonManager.Get<GameManager>().LastCheckPoint.Reset();
     }
 
     IEnumerator Hide()
@@ -102,6 +114,11 @@ public class TruckMovement : MonoBehaviour
         _rigidbody.velocity = Vector3.zero;
 
         yield return new WaitForSeconds(TimeToHide);
+
+        while (IsCopNearby)
+        {
+            yield return new WaitForEndOfFrame();
+        }
 
         IsHidden = false;
         SteeringWheelSpriteRenderer.color = Color.white;
@@ -210,6 +227,14 @@ public class TruckMovement : MonoBehaviour
     public void ToggleActive()
     {
         _isActive = !_isActive;
+        _rigidbody.isKinematic = !_isActive;
+        _capsuleColliderGameObject.SetActive(_isActive);
+        _boxColliderGameObject.SetActive(!_isActive);
+    }
+
+    public void Deactivate()
+    {
+        _isActive = false;
         _rigidbody.isKinematic = !_isActive;
         _capsuleColliderGameObject.SetActive(_isActive);
         _boxColliderGameObject.SetActive(!_isActive);

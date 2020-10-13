@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Helpers;
+using TMPro;
 using Unity.Profiling;
 using UnityEngine;
 
@@ -16,12 +17,23 @@ public class CopZone : MonoBehaviour
     public bool IsActive;
     public bool ShowDistance;
     public Transform PoliceCarStartTransform;
+    public string CaptureMessage;
+    public string TruckHiddenMessage;
+    public Color TextColorHidden;
+    public Color TextColor;
+    public FontStyles FontStyles;
+    public FontStyles FontStylesHidden;
+
+    private TextModifier _textModifier;
+
+    private bool _hasPassedPlayer;
 
     // Start is called before the first frame update
     void Awake()
     {
         _truckMovement = SingletonManager.Get<TruckMovement>();
         _truckTransform = _truckMovement.transform;
+        _textModifier = SingletonManager.Get<TextModifier>();
     }
 
     // Update is called once per frame
@@ -40,12 +52,14 @@ public class CopZone : MonoBehaviour
     {
         PoliceCar.SetActive(true);
         IsActive = true;
+        _truckMovement.IsCopNearby = true;
     }
 
     public void Deactivate()
     {
         PoliceCar.SetActive(false);
         IsActive = false;
+        _truckMovement.IsCopNearby = false;
     }
 
     void MovePoliceCar()
@@ -53,16 +67,22 @@ public class CopZone : MonoBehaviour
         PoliceCar.transform.position =
             Vector3.MoveTowards(PoliceCar.transform.position, PoliceCarDestination.position, Time.deltaTime * Speed);
 
-        if (Vector3.Distance(PoliceCar.transform.position, _truckTransform.position) < CaptureDistance)
+        if (_hasPassedPlayer && Vector3.Distance(PoliceCar.transform.position, _truckTransform.position) < CaptureDistance)
         {
+            _hasPassedPlayer = true;
+
             if (_truckMovement.IsHidden)
             {
-                Debug.Log("Successful hide!");
+                _textModifier.UpdateTextTrio(TruckHiddenMessage, TextColorHidden, FontStylesHidden);
+                _textModifier.AutoTimeFades();
+                _truckMovement.CaughtByCops();
             }
 
             else
             {
-                Debug.Log("Cop Caught you!");
+                _textModifier.UpdateTextTrio(CaptureMessage, TextColor, FontStyles);
+                _textModifier.AutoTimeFades();
+                _truckMovement.CaughtByCops();
             }
         }
 

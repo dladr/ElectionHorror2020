@@ -71,6 +71,7 @@ public class CheckPoint : MonoBehaviour
 
     IEnumerator ResetSequence()
     {
+
         PlayerObject.GetComponentInChildren<PlayerController>().Deactivate();
 
         _screenFader.Fade(isFadingIn: false);
@@ -87,8 +88,9 @@ public class CheckPoint : MonoBehaviour
 
         if (!TruckPosition.SafeIsUnityNull())
         {
-            SingletonManager.Get<TruckMovement>().transform.position = TruckPosition.position;
-            SingletonManager.Get<TruckMovement>().transform.rotation = TruckPosition.rotation;
+            TruckMovement truckMovement = SingletonManager.Get<TruckMovement>();
+            truckMovement.transform.position = TruckPosition.position;
+            truckMovement.transform.rotation = TruckPosition.rotation;
         }
 
         SingletonManager.Get<OrbManager>().SetNumberOfOrbs(NumberOfOrbs);

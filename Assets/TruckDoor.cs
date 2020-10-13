@@ -94,6 +94,15 @@ public class TruckDoor : MonoBehaviour
         StartCoroutine(MoveCamera(_playerCameraTransform));
     }
 
+    public void ExitTruckInstantly()
+    {
+        _playerObject.transform.SetParent(null);
+        _playerObject.GetComponent<PlayerController>().ResetRotation();
+        _mainCamera.transform.SetParent(_playerCameraTransform);
+        _mainCamera.transform.position = _playerCameraTransform.position;
+        _playerObject.GetComponent<PlayerController>().Reappear();
+    }
+
     void ResetCoolDown()
     {
         _isCoolingDown = false;
