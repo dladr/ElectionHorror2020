@@ -63,6 +63,18 @@ public class Orb : MonoBehaviour
         Disarm();
     }
 
+  public void DeactivateWithParticles()
+  {
+      if (!_isAwake)
+          return;
+
+      _particleSystem.Play();
+      _renderer.enabled = false;
+      _light.enabled = false;
+
+      Disarm();
+    }
+
     public void Reactivate()
     {
         if (!_isAwake)

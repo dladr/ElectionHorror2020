@@ -21,6 +21,8 @@ public class CheckPoint : MonoBehaviour
 
     public PostalBox[] PostalBoxes;
 
+    public Mimic[] Mimics;
+
     public DialogueTrigger[] DialogueTriggers;
 
     public UnityEvent ResetCheckPoint;
@@ -122,6 +124,14 @@ public class CheckPoint : MonoBehaviour
             foreach (PostalBox postalBox in PostalBoxes)
             {
                 postalBox.Reset();
+            }
+        }
+
+        if (!Mimics.IsNullOrEmpty())
+        {
+            foreach (Mimic mimic in Mimics)
+            {
+                mimic.Reset();
             }
         }
 

@@ -18,9 +18,11 @@ public class PostalBox : MonoBehaviour
 
     [SerializeField] private RoadMarker _roadMarker;
 
-    [SerializeField] private MaterialSetter[] _materialSetters;
+    [SerializeField] public MaterialSetter[] _materialSetters;
 
     private TextModifier _textModifier;
+
+    public bool IsDeactivated;
     // Start is called before the first frame update
     void Awake()
     {
@@ -32,6 +34,9 @@ public class PostalBox : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (IsDeactivated)
+            return;
+
         if (Input.GetButtonDown("Action") && IsPlayerPresent)
         {
             if(CanCollectMail)
@@ -73,6 +78,9 @@ public class PostalBox : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (IsDeactivated)
+            return;
+
         if(other.CompareTag("Player"))
         {
             if (_playerController.HasBag && HasMail)
@@ -89,6 +97,9 @@ public class PostalBox : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        if (IsDeactivated)
+            return;
+
         if (other.CompareTag("Player"))
         {
             CanCollectMail = false;

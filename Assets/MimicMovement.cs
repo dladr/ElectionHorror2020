@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Helpers;
 using Sirenix.OdinInspector;
@@ -27,17 +28,60 @@ public class MimicMovement : MonoBehaviour
     [SerializeField] private float StandardDegreesToRotate;
     [SerializeField] private Transform ReferenceAngle;
 
+    private List<Vector3> _originalPositions;
+    private List<Quaternion> _originalRotations;
+
     public bool IsMovingRightLeg;
 
     private bool _isTrackingTarget;
 
     public float LookRotation;
-    
-    public void TrackTarget(Transform targetTransform)
+
+    private void Awake()
     {
-        TargetTransform = targetTransform;
+        TargetTransform = SingletonManager.Get<PlayerController>().transform;
+        _originalPositions = new List<Vector3>();
+        _originalRotations = new List<Quaternion>();
+
+        _originalPositions.Add(FrontRightTransform.position);
+        _originalPositions.Add(FrontRightReferenceTransform.position);
+        _originalPositions.Add(FrontLeftTransform.position);
+        _originalPositions.Add(FrontLeftReferenceTransform.position);
+        _originalPositions.Add(transform.position);
+
+        _originalRotations.Add(FrontRightTransform.rotation);
+        _originalRotations.Add(FrontRightReferenceTransform.rotation);
+        _originalRotations.Add(FrontLeftTransform.rotation);
+        _originalRotations.Add(FrontLeftReferenceTransform.rotation);
+        _originalRotations.Add(transform.rotation);
+    }
+
+    public void TrackTarget()
+    {
         _isTrackingTarget = true;
         MoveNextLeg();
+    }
+
+    public void Stop()
+    {
+        _isTrackingTarget = false;
+    }
+
+    public void Reset()
+    {
+        _isTrackingTarget = false;
+
+        FrontRightTransform.position = _originalPositions[0];
+        FrontRightReferenceTransform.position = _originalPositions[1];
+        FrontLeftTransform.position = _originalPositions[2];
+        FrontLeftReferenceTransform.position = _originalPositions[3];
+        transform.position = _originalPositions[4];
+
+        FrontRightTransform.rotation = _originalRotations[0];
+        FrontRightReferenceTransform.rotation = _originalRotations[1];
+        FrontLeftTransform.rotation = _originalRotations[2];
+        FrontLeftReferenceTransform.rotation = _originalRotations[3];
+        transform.rotation = _originalRotations[4];
     }
 
     [Button]
