@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Helpers;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class MimicMovement : MonoBehaviour
@@ -23,21 +24,62 @@ public class MimicMovement : MonoBehaviour
 
     [SerializeField] private float ZDegreesToRotate;
 
+    [SerializeField] private float StandardDegreesToRotate;
+    [SerializeField] private Transform ReferenceAngle;
+
     public bool IsMovingRightLeg;
-    // Start is called before the first frame update
-    void Awake()
+
+    private bool _isTrackingTarget;
+
+    public float LookRotation;
+    
+    public void TrackTarget(Transform targetTransform)
     {
-        TargetTransform = SingletonManager.Get<PlayerController>().transform;
+        TargetTransform = targetTransform;
+        _isTrackingTarget = true;
+        MoveNextLeg();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    [Button]
     void MoveNextLeg()
     {
+        if (!_isTrackingTarget)
+            return;
+
+        //Vector3 translation = TargetTransform.position - transform.position;
+        //Quaternion lookRotation = Quaternion.LookRotation(translation, Vector3.up);
+        //float lookRotationY = lookRotation.eulerAngles.y;
+        ReferenceAngle.localEulerAngles = Vector3.zero;
+        ReferenceAngle.LookAt(TargetTransform);
+        float lookRotationY = ReferenceAngle.localEulerAngles.y;
+        lookRotationY -= 90;
+
+        if (lookRotationY > 180)
+            lookRotationY -= 360;
+
+        LookRotation = lookRotationY;
+       // lookRotationY = 0;
+
+        float degreesToRotate = StandardDegreesToRotate;
+        if (lookRotationY > 0 && IsMovingRightLeg)
+        {
+            degreesToRotate += lookRotationY;
+        }
+
+        if (lookRotationY < 0 && !IsMovingRightLeg)
+        {
+            degreesToRotate -= lookRotationY;
+        }
+
+        
+
+        if (IsMovingRightLeg)
+           StartCoroutine(MoveRightLeg(degreesToRotate)) ;
+
+        else
+        {
+           StartCoroutine(MoveLeftLeg(degreesToRotate)) ;
+        }
 
     }
 
@@ -50,8 +92,8 @@ public class MimicMovement : MonoBehaviour
 
         float timeElapsed = 0;
         Vector3 startingEulers = FrontLeftTransform.eulerAngles;
-        Vector3 targetEulers = new Vector3(startingEulers.x, -degreesToRotate, startingEulers.z);
-        Vector3 midpointEulers = new Vector3(XDegreesToRotate, -degreesToRotate/2, ZDegreesToRotate);
+        Vector3 targetEulers = new Vector3(startingEulers.x, startingEulers.y -degreesToRotate, startingEulers.z);
+        Vector3 midpointEulers = new Vector3(XDegreesToRotate, startingEulers.y - (degreesToRotate/2), ZDegreesToRotate);
         while (timeElapsed < TimeToRotate)
         {
             timeElapsed += Time.deltaTime;
@@ -69,6 +111,8 @@ public class MimicMovement : MonoBehaviour
 
         FrontLeftTransform.eulerAngles = targetEulers;
 
+        IsMovingRightLeg = true;
+
         MoveNextLeg();
         yield return null;
     }
@@ -82,8 +126,8 @@ public class MimicMovement : MonoBehaviour
 
         float timeElapsed = 0;
         Vector3 startingEulers = FrontRightTransform.eulerAngles;
-        Vector3 targetEulers = new Vector3(startingEulers.x, degreesToRotate, startingEulers.z);
-        Vector3 midpointEulers = new Vector3(-XDegreesToRotate, degreesToRotate / 2, -ZDegreesToRotate);
+        Vector3 targetEulers = new Vector3(startingEulers.x, startingEulers.y + degreesToRotate, startingEulers.z);
+        Vector3 midpointEulers = new Vector3(-XDegreesToRotate, startingEulers.y + (degreesToRotate / 2), -ZDegreesToRotate);
         while (timeElapsed < TimeToRotate)
         {
             timeElapsed += Time.deltaTime;
@@ -100,6 +144,8 @@ public class MimicMovement : MonoBehaviour
         }
 
         FrontRightTransform.eulerAngles = targetEulers;
+
+        IsMovingRightLeg = false;
 
         MoveNextLeg();
         yield return null;
