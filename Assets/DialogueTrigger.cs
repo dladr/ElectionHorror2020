@@ -32,6 +32,15 @@ public class DialogueTrigger : MonoBehaviour
         }
     }
 
+    public void ExternalTrigger()
+    {
+        if (HasTriggered)
+            return;
+
+        HasTriggered = true;
+        _textModifier.UpdateTextTrio(Dialogue, Color, FontStyles);
+        _textModifier.AutoTimeFades();
+    }
     public void Reset()
     {
         HasTriggered = false;

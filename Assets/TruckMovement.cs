@@ -19,7 +19,7 @@ public class TruckMovement : MonoBehaviour
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private Vector3 _velocity;
 
-    [SerializeField] private float _currentSpeed;
+    [SerializeField] public float CurrentSpeed;
 
     [SerializeField] private bool _isActive;
     [SerializeField] private GameObject _boxColliderGameObject;
@@ -70,7 +70,7 @@ public class TruckMovement : MonoBehaviour
         //_currentSpeed = transform.InverseTransformDirection(_rigidbody.velocity).z;
         _velocity = _rigidbody.velocity;
 
-        if (!IsHidden && _currentSpeed < .5f && Input.GetButtonDown("Action"))
+        if (!IsHidden && CurrentSpeed < .5f && Input.GetButtonDown("Action"))
         {
             _truckDoor.ExitTruck();
         }
@@ -110,7 +110,7 @@ public class TruckMovement : MonoBehaviour
         _storedSpeed = transform.InverseTransformDirection(_rigidbody.velocity).z;
         _storedVelocity = _rigidbody.velocity;
 
-        _currentSpeed = 0;
+        CurrentSpeed = 0;
         _rigidbody.velocity = Vector3.zero;
 
         yield return new WaitForSeconds(TimeToHide);
@@ -140,12 +140,12 @@ public class TruckMovement : MonoBehaviour
     void Turn(float xAxis)
     {
         //_rigidbody.AddTorque(0, xAxis * _turnForce, 0, ForceMode.Force);
-        _rigidbody.transform.Rotate(0, xAxis * _turnForce * Time.deltaTime * _currentSpeed, 0);
+        _rigidbody.transform.Rotate(0, xAxis * _turnForce * Time.deltaTime * CurrentSpeed, 0);
     }
 
     void Accelerate(float yAxis)
     {
-        if (_currentSpeed >= _maxSpeed && yAxis > 0 || _currentSpeed <= _minSpeed && yAxis < 0)
+        if (CurrentSpeed >= _maxSpeed && yAxis > 0 || CurrentSpeed <= _minSpeed && yAxis < 0)
             return;
 
         _rigidbody.AddForce(transform.forward * (yAxis * _accelerationForce), ForceMode.Force);
@@ -155,70 +155,70 @@ public class TruckMovement : MonoBehaviour
     {
         if (IsHidden)
         {
-            _currentSpeed = 0;
+            CurrentSpeed = 0;
             _rigidbody.velocity = Vector3.zero;
             return;
         }
 
-        _currentSpeed = transform.InverseTransformDirection(_rigidbody.velocity).z;
-        float speedMagnitude = Mathf.Abs(_currentSpeed);
+        CurrentSpeed = transform.InverseTransformDirection(_rigidbody.velocity).z;
+        float speedMagnitude = Mathf.Abs(CurrentSpeed);
         if (speedMagnitude < .01f)
-            _currentSpeed = speedMagnitude = 0;
+            CurrentSpeed = speedMagnitude = 0;
         float speedPercent = speedMagnitude / _maxSpeed;
-        if (_currentSpeed > 0)
+        if (CurrentSpeed > 0)
         {
             if (yAxis > 0)
             {
-                _currentSpeed += Time.deltaTime * yAxis * (_minimumAcceleration + _accelerationForce * speedPercent);
+                CurrentSpeed += Time.deltaTime * yAxis * (_minimumAcceleration + _accelerationForce * speedPercent);
             }
 
             else
             {
-                _currentSpeed += Time.deltaTime * yAxis * _breakForce * speedPercent;
+                CurrentSpeed += Time.deltaTime * yAxis * _breakForce * speedPercent;
             }
         }
           
-        else if (_currentSpeed < 0)
+        else if (CurrentSpeed < 0)
         {
             if (yAxis <= 0)
             {
-                _currentSpeed += Time.deltaTime * yAxis * (_minimumAcceleration + _accelerationForce * speedPercent);
+                CurrentSpeed += Time.deltaTime * yAxis * (_minimumAcceleration + _accelerationForce * speedPercent);
             }
 
             else
             {
-                _currentSpeed += Time.deltaTime * yAxis * _breakForce * speedPercent;
+                CurrentSpeed += Time.deltaTime * yAxis * _breakForce * speedPercent;
             }
             
         }
 
         else
         {
-            _currentSpeed += Time.deltaTime * yAxis * (_minimumAcceleration + _accelerationForce * speedPercent);
+            CurrentSpeed += Time.deltaTime * yAxis * (_minimumAcceleration + _accelerationForce * speedPercent);
         }
-        _currentSpeed -= CalculateDrag();
+        CurrentSpeed -= CalculateDrag();
 
-        if (_currentSpeed > _maxSpeed)
-            _currentSpeed = _maxSpeed;
-        if (_currentSpeed < _minSpeed)
-            _currentSpeed = _minSpeed;
+        if (CurrentSpeed > _maxSpeed)
+            CurrentSpeed = _maxSpeed;
+        if (CurrentSpeed < _minSpeed)
+            CurrentSpeed = _minSpeed;
 
-        _rigidbody.velocity = transform.forward * _currentSpeed;
+        _rigidbody.velocity = transform.forward * CurrentSpeed;
     }
 
     float CalculateDrag()
     {
-        if (_currentSpeed == 0)
+        if (CurrentSpeed == 0)
             return 0f;
 
         float multiplier = 1;
-        if (_currentSpeed < 0)
+        if (CurrentSpeed < 0)
             multiplier = -1;
 
-        float friction = (_frictionFactor*_minimumAcceleration * multiplier * Time.deltaTime) + (_frictionFactor * _currentSpeed * Time.deltaTime);
-        if (Mathf.Abs(friction) > Mathf.Abs(_currentSpeed))
+        float friction = (_frictionFactor*_minimumAcceleration * multiplier * Time.deltaTime) + (_frictionFactor * CurrentSpeed * Time.deltaTime);
+        if (Mathf.Abs(friction) > Mathf.Abs(CurrentSpeed))
         {
-            friction = _currentSpeed;
+            friction = CurrentSpeed;
         }
 
         return friction;

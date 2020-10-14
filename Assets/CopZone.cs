@@ -5,6 +5,7 @@ using Sirenix.Utilities;
 using TMPro;
 using Unity.Profiling;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CopZone : MonoBehaviour
 {
@@ -13,7 +14,11 @@ public class CopZone : MonoBehaviour
     [SerializeField] private GameObject PoliceCar;
     [SerializeField] private Transform PoliceCarDestination;
     [SerializeField] private float Speed;
+    [SerializeField] private float MinSpeed;
+    [SerializeField] private float MaxSpeed;
     [SerializeField] private float CaptureDistance;
+    [SerializeField] private float WarningDistance;
+    private bool HasWarned;
     public float Distance;
     public bool IsActive;
     public bool ShowDistance;
@@ -29,6 +34,8 @@ public class CopZone : MonoBehaviour
 
     private bool _hasPassedPlayer;
     private ScreenFader _screenFader;
+
+    public UnityEvent WarningEvent;
 
     // Start is called before the first frame update
     void Awake()
@@ -51,6 +58,16 @@ public class CopZone : MonoBehaviour
             MovePoliceCar();
     }
 
+    void SetSpeed()
+    {
+        if (_truckMovement.CurrentSpeed <= 1)
+            Speed = MinSpeed;
+        else
+        {
+            Speed = _truckMovement.CurrentSpeed * 1.25f;
+        }
+    }
+
     public void Activate()
     {
         PoliceCar.SetActive(true);
@@ -69,6 +86,12 @@ public class CopZone : MonoBehaviour
     {
         PoliceCar.transform.position =
             Vector3.MoveTowards(PoliceCar.transform.position, PoliceCarDestination.position, Time.deltaTime * Speed);
+
+        if (!HasWarned && Vector3.Distance(PoliceCar.transform.position, _truckTransform.position) < WarningDistance)
+        {
+            HasWarned = true;
+            WarningEvent.Invoke();
+        }
 
         if (!_hasPassedPlayer && Vector3.Distance(PoliceCar.transform.position, _truckTransform.position) < CaptureDistance)
         {
