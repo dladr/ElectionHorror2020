@@ -94,4 +94,18 @@ public class Orb : MonoBehaviour
         _isActive = false;
     }
 
+    public void TurnOffLights()
+    {
+        if(_isAwake)
+            _light.enabled = false;
+    }
+
+    public void TurnOnLights()
+    {
+        if (_isAwake)
+            _light.enabled = true;
+    }
+
+
+
 }

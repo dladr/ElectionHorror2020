@@ -43,6 +43,9 @@ public class TruckMovement : MonoBehaviour
 
     public bool IsCopNearby;
 
+    [SerializeField] private Camera CenterMirrorCamera;
+    [SerializeField] private Camera LeftMirrorCamera;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -230,6 +233,9 @@ public class TruckMovement : MonoBehaviour
         _rigidbody.isKinematic = !_isActive;
         _capsuleColliderGameObject.SetActive(_isActive);
         _boxColliderGameObject.SetActive(!_isActive);
+
+        CenterMirrorCamera.enabled = _isActive;
+        LeftMirrorCamera.enabled = _isActive;
     }
 
     public void Deactivate()
@@ -238,5 +244,8 @@ public class TruckMovement : MonoBehaviour
         _rigidbody.isKinematic = !_isActive;
         _capsuleColliderGameObject.SetActive(_isActive);
         _boxColliderGameObject.SetActive(!_isActive);
+
+        CenterMirrorCamera.enabled = _isActive;
+        LeftMirrorCamera.enabled = _isActive;
     }
 }

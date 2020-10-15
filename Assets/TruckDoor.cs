@@ -93,7 +93,7 @@ public class TruckDoor : MonoBehaviour
 
         _isCoolingDown = true;
 
-        _truckMovement.ToggleActive();
+        _truckMovement.Deactivate();
         _playerObject.transform.SetParent(null);
         _playerObject.GetComponent<PlayerController>().ResetRotation();
         _mainCamera.transform.SetParent(_playerCameraTransform);

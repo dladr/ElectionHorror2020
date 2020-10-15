@@ -81,6 +81,11 @@ public class OrbManager : MonoBehaviour
             {
                 orbTransform.GetComponent<Renderer>().enabled = false;
             }
+
+            foreach (Orb orb in _orbs)
+            {
+                orb.TurnOffLights();
+            }
         }
 
         else
@@ -88,6 +93,11 @@ public class OrbManager : MonoBehaviour
             foreach (Transform orbTransform in _orbTransforms)
             {
                 orbTransform.GetComponent<Renderer>().enabled = true;
+            }
+
+            foreach (Orb orb in _orbs)
+            {
+                orb.TurnOnLights();
             }
         }
     }
