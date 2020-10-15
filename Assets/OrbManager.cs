@@ -63,14 +63,14 @@ public class OrbManager : MonoBehaviour
     }
 
     [Button]
-    public void StartAttack()
+    public void StartAttack(bool isDroppingBag = true)
     {
         if (!_canAttack || !_externalCanAttack || _numberUnlocked < 1)
             return;
 
         _canAttack = false;
 
-        StartCoroutine(Attack());
+        StartCoroutine(Attack(isDroppingBag));
     }
 
     public void HideOrbs(bool isHiding)
@@ -133,10 +133,14 @@ public class OrbManager : MonoBehaviour
         return _canAttack;
     }
 
-    IEnumerator Attack()
+    IEnumerator Attack(bool isDroppingBag = true)
     {
-        _playerController.DropBag();
-        _playerAnimator.SetBool("IsHoldingEnvelope", true);
+        if (isDroppingBag)
+        {
+            _playerController.DropBag();
+            _playerAnimator.SetBool("IsHoldingEnvelope", true);
+        }
+        
 
         foreach (Orb orb in _orbs)
         {

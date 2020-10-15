@@ -67,7 +67,7 @@ public class PostalBox : MonoBehaviour
         _roadMarker.OpenRoad();
         _orbManager.UnlockOrb();
         _orbManager.SetCanAttack(true);
-        _orbManager.StartAttack();
+        _orbManager.StartAttack(false);
         _textModifier.UpdateText("Mail collected");
 
         foreach (MaterialSetter materialSetter in _materialSetters)
