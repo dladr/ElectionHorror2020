@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Helpers;
 using UnityEngine;
 
 public class Mimic : MonoBehaviour
@@ -39,7 +40,6 @@ public class Mimic : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-
         if (!_hasActivated && other.CompareTag("Player"))
         {
             _playerController = other.GetComponent<PlayerController>();
@@ -53,12 +53,14 @@ public class Mimic : MonoBehaviour
             _isPlayerPresent = true;
         }
 
-        if (!_isInvincible && other.CompareTag("Orb"))
+        else  if (!_isInvincible && other.CompareTag("Orb"))
         {
             if (!_hasActivated)
             {
+                _playerController = SingletonManager.Get<PlayerController>();
                 _hasActivated = true;
                 _mimicMovement.TrackTarget();
+                Invoke(nameof(BecomeDeadly), _deadlyDelay);
             }
 
             if (ghostIndex < _ghosts.Length)
@@ -119,12 +121,16 @@ public class Mimic : MonoBehaviour
     void Die()
     {
         _mimicMovement.Stop();
+        _isDeadly = false;
         _postalBox.IsDeactivated = false;
     }
 
     public void Reset()
     {
+
+        ghostIndex = 0;
         _hasActivated = false;
+        _isDeadly = false;
         _postalBox.IsDeactivated = true;
         _mimicMovement.Reset();
 

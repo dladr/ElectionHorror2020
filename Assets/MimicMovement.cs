@@ -69,7 +69,11 @@ public class MimicMovement : MonoBehaviour
 
     public void Reset()
     {
+        StopAllCoroutines();
+        IsMovingRightLeg = false;
+
         _isTrackingTarget = false;
+        transform.parent = OriginalTransform;
 
         FrontRightTransform.position = _originalPositions[0];
         FrontRightReferenceTransform.position = _originalPositions[1];
@@ -82,6 +86,11 @@ public class MimicMovement : MonoBehaviour
         FrontLeftTransform.rotation = _originalRotations[2];
         FrontLeftReferenceTransform.rotation = _originalRotations[3];
         transform.rotation = _originalRotations[4];
+
+        ReferenceAngle.localEulerAngles = Vector3.zero;
+        ReferenceAngle.localPosition = Vector3.zero;
+
+
     }
 
     [Button]
