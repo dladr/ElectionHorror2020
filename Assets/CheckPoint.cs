@@ -44,6 +44,9 @@ public class CheckPoint : MonoBehaviour
     public bool IsTruckDoorOpen;
     public bool InstantFade;
 
+    public GameObject[] ObjectsToSetActiveOnCheckpointSet;
+    public GameObject[] ObjectsToDeactivateOnCheckPointSet;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -194,5 +197,15 @@ public class CheckPoint : MonoBehaviour
     public void SetCheckPoint()
     {
         _gameManager.UpdateLastCheckPoint(this);
+
+        foreach (GameObject o in ObjectsToSetActiveOnCheckpointSet)
+        {
+            o.SetActive(true);
+        }
+
+        foreach (GameObject o in ObjectsToDeactivateOnCheckPointSet)
+        {
+            o.SetActive(false);
+        }
     }
 }
