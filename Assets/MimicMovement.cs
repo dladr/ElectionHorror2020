@@ -43,17 +43,17 @@ public class MimicMovement : MonoBehaviour
         _originalPositions = new List<Vector3>();
         _originalRotations = new List<Quaternion>();
 
-        _originalPositions.Add(FrontRightTransform.position);
-        _originalPositions.Add(FrontRightReferenceTransform.position);
-        _originalPositions.Add(FrontLeftTransform.position);
-        _originalPositions.Add(FrontLeftReferenceTransform.position);
-        _originalPositions.Add(transform.position);
+        _originalPositions.Add(FrontRightTransform.localPosition);
+        _originalPositions.Add(FrontRightReferenceTransform.localPosition);
+        _originalPositions.Add(FrontLeftTransform.localPosition);
+        _originalPositions.Add(FrontLeftReferenceTransform.localPosition);
+        _originalPositions.Add(transform.localPosition);
 
-        _originalRotations.Add(FrontRightTransform.rotation);
-        _originalRotations.Add(FrontRightReferenceTransform.rotation);
-        _originalRotations.Add(FrontLeftTransform.rotation);
-        _originalRotations.Add(FrontLeftReferenceTransform.rotation);
-        _originalRotations.Add(transform.rotation);
+        _originalRotations.Add(FrontRightTransform.localRotation);
+        _originalRotations.Add(FrontRightReferenceTransform.localRotation);
+        _originalRotations.Add(FrontLeftTransform.localRotation);
+        _originalRotations.Add(FrontLeftReferenceTransform.localRotation);
+        _originalRotations.Add(transform.localRotation);
     }
 
     public void TrackTarget()
@@ -75,17 +75,20 @@ public class MimicMovement : MonoBehaviour
         _isTrackingTarget = false;
         transform.parent = OriginalTransform;
 
-        FrontRightTransform.position = _originalPositions[0];
-        FrontRightReferenceTransform.position = _originalPositions[1];
-        FrontLeftTransform.position = _originalPositions[2];
-        FrontLeftReferenceTransform.position = _originalPositions[3];
-        transform.position = _originalPositions[4];
+        FrontRightTransform.localPosition = _originalPositions[0];
+        FrontRightTransform.localRotation = _originalRotations[0];
 
-        FrontRightTransform.rotation = _originalRotations[0];
-        FrontRightReferenceTransform.rotation = _originalRotations[1];
-        FrontLeftTransform.rotation = _originalRotations[2];
-        FrontLeftReferenceTransform.rotation = _originalRotations[3];
-        transform.rotation = _originalRotations[4];
+        FrontRightReferenceTransform.localPosition = _originalPositions[1];
+        FrontRightReferenceTransform.localRotation = _originalRotations[1];
+
+        FrontLeftTransform.localPosition = _originalPositions[2];
+        FrontLeftTransform.localRotation = _originalRotations[2];
+
+        FrontLeftReferenceTransform.localPosition = _originalPositions[3];
+        FrontLeftReferenceTransform.localRotation = _originalRotations[3];
+
+        transform.localPosition = _originalPositions[4];
+        transform.localRotation = _originalRotations[4];
 
         ReferenceAngle.localEulerAngles = Vector3.zero;
         ReferenceAngle.localPosition = Vector3.zero;
