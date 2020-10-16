@@ -34,6 +34,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Animator _carryBagAnimator;
     [SerializeField] private Animator _dropBagAnimator;
 
+    private bool _isHorizontal;
+
     private bool hasMovedY;
 
     public bool HasBag;
@@ -91,19 +93,34 @@ public class PlayerController : MonoBehaviour
 
     void UpdatePaperAnim(Vector2 inputDirection)
     {
-        if(Mathf.Abs(inputDirection.x) > Mathf.Abs(inputDirection.y))
-            _paperAnim.SetBool(IsHorizontal, true);
+        if (Mathf.Abs(inputDirection.x) > Mathf.Abs(inputDirection.y))
+            _isHorizontal = true;
 
         if (Mathf.Abs(inputDirection.x) < Mathf.Abs(inputDirection.y))
-            _paperAnim.SetBool(IsHorizontal, false);
+            _isHorizontal = false;
+
+        _paperAnim.SetBool("IsHorizontal", _isHorizontal);
 
         _paperAnim.SetFloat(HorizontalInput, Mathf.Abs(inputDirection.x));
         _paperAnim.SetFloat(VerticalInput, Mathf.Abs(inputDirection.y));
 
-       int scaleX = inputDirection.x < 0 ? 1 : -1;
-       int scaleZ = inputDirection.y < 0 ? 1 : -1;
-       if(inputDirection != Vector2.zero) 
-           _paperTransform.localScale = new Vector3(scaleX, 1, scaleZ);
+        int scaleX = 1;
+        int scaleZ = 1;
+
+        if (_isHorizontal)
+        {
+         scaleZ =  scaleX = inputDirection.x < 0 ? 1 : -1;
+        }
+
+        else
+        {
+          scaleZ =  scaleX = inputDirection.y < 0 ? 1 : -1;
+        }
+        
+         
+
+        if(inputDirection != Vector2.zero) 
+            _paperTransform.localScale = new Vector3(scaleX, 1, scaleZ);
         
     }
 
@@ -343,5 +360,11 @@ public class PlayerController : MonoBehaviour
     public void ResetAnim()
     {
         _paperAnim.SetBool("IsHorizontal", false);
+    }
+
+    public void FillBagExternal()
+    {
+        IsBagFull = true;
+        _carryBagAnimator.SetBool("IsFull", true);
     }
 }

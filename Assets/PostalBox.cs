@@ -63,7 +63,7 @@ public class PostalBox : MonoBehaviour
 
         HasMail = false;
         CanCollectMail = false;
-        _playerController.IsBagFull = true;
+        _playerController.FillBagExternal();
         _roadMarker.OpenRoad();
         _orbManager.UnlockOrb();
         _orbManager.SetCanAttack(true);
