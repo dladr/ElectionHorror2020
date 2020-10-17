@@ -4,6 +4,7 @@ using Sirenix.Utilities;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Ballot : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class Ballot : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-
+        _eventSystem.SetSelectedGameObject(_lastSelectedGameObject);
     }
 
     // Update is called once per frame

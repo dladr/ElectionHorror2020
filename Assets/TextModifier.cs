@@ -4,10 +4,14 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
+using Image = UnityEngine.UI.Image;
 
 public class TextModifier : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _textMeshPro;
+    [SerializeField] private TextMeshProUGUI _textMeshProActual;
+    public Image IMAGE;
     [SerializeField] private Animator _anim;
 
     [SerializeField] private float standardFade;
@@ -16,7 +20,7 @@ public class TextModifier : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+       
     }
 
     // Update is called once per frame
@@ -30,7 +34,7 @@ public class TextModifier : MonoBehaviour
         if(Islocked)
             return;
 
-        _textMeshPro.text = text;
+        _textMeshPro.text = _textMeshProActual.text = text;
     }
 
   public  void UpdateColor(Color color)
@@ -38,7 +42,8 @@ public class TextModifier : MonoBehaviour
         if (Islocked)
             return;
 
-        _textMeshPro.color = color;
+        _textMeshPro.color = _textMeshProActual.color = color;
+        
     }
 
   public void UpdateFontStyle(FontStyles fontStyle)
@@ -46,7 +51,7 @@ public class TextModifier : MonoBehaviour
       if (Islocked)
           return;
 
-        _textMeshPro.fontStyle = fontStyle;
+        _textMeshPro.fontStyle = _textMeshProActual.fontStyle = fontStyle;
   }
 
   public void UpdateTextTrio(string text, Color color, FontStyles fontStyle)
