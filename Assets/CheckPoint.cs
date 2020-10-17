@@ -15,6 +15,8 @@ public class CheckPoint : MonoBehaviour
 
     public GameObject PlayerObject;
 
+    private OrbManager _orbManager;
+
     public Transform TruckPosition;
 
     public Ghost[] Ghosts;
@@ -53,6 +55,7 @@ public class CheckPoint : MonoBehaviour
         _screenFader = SingletonManager.Get<ScreenFader>();
         _textModifier = SingletonManager.Get<TextModifier>();
         _gameManager = SingletonManager.Get<GameManager>();
+        _orbManager = SingletonManager.Get<OrbManager>();
     }
 
     private void Start()
@@ -81,6 +84,7 @@ public class CheckPoint : MonoBehaviour
     {
 
         PlayerObject.GetComponentInChildren<PlayerController>().Deactivate();
+        _textModifier.Islocked = true;
 
         if(!InstantFade)
             _screenFader.Fade(isFadingIn: false);
@@ -148,9 +152,10 @@ public class CheckPoint : MonoBehaviour
         PlayerObject.GetComponent<PlayerController>().Reset();
 
         
-        _textModifier.Fade(false, 10);
+       // _textModifier.Fade(false, 10);
 
         PlayerObject.GetComponentInChildren<PlayerController>().SetActive();
+        _orbManager.SetCanAttack(true);
         _screenFader.Fade();
 
         SingletonManager.Get<RearDoor>().Reset(IsTruckDoorOpen, EmptyBagIndex, FullBagIndex, IsMailToCollect);
@@ -158,7 +163,7 @@ public class CheckPoint : MonoBehaviour
         if (_textModifier.Islocked)
         {
             _textModifier.Islocked = false;
-            _textModifier.Fade(false, 10);
+           // _textModifier.Fade(false, 10);
         }
         
         yield return null;

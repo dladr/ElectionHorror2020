@@ -70,7 +70,7 @@ public class TextModifier : MonoBehaviour
           return;
 
         if (fadeTime == -1)
-          fadeTime = 5;
+          fadeTime = 2.5f;
 
       Fade();
       StartCoroutine(FadeAfterSeconds(fadeTime));
