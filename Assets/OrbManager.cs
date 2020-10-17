@@ -46,6 +46,17 @@ public class OrbManager : MonoBehaviour
 
         _orbTransforms[_numberUnlocked].gameObject.SetActive(true);
         _numberUnlocked++;
+
+        AdjustOrbAngles();
+    }
+
+    void AdjustOrbAngles()
+    {
+        float degreeOffset = 360 / _numberUnlocked;
+        for (int i = 0; i < _numberUnlocked; i++)
+        {
+            _orbTransforms[i].localEulerAngles = new Vector3(0, degreeOffset * i, 0);
+        }
     }
 
     void RemoveOrb()
@@ -55,6 +66,8 @@ public class OrbManager : MonoBehaviour
 
         _orbTransforms[_numberUnlocked - 1].gameObject.SetActive(false);
         _numberUnlocked--;
+
+        AdjustOrbAngles();
     }
 
     public void SetCanAttack(bool canAttack)

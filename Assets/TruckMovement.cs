@@ -46,6 +46,8 @@ public class TruckMovement : MonoBehaviour
     [SerializeField] private Camera CenterMirrorCamera;
     [SerializeField] private Camera LeftMirrorCamera;
 
+    [SerializeField]private RotateWithXInput _rotateWithXInput;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -236,6 +238,7 @@ public class TruckMovement : MonoBehaviour
 
         CenterMirrorCamera.enabled = _isActive;
         LeftMirrorCamera.enabled = _isActive;
+        _rotateWithXInput.IsRotating = _isActive;
     }
 
     public void Deactivate()
@@ -247,5 +250,7 @@ public class TruckMovement : MonoBehaviour
 
         CenterMirrorCamera.enabled = _isActive;
         LeftMirrorCamera.enabled = _isActive;
+
+        _rotateWithXInput.IsRotating = _isActive;
     }
 }
