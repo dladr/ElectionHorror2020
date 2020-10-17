@@ -12,6 +12,10 @@ public class RoadMarkerTriggerZone : MonoBehaviour
     private TextModifier _textModifier;
 
     public CheckPoint NextCheckPoint;
+
+    public bool IsAlternateMessages;
+
+    public string[] AlternateStrings;
     // Start is called before the first frame update
     void Awake()
     {
@@ -29,6 +33,9 @@ public class RoadMarkerTriggerZone : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             _textModifier.UpdateTextTrio("I think I should get back to the truck...", Color.white, FontStyles.Normal);
+
+            if(IsAlternateMessages)
+                _textModifier.UpdateText(AlternateStrings[0]);
             _textModifier.Fade(true, 10f);
         }
 
@@ -37,6 +44,8 @@ public class RoadMarkerTriggerZone : MonoBehaviour
             if (!_isOpen)
             {
                 _textModifier.UpdateTextTrio("I can't leave any mail behind... ", Color.white, FontStyles.Normal);
+                if(IsAlternateMessages)
+                    _textModifier.UpdateText(AlternateStrings[1]);
                 _textModifier.Fade(true, 10f);
             }
 
