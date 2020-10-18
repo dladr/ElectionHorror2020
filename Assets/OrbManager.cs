@@ -24,12 +24,15 @@ public class OrbManager : MonoBehaviour
     [SerializeField] private Animator _playerAnimator;
     private PlayerController _playerController;
 
+    [SerializeField] private AudioSource _audioSource;
+
     // Start is called before the first frame update
     void Awake()
     {
         _numberUnlocked = 0;
         _canAttack = _externalCanAttack = true;
         _playerController = GetComponentInParent<PlayerController>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -148,6 +151,8 @@ public class OrbManager : MonoBehaviour
 
     IEnumerator Attack(bool isDroppingBag = true)
     {
+        _audioSource.Play();
+
         if (isDroppingBag)
         {
             _playerController.DropBag();

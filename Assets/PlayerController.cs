@@ -49,6 +49,7 @@ public class PlayerController : MonoBehaviour
     private static readonly int HorizontalInput = Animator.StringToHash("HorizontalInput");
     private static readonly int VerticalInput = Animator.StringToHash("VerticalInput");
 
+    [SerializeField] private AudioSource _deathAudioSource;
 
     void Awake()
     {
@@ -306,6 +307,7 @@ public class PlayerController : MonoBehaviour
     {
         if (damage > 0)
         {
+            _deathAudioSource.Play();
             ToggleIsActive();
             _gameManager.LastCheckPoint.Reset();
         }

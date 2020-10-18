@@ -41,6 +41,8 @@ public class Ghost : MonoBehaviour
     private PlayerController _playerController;
     [SerializeField] bool _isStartingActive;
 
+    [SerializeField] private AudioSource _deathAudioSource;
+
 
     private static readonly int IsHorizontal = Animator.StringToHash("IsHorizontal");
 
@@ -53,8 +55,9 @@ public class Ghost : MonoBehaviour
         _collider = GetComponent<Collider>();
         _playerController = SingletonManager.Get<PlayerController>();
         _currentHealth = _health;
+        _deathAudioSource = GetComponent<AudioSource>();
 
-      
+
     }
 
     private void Start()
@@ -126,6 +129,9 @@ public class Ghost : MonoBehaviour
             _textModifier.UpdateTextTrio(DyingWords, _fontColor, _fontStyles);
             _textModifier.AutoTimeFades();
         }
+
+        if(!_deathAudioSource.SafeIsUnityNull())
+                _deathAudioSource.Play();
         DyingEvent.Invoke();
         ToggleIsActive();
         

@@ -47,11 +47,13 @@ public class TruckMovement : MonoBehaviour
     [SerializeField] private Camera LeftMirrorCamera;
 
     [SerializeField]private RotateWithXInput _rotateWithXInput;
+    [SerializeField] private AudioSource _engineAudioSource;
 
     // Start is called before the first frame update
     void Awake()
     {
         _truckDoor = SingletonManager.Get<TruckDoor>();
+        _engineAudioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -209,6 +211,9 @@ public class TruckMovement : MonoBehaviour
             CurrentSpeed = _minSpeed;
 
         _rigidbody.velocity = transform.forward * CurrentSpeed;
+
+        float percentSpeed = Mathf.Abs(CurrentSpeed) / _maxSpeed;
+        _engineAudioSource.pitch = 1 + percentSpeed * 2;
     }
 
     float CalculateDrag()
