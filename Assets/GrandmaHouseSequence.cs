@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Helpers;
 using TMPro;
 using UnityEngine;
 
@@ -297,6 +298,8 @@ public class GrandmaHouseSequence : MonoBehaviour
                     _textModifier.AutoTimeFades(2);
                     nextTime = zoomTime + 1;
                     timesHit++;
+
+                    //SingletonManager.Get<MusicManager>().PlayTrack(0);
                 }
 
               
@@ -305,6 +308,7 @@ public class GrandmaHouseSequence : MonoBehaviour
         }
 
         _ghostToRaise.GetComponent<GhostRaiser>().RaiseGhost();
+        
 
          timePassed = 0;
          zoomTime = 5;

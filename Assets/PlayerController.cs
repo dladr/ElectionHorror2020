@@ -10,7 +10,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float _speed;
+    public float _speed;
 
     public bool IsActive;
     [SerializeField] private Rigidbody _rigidbody;

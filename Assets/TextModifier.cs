@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Image = UnityEngine.UI.Image;
+using Random = UnityEngine.Random;
 
 public class TextModifier : MonoBehaviour
 {
@@ -17,10 +18,12 @@ public class TextModifier : MonoBehaviour
     [SerializeField] private float standardFade;
 
     public bool Islocked;
+
+    [SerializeField] private AudioSource _audioSource;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-       
+        _audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -98,8 +101,15 @@ public class TextModifier : MonoBehaviour
         if (speed < 0)
             speed = standardFade;
 
-        if(isFadingIn)
+        if (isFadingIn)
+        {
             _anim.Play("FadeIn");
+
+            float random =
+            _audioSource.pitch = 1 + Random.Range(-.2f, .1f);
+            _audioSource.Play();
+        }
+            
         else
         {
             _anim.Play("FadeOut");
