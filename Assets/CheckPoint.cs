@@ -172,7 +172,7 @@ public class CheckPoint : MonoBehaviour
     IEnumerator InitializeSequence()
     {
         PlayerObject.GetComponentInChildren<PlayerController>().Deactivate();
-        PlayerObject.GetComponent<PlayerController>()._speed = .5f;
+        PlayerObject.GetComponent<PlayerController>()._speed = .75f;
 
         _screenFader.Fade(isFadingIn: false);
         yield return new WaitForSeconds(1f);

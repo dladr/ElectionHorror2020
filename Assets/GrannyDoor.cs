@@ -37,7 +37,7 @@ public class GrannyDoor : MonoBehaviour
         if (_isOpen)
         {
             _orbManager.SetCanAttack(true);
-            SingletonManager.Get<MusicManager>().PlayTrack(0);
+            SingletonManager.Get<MusicManager>().PlayTrack(0, isLooping: false);
             _textModifier.UpdateTextTrio("Heading outside", Color.white, FontStyles.Normal);
             _textModifier.AutoTimeFades();
             _firstCheckPoint.InitializeCheckpoint();

@@ -8,7 +8,7 @@ public class OrbManager : MonoBehaviour
     [SerializeField] private Transform[] _orbTransforms;
     [SerializeField] private Orb[] _orbs;
 
-    [SerializeField] private int _numberUnlocked;
+    [SerializeField] public int _numberUnlocked;
 
     [SerializeField] private float _expansionSpeed;
 

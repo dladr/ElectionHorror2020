@@ -11,18 +11,29 @@ public class DropBagPickup : MonoBehaviour
     [SerializeField] private Animator _anim;
     public bool IsFull;
 
+    [SerializeField] bool _isVisible;
+    [SerializeField] private bool _canSetVisible;
+
     private TextModifier _textModifier;
 
     private OrbManager _orbManager;
 
     [SerializeField] private Rigidbody _rigidbody;
+
+    public Vector3 InitialPosition;
+
+    public Quaternion InitialRotation;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         _textModifier = SingletonManager.Get<TextModifier>();
         _playerController = SingletonManager.Get<PlayerController>();
         _orbManager = SingletonManager.Get<OrbManager>();
         _anim.SetBool("IsVisible", true);
+        _isVisible = true;
+
+        InitialPosition = transform.position;
+        InitialRotation = transform.rotation;
     }
 
     // Update is called once per frame
@@ -30,6 +41,11 @@ public class DropBagPickup : MonoBehaviour
     {
         if (_isPlayerPresent && Input.GetButtonDown("Action"))
             Pickup();
+
+        if (!_canSetVisible)
+        {
+            _anim.SetBool("IsVisible", true);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -67,5 +83,35 @@ public class DropBagPickup : MonoBehaviour
         _textModifier.Fade(false, 10);
         _orbManager.SetCanAttack(true);
         _playerController.PickupBag(IsFull);
+    }
+
+    public void Reset()
+    {
+        transform.position = InitialPosition;
+        transform.rotation = InitialRotation;
+        _anim.SetBool("IsVisible", true);
+        IsFull = false;
+        _anim.SetBool("IsFull", false);
+        _isVisible = true;
+        _canSetVisible = false;
+    }
+
+    public void SetCanSetVisible(bool canSet)
+    {
+        _canSetVisible = canSet;
+    }
+
+    public void SetIsBagFull(bool isFull)
+    {
+        _anim.SetBool("IsFull", isFull);
+    }
+
+    public void SetVisible(bool isVisible)
+    {
+        if (!_canSetVisible)
+            return;
+
+        _isVisible = true;
+        _anim.SetBool("IsVisible", isVisible);
     }
 }

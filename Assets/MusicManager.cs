@@ -19,11 +19,17 @@ public class MusicManager : MonoBehaviour
         
     }
 
-    public void PlayTrack(int trackNumber, float startTime = 0)
+    public void PlayTrack(int trackNumber, float startTime = 0, bool isLooping = true)
     {
         _audioSource.Stop();
         _audioSource.clip = AudioClips[trackNumber];
         _audioSource.time = startTime;
         _audioSource.Play();
+        _audioSource.loop = isLooping;
+    }
+
+    public void StopPlaying()
+    {
+        _audioSource.Stop();
     }
 }

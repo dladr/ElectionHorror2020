@@ -37,6 +37,8 @@ public class GrandmaHouseSequence : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 30;
         Cursor.visible = false;
         _startingFOV = _cameras[0].fieldOfView;
         StartCoroutine(Sequence());
@@ -247,6 +249,7 @@ public class GrandmaHouseSequence : MonoBehaviour
         _textModifier.Fade(false, 1);
         _screenFader.Fade(1, false);
         yield return new WaitForSeconds(1f);
+        SingletonManager.Get<MusicManager>().PlayTrack(1);
         _ballotGameObject.SetActive(true);
 
         while (!_resumeSequence)
@@ -259,6 +262,7 @@ public class GrandmaHouseSequence : MonoBehaviour
         _grandmaAnim.Play("GrandmaDead");
         _dummyEnvelope.SetActive(false);
         _actualEnvelope.SetActive(true);
+        SingletonManager.Get<MusicManager>().StopPlaying();
         _ballotGameObject.SetActive(false);
         _screenFader.Fade();
 

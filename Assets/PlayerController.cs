@@ -32,7 +32,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform _carryBagTransform;
     [SerializeField] private Transform _aheadTransform;
     [SerializeField] private Animator _carryBagAnimator;
-    [SerializeField] private Animator _dropBagAnimator;
+   // [SerializeField] private Animator _dropBagAnimator;
+   [SerializeField] private DropBagPickup _dropBagPickup;
 
     private bool _isHorizontal;
 
@@ -164,7 +165,13 @@ public class PlayerController : MonoBehaviour
 
     public void Reset()
     {
-        _dropBag.SetActive(false);
+        if(_orbManager._numberUnlocked > 1)
+          _dropBag.SetActive(false);
+        else
+        {
+            SingletonManager.Get<DropBagPickup>().Reset();
+        }
+
         HasBag = false;
         IsBagFull = false;
         _paperAnim.SetBool("IsHoldingBag", false);
@@ -339,6 +346,7 @@ public class PlayerController : MonoBehaviour
         _paperAnim.SetBool("IsHoldingBag", true);
         _carryBagAnimator.SetBool("IsFull", IsBagFull);
         _carryBagAnimator.SetBool("IsVisible", HasBag);
+        _dropBagPickup.SetCanSetVisible(true);
         _dropBag.SetActive(false);
     }
 
@@ -353,8 +361,10 @@ public class PlayerController : MonoBehaviour
         _dropBag.transform.position = _carryBagTransform.position;
         _dropBag.transform.rotation = _carryBagTransform.rotation;
         _dropBag.SetActive(true);
-        _dropBagAnimator.SetBool("IsFull", IsBagFull);
-        _dropBagAnimator.SetBool("IsVisible", true);
+        _dropBagPickup.SetIsBagFull(IsBagFull);
+       // _dropBagAnimator.SetBool("IsFull", IsBagFull);
+       _dropBagPickup.SetVisible(true);
+        //_dropBagAnimator.SetBool("IsVisible", true);
         _dropBag.GetComponentInChildren<DropBagPickup>().IsFull = IsBagFull;
 
     }
