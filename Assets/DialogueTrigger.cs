@@ -17,6 +17,8 @@ public class DialogueTrigger : MonoBehaviour
 
     private TextModifier _textModifier;
 
+    public bool PlayerCanTrigger;
+
     private void Awake()
     {
         _textModifier = SingletonManager.Get<TextModifier>();
@@ -25,6 +27,13 @@ public class DialogueTrigger : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!HasTriggered && other.CompareTag("Truck"))
+        {
+            HasTriggered = true;
+            _textModifier.UpdateTextTrio(Dialogue, Color, FontStyles);
+            _textModifier.AutoTimeFades();
+        }
+
+        if (!HasTriggered && PlayerCanTrigger && other.CompareTag("Player"))
         {
             HasTriggered = true;
             _textModifier.UpdateTextTrio(Dialogue, Color, FontStyles);

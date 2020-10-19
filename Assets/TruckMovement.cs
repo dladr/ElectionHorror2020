@@ -49,6 +49,10 @@ public class TruckMovement : MonoBehaviour
     [SerializeField]private RotateWithXInput[] _rotateWithXInputs;
     [SerializeField] private AudioSource _engineAudioSource;
 
+    [SerializeField] private bool _isInDangerZone;
+
+    [SerializeField] private DangerZoneTrigger _dangerZoneTrigger;
+ 
     // Start is called before the first frame update
     void Awake()
     {
@@ -81,6 +85,11 @@ public class TruckMovement : MonoBehaviour
         if (!IsHidden && CurrentSpeed < .5f && Input.GetButtonDown("Action"))
         {
             _truckDoor.ExitTruck();
+        }
+
+        if (_isInDangerZone && CurrentSpeed < _dangerZoneTrigger.MinSpeed)
+        {
+            CaughtByCops();
         }
 
     }
@@ -265,5 +274,17 @@ public class TruckMovement : MonoBehaviour
         {
             rotateWithXInput.IsRotating = _isActive;
         }
+    }
+
+    public void EnterDangerZone(DangerZoneTrigger dangerZoneTrigger)
+    {
+        _isInDangerZone = true;
+        _dangerZoneTrigger = dangerZoneTrigger;
+    }
+
+    public void ExitDangerZone()
+    {
+        _isInDangerZone = false;
+        _dangerZoneTrigger = null;
     }
 }

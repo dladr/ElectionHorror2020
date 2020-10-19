@@ -11,6 +11,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float _speed;
+    public float _rotationSpeed;
 
     public bool IsActive;
     [SerializeField] private Rigidbody _rigidbody;
@@ -79,6 +80,10 @@ public class PlayerController : MonoBehaviour
     {
         if (IsUpdatingRotation && hasMovedY)
             ResetRotation();
+
+        if (IsUpdatingRotation)
+          SmoothRotation();
+
     }
 
     void Move(Vector2 inputDirection)
@@ -160,8 +165,47 @@ public class PlayerController : MonoBehaviour
        // transform.eulerAngles = new Vector3(0, _currentYRotation, 0);
        hasMovedY = false;
        UpdateRotationFromCurrentReferences();
-       transform.rotation = _currentRotation;
+      // transform.rotation = _currentRotation;
     }
+
+    void SmoothRotation()
+    {
+        Vector3 _currentVector3 = MakeEulersUseful(transform.eulerAngles);
+
+        Vector3 _targetVector3 = MakeEulersUseful(_currentRotation.eulerAngles);
+
+
+        transform.localEulerAngles =
+            Vector3.MoveTowards(_currentVector3, _targetVector3, _rotationSpeed * Time.deltaTime);
+
+        Debug.Log(_targetVector3);
+    }
+
+    Vector3 MakeEulersUseful(Vector3 _currentVector3)
+    {
+        float _currentY = _currentVector3.y;
+        float _currentZ = _currentVector3.z;
+        float _currentX = _currentVector3.x;
+
+        if (_currentY > 180)
+        {
+            _currentY -= 360;
+        }
+
+        if (_currentZ > 180)
+        {
+            _currentZ -= 360;
+        }
+
+        if (_currentX > 180)
+        {
+            _currentX -= 360;
+        }
+
+        return new Vector3(_currentX, _currentY, _currentZ);
+    }
+
+  
 
     public void Reset()
     {

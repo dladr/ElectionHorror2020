@@ -35,7 +35,8 @@ public class GameManager : MonoBehaviour
 
     public void UpdateLastCheckPoint(CheckPoint checkPoint)
     {
-        LastCheckPoint = checkPoint;
+        if(!checkPoint.SafeIsUnityNull())
+         LastCheckPoint = checkPoint;
     }
 
     public void AddRotationReference(RotationReference rotationReference)
