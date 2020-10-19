@@ -9,7 +9,7 @@ public class RotateWithXInput : MonoBehaviour
 
     [SerializeField] private Vector3 rotationVector3;
 
-    [SerializeField] private Vector3 _currentVector3;
+    [SerializeField] public Vector3 _currentVector3;
 
     [SerializeField] private float rotationSpeed;
 
@@ -38,11 +38,20 @@ public class RotateWithXInput : MonoBehaviour
     void LerpTowardsTargetRotation()
     {
         _currentVector3 = transform.localEulerAngles;
+        float _currentY = _currentVector3.y;
+        float _currentZ = _currentVector3.z;
 
-        if (_currentVector3.y > 180)
+        if (_currentY > 180)
         {
-            _currentVector3 = new Vector3(0, _currentVector3.y - 360, 0);
+            _currentY -= 360;
         }
+
+        if (_currentZ > 180)
+        {
+            _currentZ -= 360;
+        }
+
+        _currentVector3 = new Vector3(0, _currentY, _currentZ);
 
         transform.localEulerAngles =
             Vector3.MoveTowards(_currentVector3, _targetRotation, rotationSpeed * Time.deltaTime);

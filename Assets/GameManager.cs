@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Sirenix.Utilities;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -19,7 +20,17 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            if(!LastCheckPoint.SafeIsUnityNull())
+                LastCheckPoint.Reset();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 
     public void UpdateLastCheckPoint(CheckPoint checkPoint)

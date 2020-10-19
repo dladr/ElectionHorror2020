@@ -32,13 +32,19 @@ public class GrandmaHouseSequence : MonoBehaviour
     [SerializeField] private Color[] _dialogueColors;
     [SerializeField] private FontStyles[] _dialogueFontStyles;
 
+    [SerializeField] private bool _capFPS;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
-        QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = 30;
+        if (_capFPS)
+        {
+            QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = 30;
+        }
+      
         Cursor.visible = false;
         _startingFOV = _cameras[0].fieldOfView;
         StartCoroutine(Sequence());

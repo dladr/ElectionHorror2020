@@ -87,7 +87,7 @@ public class CopZone : MonoBehaviour
         PoliceCar.transform.position =
             Vector3.MoveTowards(PoliceCar.transform.position, PoliceCarDestination.position, Time.deltaTime * Speed);
 
-        if (!HasWarned && Vector3.Distance(PoliceCar.transform.position, _truckTransform.position) < WarningDistance)
+        if (!HasWarned && !_truckMovement.IsHidden && Vector3.Distance(PoliceCar.transform.position, _truckTransform.position) < WarningDistance)
         {
             HasWarned = true;
             WarningEvent.Invoke();

@@ -32,8 +32,8 @@ public class DropBagPickup : MonoBehaviour
         _anim.SetBool("IsVisible", true);
         _isVisible = true;
 
-        InitialPosition = transform.position;
-        InitialRotation = transform.rotation;
+        InitialPosition = transform.parent.position;
+        InitialRotation = transform.parent.rotation;
     }
 
     // Update is called once per frame
@@ -87,8 +87,8 @@ public class DropBagPickup : MonoBehaviour
 
     public void Reset()
     {
-        transform.position = InitialPosition;
-        transform.rotation = InitialRotation;
+        transform.parent.position = InitialPosition;
+        transform.parent.rotation = InitialRotation;
         _anim.SetBool("IsVisible", true);
         IsFull = false;
         _anim.SetBool("IsFull", false);

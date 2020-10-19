@@ -46,7 +46,7 @@ public class TruckMovement : MonoBehaviour
     [SerializeField] private Camera CenterMirrorCamera;
     [SerializeField] private Camera LeftMirrorCamera;
 
-    [SerializeField]private RotateWithXInput _rotateWithXInput;
+    [SerializeField]private RotateWithXInput[] _rotateWithXInputs;
     [SerializeField] private AudioSource _engineAudioSource;
 
     // Start is called before the first frame update
@@ -54,6 +54,7 @@ public class TruckMovement : MonoBehaviour
     {
         _truckDoor = SingletonManager.Get<TruckDoor>();
         _engineAudioSource = GetComponent<AudioSource>();
+        _rotateWithXInputs = GetComponentsInChildren<RotateWithXInput>();
     }
 
     // Update is called once per frame
@@ -243,7 +244,11 @@ public class TruckMovement : MonoBehaviour
 
         CenterMirrorCamera.enabled = _isActive;
         LeftMirrorCamera.enabled = _isActive;
-        _rotateWithXInput.IsRotating = _isActive;
+
+        foreach (RotateWithXInput rotateWithXInput in _rotateWithXInputs)
+        {
+            rotateWithXInput.IsRotating = _isActive;
+        }
     }
 
     public void Deactivate()
@@ -256,6 +261,9 @@ public class TruckMovement : MonoBehaviour
         CenterMirrorCamera.enabled = _isActive;
         LeftMirrorCamera.enabled = _isActive;
 
-        _rotateWithXInput.IsRotating = _isActive;
+        foreach (RotateWithXInput rotateWithXInput in _rotateWithXInputs)
+        {
+            rotateWithXInput.IsRotating = _isActive;
+        }
     }
 }
