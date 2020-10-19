@@ -81,8 +81,8 @@ public class PlayerController : MonoBehaviour
         if (IsUpdatingRotation && hasMovedY)
             ResetRotation();
 
-        if (IsUpdatingRotation)
-          SmoothRotation();
+        //if (IsUpdatingRotation)
+        //  SmoothRotation();
 
     }
 
@@ -165,7 +165,7 @@ public class PlayerController : MonoBehaviour
        // transform.eulerAngles = new Vector3(0, _currentYRotation, 0);
        hasMovedY = false;
        UpdateRotationFromCurrentReferences();
-      // transform.rotation = _currentRotation;
+       transform.rotation = _currentRotation;
     }
 
     void SmoothRotation()

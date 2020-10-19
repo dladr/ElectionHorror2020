@@ -20,7 +20,11 @@ public class Fire : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            IsAutoFire = true;
+            FireGun();
+        }
     }
 
     public void FireGun()
