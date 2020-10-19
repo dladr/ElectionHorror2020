@@ -42,6 +42,7 @@ public class CheckPoint : MonoBehaviour
     public int FullBagIndex;
 
     public bool IsMailToCollect;
+    public bool IsMailBagNearby;
 
     public bool IsTruckDoorOpen;
     public bool InstantFade;
@@ -158,7 +159,7 @@ public class CheckPoint : MonoBehaviour
         _orbManager.SetCanAttack(true);
         _screenFader.Fade();
 
-        SingletonManager.Get<RearDoor>().Reset(IsTruckDoorOpen, EmptyBagIndex, FullBagIndex, IsMailToCollect);
+        SingletonManager.Get<RearDoor>().Reset(IsTruckDoorOpen, EmptyBagIndex, FullBagIndex, IsMailToCollect, IsMailBagNearby);
 
         if (_textModifier.Islocked)
         {

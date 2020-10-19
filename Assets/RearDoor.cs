@@ -86,6 +86,7 @@ public class RearDoor : MonoBehaviour
             else
             {
                 _playerController.GetBag();
+                IsMailBagNearby = true;
                 RemoveEmptyBag();
                 _textModifier.UpdateTextTrio(GetLabel(), Color.white, FontStyles.Normal);
             }
@@ -225,7 +226,7 @@ public class RearDoor : MonoBehaviour
     }
 
     [Button]
-    public void Reset(bool isTruckDoorOpen, int emptyBagIndex, int fullBagIndex, bool isMailToCollect)
+    public void Reset(bool isTruckDoorOpen, int emptyBagIndex, int fullBagIndex, bool isMailToCollect, bool isBagNearby = false)
     {
         if(isTruckDoorOpen)
             OpenDoor();
@@ -237,6 +238,7 @@ public class RearDoor : MonoBehaviour
         SetEmptyBagIndex(emptyBagIndex);
         SetFullBagIndex(fullBagIndex);
         IsMailToCollectNearby = isMailToCollect;
+        IsMailBagNearby = isBagNearby;
 
     }
 
