@@ -16,6 +16,12 @@ public class MirrorCameraController : MonoBehaviour
 
     [SerializeField] private bool _isLeft;
 
+    private bool _hasLostMirror;
+
+    [SerializeField] private GameObject _leftMirrorObject;
+
+    [SerializeField] private AudioSource _audioSource;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +31,9 @@ public class MirrorCameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (_hasLostMirror)
+            return;
+
         if (!_isLeft && _rotateWithXInput._currentVector3.y <= _leftThreshold)
         {
             _isLeft = true;
@@ -42,6 +51,21 @@ public class MirrorCameraController : MonoBehaviour
                 _middleCamera.enabled = true;
         }
 
-      
+    }
+
+    public void LoseLeftMirror()
+    {
+        _audioSource.Play();
+        _leftMirrorObject.SetActive(false);
+        _hasLostMirror = true;
+        _middleCamera.enabled = true;
+        _middleCamera.farClipPlane = 90;
+    }
+
+    public void ResetLeftMirror()
+    {
+        _leftMirrorObject.SetActive(true);
+        _hasLostMirror = false;
+        _middleCamera.farClipPlane = 10;
     }
 }

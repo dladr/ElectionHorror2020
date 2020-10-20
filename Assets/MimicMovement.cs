@@ -28,6 +28,9 @@ public class MimicMovement : MonoBehaviour
     [SerializeField] private float StandardDegreesToRotate;
     [SerializeField] private Transform ReferenceAngle;
 
+    [SerializeField] private AudioSource _audioSourceStep;
+    [SerializeField] private AudioSource _audioSourceTurn;
+
     private List<Vector3> _originalPositions;
     private List<Quaternion> _originalRotations;
 
@@ -141,6 +144,8 @@ public class MimicMovement : MonoBehaviour
 
     IEnumerator MoveLeftLeg(float degreesToRotate)
     {
+        _audioSourceTurn.Play();
+
         FrontLeftTransform.position = FrontLeftReferenceTransform.position;
         FrontLeftTransform.rotation = FrontLeftReferenceTransform.rotation;
 
@@ -167,6 +172,9 @@ public class MimicMovement : MonoBehaviour
 
         FrontLeftTransform.eulerAngles = targetEulers;
 
+        _audioSourceTurn.Stop();
+        _audioSourceStep.Play();
+
         IsMovingRightLeg = true;
 
         MoveNextLeg();
@@ -175,6 +183,8 @@ public class MimicMovement : MonoBehaviour
 
     IEnumerator MoveRightLeg(float degreesToRotate)
     {
+        _audioSourceTurn.Play();
+
         FrontRightTransform.position = FrontRightReferenceTransform.position;
         FrontRightTransform.rotation = FrontRightReferenceTransform.rotation;
 
@@ -200,6 +210,9 @@ public class MimicMovement : MonoBehaviour
         }
 
         FrontRightTransform.eulerAngles = targetEulers;
+
+        _audioSourceTurn.Stop();
+        _audioSourceStep.Play();
 
         IsMovingRightLeg = false;
 

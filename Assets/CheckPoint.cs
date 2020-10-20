@@ -83,12 +83,16 @@ public class CheckPoint : MonoBehaviour
 
     IEnumerator ResetSequence()
     {
-
-        PlayerObject.GetComponentInChildren<PlayerController>().Deactivate();
         _textModifier.Islocked = true;
+        PlayerObject.GetComponentInChildren<PlayerController>().Deactivate();
+        
 
         if(!InstantFade)
             _screenFader.Fade(isFadingIn: false);
+        else
+        {
+            _screenFader.Fade(15, false);
+        }
        
         yield return new WaitForSeconds(1f);
 
