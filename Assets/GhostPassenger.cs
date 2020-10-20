@@ -20,11 +20,21 @@ public class GhostPassenger : MonoBehaviour
 
     [SerializeField] private bool _isRotatingToPlayer;
 
+   [SerializeField] private float _playerRotationTrigger;
+    [SerializeField] private RotateWithXInput _cameraRotateWithXInput;
+    [SerializeField] private DialogueTrigger _dialogueTrigger;
+
     private Vector3 _currentVector3;
 
 
     private void Update()
     {
+        if (_cameraRotateWithXInput._currentVector3.y < _playerRotationTrigger)
+        {
+            _dialogueTrigger.ExternalTrigger();
+            _isRotatingToPlayer = true;
+        }
+
         LerpTowardsTargetRotation();
     }
 
