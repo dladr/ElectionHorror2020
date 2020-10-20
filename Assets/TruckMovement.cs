@@ -24,6 +24,7 @@ public class TruckMovement : MonoBehaviour
     [SerializeField] private bool _isActive;
     [SerializeField] private GameObject _boxColliderGameObject;
     [SerializeField] private GameObject _capsuleColliderGameObject;
+    [SerializeField] private GameObject _ghostPassengerParentGameObject;
 
     public bool IsHidden;
     public bool IsTryingToHide;
@@ -250,6 +251,7 @@ public class TruckMovement : MonoBehaviour
         _rigidbody.isKinematic = !_isActive;
         _capsuleColliderGameObject.SetActive(_isActive);
         _boxColliderGameObject.SetActive(!_isActive);
+        _ghostPassengerParentGameObject.SetActive(_isActive);
 
         CenterMirrorCamera.enabled = _isActive;
         LeftMirrorCamera.enabled = _isActive;
@@ -266,6 +268,7 @@ public class TruckMovement : MonoBehaviour
         _rigidbody.isKinematic = !_isActive;
         _capsuleColliderGameObject.SetActive(_isActive);
         _boxColliderGameObject.SetActive(!_isActive);
+        _ghostPassengerParentGameObject.SetActive(_isActive);
 
         CenterMirrorCamera.enabled = _isActive;
         LeftMirrorCamera.enabled = _isActive;
