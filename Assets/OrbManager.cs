@@ -162,6 +162,15 @@ public class OrbManager : MonoBehaviour
             _playerController.DropBag();
             _playerAnimator.SetBool("IsHoldingEnvelope", true);
         }
+
+        else
+        {
+            if (IsCowardlyGhostWaiting)
+            {
+                IsCowardlyGhostWaiting = false;
+                IsCowardlyGhostNear = true;
+            }
+        }
         
 
         foreach (Orb orb in _orbs)
@@ -238,6 +247,5 @@ public class OrbManager : MonoBehaviour
     {
         CowardlyGhost = ghost;
         IsCowardlyGhostWaiting = true;
-        IsCowardlyGhostNear = true;
     }
 }
