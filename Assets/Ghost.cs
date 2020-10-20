@@ -43,6 +43,15 @@ public class Ghost : MonoBehaviour
 
     [SerializeField] private AudioSource _deathAudioSource;
 
+    public bool IsCowardly;
+    public float CowardlyRunDistance;
+    public float CowardlyWatchDistance;
+
+    public bool IsRunning;
+    public bool IsAdvancing;
+
+    public ParticleSystem CowardlyParticleSystem;
+
 
     private static readonly int IsHorizontal = Animator.StringToHash("IsHorizontal");
 
@@ -72,14 +81,70 @@ public class Ghost : MonoBehaviour
         if (!_isActive)
             return;
 
+        if(IsCowardly)
+            CheckIfRunning();
+
         TurnTowardsTarget();
         Move(Vector2.zero);
     }
 
+    void CheckIfRunning()
+    {
+      
+
+        float distance = Vector3.Distance(transform.position, _playerController.transform.position);
+
+        if (_currentHealth == 0)
+        {
+            if (distance > 20)
+            {
+                Disappear();
+                return;
+            }
+
+            IsRunning = true;
+            return;
+        }
+
+        if (distance < (CowardlyRunDistance + CowardlyWatchDistance) / 2)
+        {
+            IsAdvancing = false;
+        }
+
+        if (distance < CowardlyWatchDistance)
+        {
+            IsRunning = true;
+        }
+
+        if (distance > CowardlyRunDistance)
+        {
+            IsRunning = false;
+            IsAdvancing = true;
+        }
+
+
+       
+
+
+    }
+
     void Move(Vector2 inputDirection)
     {
+        float tempSpeed = _speed;
+
+        if (IsCowardly)
+        {
+            if (IsRunning)
+                tempSpeed *= 3;
+
+            if (_currentHealth == 0)
+                tempSpeed *= 2;
+
+            if (!IsRunning && !IsAdvancing)
+                tempSpeed = 0;
+        }
         
-        _rigidbody.velocity = transform.forward * _speed;
+        _rigidbody.velocity = transform.forward * tempSpeed;
 
         UpdatePaperAnim(inputDirection);
     }
@@ -113,8 +178,18 @@ public class Ghost : MonoBehaviour
             transform.LookAt(_playerController.transform);
         }
 
+        if (IsCowardly && IsRunning)
+        {
+            transform.Rotate(0, 180, 0);
+        }
+
         _paperTransform.LookAt(_playerController.transform);
+
+        if(IsCowardly && IsRunning)
+            return;
+        
         _paperTransform.Rotate(0, 180, 0);
+
 
     }
 
@@ -173,14 +248,30 @@ public class Ghost : MonoBehaviour
             _particleSystem.Play();
             _collider.enabled = true;
             _rigidbody.isKinematic = false;
+
+            if(IsCowardly)
+                SingletonManager.Get<OrbManager>().SetCowardlyGhost(this);
         }
     }
 
     public void TakeDamage(int damageAmount)
     {
+        if (IsCowardly)
+        {
+            return;
+        }
+
         _currentHealth -= damageAmount;
         if(_currentHealth <= 0)
             Disappear();
+    }
+
+    public void TakeCowardlyDamage()
+    {
+        _textModifier.UpdateTextTrio(DyingWords, _fontColor, _fontStyles);
+        _textModifier.AutoTimeFades();
+        CowardlyParticleSystem.Play();
+        _currentHealth = 0;
     }
 
     private void OnTriggerEnter(Collider other)

@@ -26,6 +26,10 @@ public class OrbManager : MonoBehaviour
 
     [SerializeField] private AudioSource _audioSource;
 
+    public Ghost CowardlyGhost;
+    public bool IsCowardlyGhostNear;
+    public bool IsCowardlyGhostWaiting;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -176,7 +180,20 @@ public class OrbManager : MonoBehaviour
             transform.Rotate(0, _spinSpeed * _numberOfRotations * Time.deltaTime, 0);
 
             if (degreesRotated >= _numberOfRotations * 180)
+            {
                 orbDirection = -1;
+                if (IsCowardlyGhostNear)
+                {
+                    IsCowardlyGhostNear = false;
+                    CowardlyGhost.TakeCowardlyDamage();
+                    foreach (Orb orb in _orbs)
+                    {
+                        orb.DeactivateWithParticles();
+                    }
+                    CowardlyGhost = null;
+                }
+            }
+                
 
             foreach (Transform orbTransform in _orbTransforms)
             {
@@ -215,5 +232,12 @@ public class OrbManager : MonoBehaviour
         }
 
         yield return null;
+    }
+
+    public void SetCowardlyGhost(Ghost ghost)
+    {
+        CowardlyGhost = ghost;
+        IsCowardlyGhostWaiting = true;
+        IsCowardlyGhostNear = true;
     }
 }
