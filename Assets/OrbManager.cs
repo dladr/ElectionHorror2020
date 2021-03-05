@@ -59,7 +59,11 @@ public class OrbManager : MonoBehaviour
 
     void AdjustOrbAngles()
     {
-        float degreeOffset = 360 / _numberUnlocked;
+        float degreeOffset = 0;
+
+        if(_numberUnlocked > 0)
+         degreeOffset = 360 / _numberUnlocked;
+
         for (int i = 0; i < _numberUnlocked; i++)
         {
             _orbTransforms[i].localEulerAngles = new Vector3(0, degreeOffset * i, 0);
@@ -247,5 +251,15 @@ public class OrbManager : MonoBehaviour
     {
         CowardlyGhost = ghost;
         IsCowardlyGhostWaiting = true;
+    }
+
+    public void GhostBossAttack()
+    {
+        foreach (Orb orb in _orbs)
+        {
+            orb.DeactivateWithParticles();
+        }
+
+        RemoveOrb();
     }
 }

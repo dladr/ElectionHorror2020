@@ -37,6 +37,8 @@ public class CopZone : MonoBehaviour
 
     public UnityEvent WarningEvent;
 
+    public UnityEvent HiddenEvent;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -101,6 +103,7 @@ public class CopZone : MonoBehaviour
             {
                 _textModifier.UpdateTextTrio(TruckHiddenMessage, TextColorHidden, FontStylesHidden);
                 _textModifier.AutoTimeFades();
+                HiddenEvent.Invoke();
             }
 
             else
@@ -131,5 +134,6 @@ public class CopZone : MonoBehaviour
         Deactivate();
         PoliceCar.transform.position = PoliceCarStartTransform.position;
         _hasPassedPlayer = false;
+        HasWarned = false;
     }
 }

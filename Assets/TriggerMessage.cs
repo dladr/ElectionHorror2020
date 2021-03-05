@@ -21,6 +21,8 @@ public class TriggerMessage : MonoBehaviour
 
     private bool _isPlayerPresent;
 
+    public bool IsDeactivated;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -31,6 +33,9 @@ public class TriggerMessage : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (IsDeactivated)
+            return;
+
         if (_isPlayerPresent && Input.GetButtonDown("Action"))
         {
             _textModifier.UpdateTextTrio(Description, TextColor, FontStyles);
@@ -39,6 +44,9 @@ public class TriggerMessage : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (IsDeactivated)
+            return;
+
         if (other.CompareTag("Player"))
         {
             _isPlayerPresent = true;
@@ -50,6 +58,9 @@ public class TriggerMessage : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        if (IsDeactivated)
+            return;
+
         if (other.CompareTag("Player"))
         {
             _isPlayerPresent = false;

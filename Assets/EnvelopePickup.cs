@@ -5,6 +5,7 @@ using System.Net.Mime;
 using Assets.Scripts.Helpers;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class EnvelopePickup : MonoBehaviour
 {
@@ -19,9 +20,16 @@ public class EnvelopePickup : MonoBehaviour
     public string label;
     public string actionDescription;
 
+    public UnityEvent OnPickUpBallot ;
+
+    public bool HasPickedUp;
+
+    public MeshRenderer[] MeshRenderers;
+
     // Start is called before the first frame update
     void Awake()
     {
+        MeshRenderers = GetComponentsInChildren<MeshRenderer>();
         _textModifier = SingletonManager.Get<TextModifier>();
         _orbManager = SingletonManager.Get<OrbManager>();
     }
@@ -29,12 +37,18 @@ public class EnvelopePickup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (HasPickedUp)
+            return;
+
         if(_isPlayerPresent && Input.GetButtonDown("Action"))
             Pickup();
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (HasPickedUp)
+            return;
+
         if (other.CompareTag("Player"))
         {
             _isPlayerPresent = true;
@@ -52,6 +66,9 @@ public class EnvelopePickup : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        if (HasPickedUp)
+            return;
+
         if (other.CompareTag("Player"))
         {
             _isPlayerPresent = false;
@@ -72,6 +89,22 @@ public class EnvelopePickup : MonoBehaviour
         if(!_isNotGramBallot)
           SingletonManager.Get<OrbManager>().UnlockOrb();
 
-        Destroy(gameObject);
+        HasPickedUp = true;
+        foreach (MeshRenderer meshRenderer in MeshRenderers)
+        {
+            meshRenderer.enabled = false;
+        }
+
+        OnPickUpBallot.Invoke();
+    }
+
+    public void Reset()
+    {
+        HasPickedUp = false;
+
+        foreach (MeshRenderer meshRenderer in MeshRenderers)
+        {
+            meshRenderer.enabled = true;
+        }
     }
 }

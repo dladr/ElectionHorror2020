@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Helpers;
 using UnityEngine;
@@ -29,6 +30,7 @@ public class TruckMovement : MonoBehaviour
     public bool IsHidden;
     public bool IsTryingToHide;
     public bool CanHide;
+    public bool CanHideExternal;
     public float HideTime;
     public float HideCooldown;
     public float TimeToHide;
@@ -70,7 +72,7 @@ public class TruckMovement : MonoBehaviour
 
         IsButtonDown = Input.GetButton("Action");
 
-        if (CanHide && Input.GetButtonDown("Action"))
+        if (CanHideExternal && CanHide && Input.GetButtonDown("Action"))
             StartCoroutine(Hide());
 
         Turn(Input.GetAxis("Horizontal"));
@@ -93,6 +95,17 @@ public class TruckMovement : MonoBehaviour
             CaughtByCops();
         }
 
+    }
+
+    private void LateUpdate()
+    {
+        //if (!_isActive)
+        //{
+        //    CurrentSpeed = transform.InverseTransformDirection(_rigidbody.velocity).z;
+        //}
+
+        float percentSpeed = Mathf.Abs(CurrentSpeed) / _maxSpeed;
+        _engineAudioSource.pitch = 1 + percentSpeed * 2;
     }
 
     public void CaughtByCops()
@@ -155,7 +168,40 @@ public class TruckMovement : MonoBehaviour
         //TODO: Cool hiding effect (maybe turn all renderers off/invisible?)
 
     }
-    void Turn(float xAxis)
+
+    IEnumerator HideExternal()
+    {
+       float timePassed = 0;
+        IsHidden = true;
+        CanHide = false;
+
+        _storedSpeed = transform.InverseTransformDirection(_rigidbody.velocity).z;
+        _storedVelocity = _rigidbody.velocity;
+
+        CurrentSpeed = 0;
+        _rigidbody.velocity = Vector3.zero;
+
+        yield return new WaitForSeconds(TimeToHide);
+
+        while (IsCopNearby)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        IsHidden = false;
+        SteeringWheelSpriteRenderer.color = Color.white;
+
+
+        while (timePassed < HideCooldown)
+        {
+            timePassed += Time.deltaTime;
+            SteeringWheelSpriteRenderer.color = Color.Lerp(Color.white, HideChargedColor, timePassed / HideCooldown);
+            yield return new WaitForEndOfFrame();
+        }
+
+        CanHide = true;
+    }
+  public  void Turn(float xAxis)
     {
         //_rigidbody.AddTorque(0, xAxis * _turnForce, 0, ForceMode.Force);
         _rigidbody.transform.Rotate(0, xAxis * _turnForce * Time.deltaTime * CurrentSpeed, 0);
@@ -169,7 +215,7 @@ public class TruckMovement : MonoBehaviour
         _rigidbody.AddForce(transform.forward * (yAxis * _accelerationForce), ForceMode.Force);
     }
 
-    void CalculateManualSpeed(float yAxis)
+   public void CalculateManualSpeed(float yAxis)
     {
         if (IsHidden)
         {
@@ -223,8 +269,7 @@ public class TruckMovement : MonoBehaviour
 
         _rigidbody.velocity = transform.forward * CurrentSpeed;
 
-        float percentSpeed = Mathf.Abs(CurrentSpeed) / _maxSpeed;
-        _engineAudioSource.pitch = 1 + percentSpeed * 2;
+       
     }
 
     float CalculateDrag()
@@ -290,4 +335,27 @@ public class TruckMovement : MonoBehaviour
         _isInDangerZone = false;
         _dangerZoneTrigger = null;
     }
+
+    public void SetCanHideExternal(bool canHideExternal)
+    {
+        CanHideExternal = canHideExternal;
+    }
+
+    public void ExternalHide()
+    {
+        StartCoroutine(HideExternal());
+    }
+
+    public void StartSelfDriving()
+    {
+        _rotateWithXInputs[1].IsRotating = false;
+        _isActive = false;
+    }
+
+    public void EndSelfDriving()
+    {
+        _rotateWithXInputs[1].IsRotating = true;
+        _isActive = true;
+    }
+    
 }

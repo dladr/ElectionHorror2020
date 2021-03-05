@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Assets.Scripts.Helpers;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PostalBox : MonoBehaviour
 {
@@ -23,6 +24,8 @@ public class PostalBox : MonoBehaviour
     private TextModifier _textModifier;
 
     public bool IsDeactivated;
+
+    public UnityEvent OnCollectEvent;
     // Start is called before the first frame update
     void Awake()
     {
@@ -69,6 +72,7 @@ public class PostalBox : MonoBehaviour
         _orbManager.SetCanAttack(true);
         _orbManager.StartAttack(false);
         _textModifier.UpdateText("Mail collected");
+        OnCollectEvent.Invoke();
 
         foreach (MaterialSetter materialSetter in _materialSetters)
         {

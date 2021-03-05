@@ -37,7 +37,7 @@ public class Ghost : MonoBehaviour
 
     private Vector3 _initialPosition;
 
-    public UnityEvent DyingEvent;
+    public UnityEvent OnDieEvent;
     private PlayerController _playerController;
     [SerializeField] bool _isStartingActive;
 
@@ -51,6 +51,8 @@ public class Ghost : MonoBehaviour
     public bool IsAdvancing;
 
     public ParticleSystem CowardlyParticleSystem;
+
+    public bool IsBoss;
 
 
     private static readonly int IsHorizontal = Animator.StringToHash("IsHorizontal");
@@ -207,7 +209,8 @@ public class Ghost : MonoBehaviour
 
         if(!_deathAudioSource.SafeIsUnityNull())
                 _deathAudioSource.Play();
-        DyingEvent.Invoke();
+
+        OnDieEvent.Invoke();
         ToggleIsActive();
         
        

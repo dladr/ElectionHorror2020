@@ -18,6 +18,8 @@ public class Orb : MonoBehaviour
     [SerializeField] private Light _light;
 
     [SerializeField] private AudioSource _audioSource;
+
+    [SerializeField] private OrbManager _orbManager;
     // Start is called before the first frame update
     void Awake()
     {
@@ -26,6 +28,7 @@ public class Orb : MonoBehaviour
         _light = GetComponentInChildren<Light>();
         _isAwake = true;
         _audioSource = GetComponent<AudioSource>();
+        _orbManager = GetComponentInParent<OrbManager>();
     }
 
     // Update is called once per frame
@@ -50,11 +53,24 @@ public class Orb : MonoBehaviour
         if (!_isActive)
             return;
 
-        ghost.TakeDamage(_damageAmount);
-        _audioSource.Play();
-        _particleSystem.Play();
-        Deactivate();
+        if (ghost.IsBoss)
+        {
+            _orbManager.GhostBossAttack();
+            ghost.TakeDamage(_damageAmount);
+        }
+
+        else
+        {
+            ghost.TakeDamage(_damageAmount);
+            _audioSource.Play();
+            _particleSystem.Play();
+            Deactivate();
+        }
+
+       
     }
+
+   
 
   public  void Deactivate()
   {

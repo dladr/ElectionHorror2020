@@ -9,6 +9,7 @@ public class TriggerEvent : MonoBehaviour
     public UnityEvent TheEvent;
 
     public bool HasTriggered;
+
     // Start is called before the first frame update
     void Start()
     {

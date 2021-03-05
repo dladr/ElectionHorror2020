@@ -47,7 +47,7 @@ public class GhostPassenger : MonoBehaviour
 
     void LerpTowardsTargetRotation()
     {
-        _currentVector3 = MakeEulersUseful(transform.eulerAngles);
+        _currentVector3 = MakeEulersUseful(transform.localEulerAngles);
         _targetRotation = _isRotatingToPlayer ? _facePlayerRotation : _faceWindowRotation;
 
         transform.localEulerAngles =
