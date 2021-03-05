@@ -80,6 +80,21 @@ public class TextModifier : MonoBehaviour
 
   }
 
+  public void DelayMessage(string text, Color color, FontStyles fontStyles, float delay)
+  {
+      StartCoroutine(SetMessageWithDelay(text, color, fontStyles, delay));
+  }
+
+ IEnumerator SetMessageWithDelay(string text, Color color, FontStyles fontStyles, float delay)
+ {
+     yield return new WaitForSeconds(delay);
+
+     UpdateTextTrio(text, color, fontStyles);
+     AutoTimeFades();
+
+     yield return null;
+ }
+
   IEnumerator FadeAfterSeconds(float seconds)
   {
       if (Islocked)
@@ -117,5 +132,44 @@ public class TextModifier : MonoBehaviour
 
         _anim.speed = speed;
     }
-    
+
+   public void DisplayImmutableMessage(string message, Color color, FontStyles fontStyles)
+   {
+       StopAllCoroutines();
+       StartCoroutine(ImmutableMessageSequence(message, color, fontStyles));
+   }
+
+   IEnumerator ImmutableMessageSequence(string message, Color color, FontStyles fontStyles)
+   {
+       Islocked = true;
+
+       _anim.Play("FadeOut");
+       _anim.speed = 10;
+
+       yield return new WaitForSeconds(.1f); 
+       
+       Islocked = false; 
+       UpdateTextTrio(message, color, fontStyles); 
+       Islocked = true;
+
+       _anim.Play("FadeIn");
+       _anim.speed = standardFade;
+
+        float random =
+           _audioSource.pitch = 1 + Random.Range(-.2f, .1f);
+       _audioSource.Play();
+
+       yield return new WaitForSeconds(2.5f);
+
+       _anim.Play("FadeOut");
+       _anim.speed = standardFade;
+
+        yield return new WaitForSeconds(1);
+
+       Islocked = false;
+
+       yield return null;
+   }
+
+
 }

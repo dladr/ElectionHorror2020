@@ -44,6 +44,8 @@ public class PlayerController : MonoBehaviour
     public bool IsBagFull;
     public bool IsUpdatingRotation;
 
+    private bool _hasPickedUpBagOnce;
+
     private GameManager _gameManager;
 
 
@@ -82,7 +84,7 @@ public class PlayerController : MonoBehaviour
             ResetRotation();
 
         //if (IsUpdatingRotation)
-        //  SmoothRotation();
+        //    SmoothRotation();
 
     }
 
@@ -209,7 +211,7 @@ public class PlayerController : MonoBehaviour
 
     public void Reset()
     {
-        if(_orbManager._numberUnlocked > 1)
+        if(_hasPickedUpBagOnce)
           _dropBag.SetActive(false);
         else
         {
@@ -222,6 +224,8 @@ public class PlayerController : MonoBehaviour
         _carryBagAnimator.SetBool("IsFull", false);
         _carryBagAnimator.SetBool("IsVisible", false);
     }
+
+   
     void DetermineRotationReferences()
     {
         _gameManager.RotationReferences = _gameManager.RotationReferences.OrderBy(x => Vector3.Distance(x.transform.position, transform.position)).ToList();
@@ -392,6 +396,8 @@ public class PlayerController : MonoBehaviour
         _carryBagAnimator.SetBool("IsVisible", HasBag);
         _dropBagPickup.SetCanSetVisible(true);
         _dropBag.SetActive(false);
+
+        _hasPickedUpBagOnce = true;
     }
 
     public void DropBag()

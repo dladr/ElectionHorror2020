@@ -27,6 +27,7 @@ public class TruckMovement : MonoBehaviour
     [SerializeField] private GameObject _capsuleColliderGameObject;
     [SerializeField] private GameObject _ghostPassengerParentGameObject;
 
+    public bool IsDrivingWithDoorOpen;
     public bool IsHidden;
     public bool IsTryingToHide;
     public bool CanHide;
@@ -38,6 +39,10 @@ public class TruckMovement : MonoBehaviour
     public SpriteRenderer SteeringWheelSpriteRenderer;
     public Color HideChargedColor;
     public Color HideColor;
+
+    private bool _isCruiseControl;
+    private Vector3 _cruiseControlVelocity;
+
 
     private float _storedSpeed;
     private Vector3 _storedVelocity;
@@ -55,6 +60,26 @@ public class TruckMovement : MonoBehaviour
     [SerializeField] private bool _isInDangerZone;
 
     [SerializeField] private DangerZoneTrigger _dangerZoneTrigger;
+
+    [SerializeField] private RigidbodyConstraints _initialRigidbodyConstraints;
+                     private RigidbodyConstraints _releasedConstraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
+      
+    [SerializeField] private ParticleSystem _particleSystem;
+    [SerializeField] private AudioSource _particleAudioSource;
+
+    [SerializeField] private GameObject _strangerOrbGameObject;
+
+    public bool IsAutoDriving;
+
+    private float _horizontalInput;
+    private float _verticalInput;
+
+    
+    public SpriteRenderer CruiseControlRenderer;
+    public SpriteRenderer CButtonRederer;
+    public Color CActiveColor;
+    public Color CDeactiveColor;
+    
  
     // Start is called before the first frame update
     void Awake()
@@ -62,6 +87,7 @@ public class TruckMovement : MonoBehaviour
         _truckDoor = SingletonManager.Get<TruckDoor>();
         _engineAudioSource = GetComponent<AudioSource>();
         _rotateWithXInputs = GetComponentsInChildren<RotateWithXInput>();
+        _initialRigidbodyConstraints = _rigidbody.constraints;
     }
 
     // Update is called once per frame
@@ -70,20 +96,24 @@ public class TruckMovement : MonoBehaviour
         if (!_isActive)
             return;
 
+        if(Input.GetKeyDown(KeyCode.C))
+            ToggleCruiseControl();
+
+
         IsButtonDown = Input.GetButton("Action");
+        _horizontalInput = Input.GetAxis("Horizontal");
+        _verticalInput = Input.GetAxis("Vertical");
 
         if (CanHideExternal && CanHide && Input.GetButtonDown("Action"))
             StartCoroutine(Hide());
 
-        Turn(Input.GetAxis("Horizontal"));
+      //  Turn(Input.GetAxis("Horizontal"));
 
-        if(!IsHidden)
-            CalculateManualSpeed(Input.GetAxis("Vertical"));
+        //if(!IsHidden)
+        //    CalculateManualSpeed(Input.GetAxis("Vertical"));
 
-        //Accelerate(Input.GetAxis("Vertical"));
-
-        //_currentSpeed = transform.InverseTransformDirection(_rigidbody.velocity).z;
-        _velocity = _rigidbody.velocity;
+       
+     //   _velocity = _rigidbody.velocity;
 
         if (!IsHidden && CurrentSpeed < .5f && Input.GetButtonDown("Action"))
         {
@@ -97,12 +127,29 @@ public class TruckMovement : MonoBehaviour
 
     }
 
+    private void FixedUpdate()
+    {
+        if (!_isActive)
+            return;
+
+        Turn(Input.GetAxis("Horizontal"));
+
+        if (!IsHidden)
+            CalculateManualSpeed(Input.GetAxis("Vertical"));
+
+        _velocity = _rigidbody.velocity;
+
+    }
+
     private void LateUpdate()
     {
         //if (!_isActive)
         //{
         //    CurrentSpeed = transform.InverseTransformDirection(_rigidbody.velocity).z;
         //}
+
+        if(IsAutoDriving)
+            transform.localEulerAngles = Vector3.up * transform.localEulerAngles.y;
 
         float percentSpeed = Mathf.Abs(CurrentSpeed) / _maxSpeed;
         _engineAudioSource.pitch = 1 + percentSpeed * 2;
@@ -117,6 +164,8 @@ public class TruckMovement : MonoBehaviour
 
     IEnumerator Hide()
     {
+       
+
         float timePassed = 0;
         IsTryingToHide = true;
 
@@ -131,8 +180,10 @@ public class TruckMovement : MonoBehaviour
 
         if (!IsButtonDown)
             yield break;
-        
-            
+
+        EndCruiseControl();
+        _particleSystem.Play();
+        _particleAudioSource.Play();
 
         timePassed = 0;
         IsHidden = true;
@@ -152,6 +203,9 @@ public class TruckMovement : MonoBehaviour
         }
 
         IsHidden = false;
+        _particleSystem.Stop();
+        _particleAudioSource.Stop();
+
         SteeringWheelSpriteRenderer.color = Color.white;
 
         //_currentSpeed = _storedSpeed;
@@ -171,7 +225,12 @@ public class TruckMovement : MonoBehaviour
 
     IEnumerator HideExternal()
     {
-       float timePassed = 0;
+        EndCruiseControl();
+
+        _particleSystem.Play();
+        _particleAudioSource.Play();
+
+        float timePassed = 0;
         IsHidden = true;
         CanHide = false;
 
@@ -189,6 +248,8 @@ public class TruckMovement : MonoBehaviour
         }
 
         IsHidden = false;
+        _particleSystem.Stop();
+        _particleAudioSource.Stop();
         SteeringWheelSpriteRenderer.color = Color.white;
 
 
@@ -202,7 +263,10 @@ public class TruckMovement : MonoBehaviour
         CanHide = true;
     }
   public  void Turn(float xAxis)
-    {
+  {
+      if (_isCruiseControl)
+          return;
+
         //_rigidbody.AddTorque(0, xAxis * _turnForce, 0, ForceMode.Force);
         _rigidbody.transform.Rotate(0, xAxis * _turnForce * Time.deltaTime * CurrentSpeed, 0);
     }
@@ -223,6 +287,18 @@ public class TruckMovement : MonoBehaviour
             _rigidbody.velocity = Vector3.zero;
             return;
         }
+
+        if (IsDrivingWithDoorOpen)
+            yAxis = 1;
+
+        if (_isCruiseControl)
+        {
+            CurrentSpeed = transform.InverseTransformDirection(_rigidbody.velocity).z;
+            if(CurrentSpeed > .1f)
+             _rigidbody.velocity = _cruiseControlVelocity;
+            return;
+        }
+            
 
         CurrentSpeed = transform.InverseTransformDirection(_rigidbody.velocity).z;
         float speedMagnitude = Mathf.Abs(CurrentSpeed);
@@ -305,6 +381,9 @@ public class TruckMovement : MonoBehaviour
         {
             rotateWithXInput.IsRotating = _isActive;
         }
+
+        if(!_isActive)
+            EndCruiseControl();
     }
 
     public void Deactivate()
@@ -318,10 +397,14 @@ public class TruckMovement : MonoBehaviour
         CenterMirrorCamera.enabled = _isActive;
         LeftMirrorCamera.enabled = _isActive;
 
+        EndCruiseControl();
+
         foreach (RotateWithXInput rotateWithXInput in _rotateWithXInputs)
         {
             rotateWithXInput.IsRotating = _isActive;
         }
+
+        CurrentSpeed = 0;
     }
 
     public void EnterDangerZone(DangerZoneTrigger dangerZoneTrigger)
@@ -348,14 +431,70 @@ public class TruckMovement : MonoBehaviour
 
     public void StartSelfDriving()
     {
+        EndCruiseControl();
+
         _rotateWithXInputs[1].IsRotating = false;
         _isActive = false;
+        IsAutoDriving = true;
     }
 
     public void EndSelfDriving()
     {
         _rotateWithXInputs[1].IsRotating = true;
         _isActive = true;
+        IsAutoDriving = false;
+    }
+
+    void StartCruiseControl()
+    {
+        if (IsDrivingWithDoorOpen)
+            return;
+
+        _cruiseControlVelocity = _rigidbody.velocity;
+        _isCruiseControl = true;
+        _rotateWithXInputs[1].IsRotating = false;
+        CButtonRederer.color = CruiseControlRenderer.color = CActiveColor;
+    }
+
+    void EndCruiseControl()
+    {
+        _isCruiseControl = false;
+        _rotateWithXInputs[1].IsRotating = true;
+        CButtonRederer.color = CruiseControlRenderer.color = CDeactiveColor;
+    }
+
+    void ToggleCruiseControl()
+    {
+        if(_isCruiseControl)
+            EndCruiseControl();
+        else
+        {
+            StartCruiseControl();
+        }
+    }
+
+    public void ResetConstraints()
+    {
+        _rigidbody.constraints = _initialRigidbodyConstraints;
+    }
+
+    public void ReleaseConstraints()
+    {
+        _rigidbody.constraints = _releasedConstraints;
+    }
+
+    public void ReleaseALLConstraints()
+    {
+        _rigidbody.constraints = RigidbodyConstraints.None;
+    }
+
+    public void FinalDeactivate()
+    {
+        _engineAudioSource.loop = false;
+        _engineAudioSource.playOnAwake = false;
+        _engineAudioSource.volume = 0;
+        _engineAudioSource.Stop();
+        Deactivate();
     }
     
 }

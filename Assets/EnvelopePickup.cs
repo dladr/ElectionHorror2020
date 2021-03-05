@@ -26,6 +26,7 @@ public class EnvelopePickup : MonoBehaviour
 
     public MeshRenderer[] MeshRenderers;
 
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -52,6 +53,7 @@ public class EnvelopePickup : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             _isPlayerPresent = true;
+            _orbManager.SetCanAttack(false);
 
             if(!_isNotGramBallot)
               _textModifier.UpdateTextTrio("Gram Gram's Ballot", Color.white, FontStyles.Normal);
@@ -72,12 +74,16 @@ public class EnvelopePickup : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             _isPlayerPresent = false;
+            _orbManager.SetCanAttack(true);
             _textModifier.Fade(false, 10);
         }
     }
 
     private void Pickup()
     {
+        _isPlayerPresent = false;
+        _orbManager.SetCanAttack(true);
+
         if(!_isNotGramBallot)
             _textModifier.UpdateText("Picked up Gram Gram's ballot.");
         else

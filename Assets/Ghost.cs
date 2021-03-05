@@ -17,7 +17,7 @@ public class Ghost : MonoBehaviour
     [SerializeField] private bool _isActive;
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private Collider _collider;
-    [SerializeField] private Animator _paperAnim;
+    [SerializeField] public Animator _paperAnim;
     [SerializeField] private Transform _paperTransform;
     [SerializeField] private ParticleSystem _particleSystem;
     [SerializeField] private TextModifier _textModifier;
@@ -54,9 +54,23 @@ public class Ghost : MonoBehaviour
 
     public bool IsBoss;
 
+    [SerializeField] private Color _bossDamageColor;
+    [SerializeField] private Color _bossNormalColor;
 
     private static readonly int IsHorizontal = Animator.StringToHash("IsHorizontal");
 
+    public bool IsEndingGhost;
+    public Transform LookTargetTransform;
+    public bool IsLookingAtLookTarget;
+    public Transform FollowTargetTransform;
+    public bool IsPlayerGhost;
+    public bool IsPlayerGhostLooking;
+    public bool IsLookingUp;
+    public bool HasPlayerSetDirection;
+    [SerializeField] private float PlayerGhostRotationOffset;
+
+    public bool IsStill;
+    private float rotationAngle;
 
     void Awake()
     {
@@ -68,6 +82,7 @@ public class Ghost : MonoBehaviour
         _currentHealth = _health;
         _deathAudioSource = GetComponent<AudioSource>();
 
+        
 
     }
 
@@ -86,8 +101,88 @@ public class Ghost : MonoBehaviour
         if(IsCowardly)
             CheckIfRunning();
 
-        TurnTowardsTarget();
-        Move(Vector2.zero);
+        if (IsPlayerGhost && IsPlayerGhostLooking)
+        {
+            
+
+          
+
+            if (IsLookingUp)
+            {
+                transform.eulerAngles = Vector3.up * PlayerGhostRotationOffset;
+                return;
+            }
+
+            float horizontal = Input.GetAxisRaw("Horizontal");
+            float vertical = Input.GetAxisRaw("Vertical");
+
+            if (!HasPlayerSetDirection)
+            {
+                if (Mathf.Abs(horizontal) > 0 || Mathf.Abs(vertical) > 0)
+                {
+                    HasPlayerSetDirection = true;
+                }
+
+                else
+                {
+                    return;
+                }
+               
+            }
+               
+
+            if (horizontal > 0)
+            {
+                rotationAngle = 90 + PlayerGhostRotationOffset;
+
+                if (vertical > 0)
+                    rotationAngle = 45 + PlayerGhostRotationOffset;
+                if (vertical < 0)
+                    rotationAngle = 135 + PlayerGhostRotationOffset;
+            }
+
+            if (horizontal < 0)
+            {
+                rotationAngle = 270 + PlayerGhostRotationOffset;
+
+                if (vertical > 0)
+                    rotationAngle = 315 + PlayerGhostRotationOffset;
+                if (vertical < 0)
+                    rotationAngle = 225 + PlayerGhostRotationOffset;
+            }
+
+            if (horizontal == 0)
+            {
+                if (vertical < 0)
+                    rotationAngle = 180 + PlayerGhostRotationOffset;
+
+                if (vertical > 0)
+                    rotationAngle = 0 + PlayerGhostRotationOffset;
+            }
+
+            transform.eulerAngles = Vector3.up * rotationAngle;
+
+            return;
+        }
+
+        if (IsPlayerGhost)
+            return;
+
+        if (IsEndingGhost)
+            TurnTowardsTargetEndGhost();
+        else
+        {
+            TurnTowardsTarget();
+        }
+        
+        if(!IsStill)
+          Move(Vector2.zero);
+    }
+
+    private void LateUpdate()
+    {
+        if (IsPlayerGhost)
+            _rigidbody.isKinematic = true;
     }
 
     void CheckIfRunning()
@@ -195,13 +290,43 @@ public class Ghost : MonoBehaviour
 
     }
 
+    void TurnTowardsTargetEndGhost()
+    {
+        if (Vector3.Distance(transform.position, _alternateDestination.position) > .2f)
+        {
+            transform.LookAt(_alternateDestination);
+            IsStill = false;
+        }
+
+        else
+        {
+            IsStill = true;
+        }
+          
+
+
+        //if (IsLookingAtLookTarget ||  Vector3.Distance(transform.position, _alternateDestination.position) < .1f)
+        //{
+        //    _paperTransform.LookAt(LookTargetTransform);
+        //}
+        //else
+        //{
+        //    _paperTransform.LookAt(_alternateDestination);
+        //}
+
+        _paperTransform.LookAt(LookTargetTransform);
+
+        _paperTransform.Rotate(0, 180, 0);
+
+    }
+
 
     public void Disappear()
     {
         if (!_isActive)
             return;
 
-        if (!DyingWords.IsNullOrWhitespace())
+        if (!DyingWords.IsNullOrWhitespace() && !IsCowardly)
         {
             _textModifier.UpdateTextTrio(DyingWords, _fontColor, _fontStyles);
             _textModifier.AutoTimeFades();
@@ -257,6 +382,12 @@ public class Ghost : MonoBehaviour
         }
     }
 
+    public void SetActive(bool isActive)
+    {
+        if(isActive != _isActive)
+            ToggleIsActive();
+    }
+
     public void TakeDamage(int damageAmount)
     {
         if (IsCowardly)
@@ -267,6 +398,26 @@ public class Ghost : MonoBehaviour
         _currentHealth -= damageAmount;
         if(_currentHealth <= 0)
             Disappear();
+        else
+        {
+            if (IsBoss)
+            {
+                ChangeParticleColor(_bossDamageColor);
+                Invoke(nameof(ChangeParticleColorToDefault), .5f);
+            }
+             
+        }
+    }
+
+    void ChangeParticleColor(Color color)
+    {
+        var particleSystemMain = _particleSystem.main;
+        particleSystemMain.startColor = color;
+    }
+
+    void ChangeParticleColorToDefault()
+    {
+        ChangeParticleColor(_bossNormalColor);
     }
 
     public void TakeCowardlyDamage()
@@ -285,5 +436,27 @@ public class Ghost : MonoBehaviour
             _textModifier.AutoTimeFades();
             other.GetComponent<PlayerController>().TakeDamage(_damage);
         }
+
+        if (IsEndingGhost && other.CompareTag("Bag") && other.transform.parent == _alternateDestination)
+        {
+           PickupBag(other);
+        }
+    }
+
+  public  void PickupBag(Collider other)
+    {
+        _paperAnim.Play("GhostMailBag");
+        other.transform.parent.gameObject.SetActive(false);
+        SetAlternateDestination(FollowTargetTransform);
+    }
+
+    public void SetAlternateDestination(Transform destinationTransform)
+    {
+        _alternateDestination = destinationTransform;
+    }
+
+    public void SetSpeed(float speed)
+    {
+        _speed = speed;
     }
 }

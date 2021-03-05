@@ -29,7 +29,7 @@ public class CrashedCar : MonoBehaviour
 
     private RearDoor _rearDoor;
 
-   [SerializeField] private bool _hasPlayerHitSpace;
+  // [SerializeField] private bool _hasPlayerHitSpace;
 
    private bool _hasStartedSequence;
 
@@ -37,6 +37,8 @@ public class CrashedCar : MonoBehaviour
 
     public GameObject TreeGameObject;
     public GameObject TreeMovedGameObject;
+
+    [SerializeField] private float _advanceDialogueTime;
 
 
 
@@ -54,8 +56,8 @@ public class CrashedCar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Action"))
-            _hasPlayerHitSpace = true;
+        //if (Input.GetButtonDown("Action"))
+        //    _hasPlayerHitSpace = true;
 
         if (_isPlayerPresent && Input.GetButtonDown("Action") && !_hasStartedSequence)
         {
@@ -94,33 +96,39 @@ public class CrashedCar : MonoBehaviour
 
         _textModifier.UpdateTextTrio(DialogueStrings[0], TextColors[0], FontStyles[0]);
         _textModifier.Fade();
-        _hasPlayerHitSpace = false;
-        while (!_hasPlayerHitSpace)
-        {
-            yield return new WaitForEndOfFrame();
-        }
+        //_hasPlayerHitSpace = false;
+        //while (!_hasPlayerHitSpace)
+        //{
+        //    yield return new WaitForEndOfFrame();
+        //}
+
+        yield return new WaitForSeconds(_advanceDialogueTime);
 
         _textModifier.Fade(false);
         yield return new WaitForSeconds(.5f);
 
         _textModifier.UpdateTextTrio(DialogueStrings[1], TextColors[1], FontStyles[1]);
         _textModifier.Fade();
-        _hasPlayerHitSpace = false;
-        while (!_hasPlayerHitSpace)
-        {
-            yield return new WaitForEndOfFrame();
-        }
+        //_hasPlayerHitSpace = false;
+        //while (!_hasPlayerHitSpace)
+        //{
+        //    yield return new WaitForEndOfFrame();
+        //}
+
+        yield return new WaitForSeconds(_advanceDialogueTime);
 
         _textModifier.Fade(false);
         yield return new WaitForSeconds(.5f);
 
         _textModifier.UpdateTextTrio(DialogueStrings[2], TextColors[2], FontStyles[2]);
         _textModifier.Fade();
-        _hasPlayerHitSpace = false;
-        while (!_hasPlayerHitSpace)
-        {
-            yield return new WaitForEndOfFrame();
-        }
+        //_hasPlayerHitSpace = false;
+        //while (!_hasPlayerHitSpace)
+        //{
+        //    yield return new WaitForEndOfFrame();
+        //}
+
+        yield return new WaitForSeconds(_advanceDialogueTime);
 
         _textModifier.Fade(false);
         yield return new WaitForSeconds(.5f);
@@ -148,11 +156,13 @@ public class CrashedCar : MonoBehaviour
 
         _textModifier.UpdateTextTrio(DialogueStrings[3], TextColors[3], FontStyles[3]);
         _textModifier.Fade();
-        _hasPlayerHitSpace = false;
-        while (!_hasPlayerHitSpace)
-        {
-            yield return new WaitForEndOfFrame();
-        }
+        //_hasPlayerHitSpace = false;
+        //while (!_hasPlayerHitSpace)
+        //{
+        //    yield return new WaitForEndOfFrame();
+        //}
+
+        yield return new WaitForSeconds(2);
 
         _textModifier.Fade(false);
         yield return new WaitForSeconds(.5f);
@@ -160,55 +170,65 @@ public class CrashedCar : MonoBehaviour
 
         _textModifier.UpdateTextTrio(DialogueStrings[4], TextColors[4], FontStyles[4]);
         _textModifier.Fade();
-        _hasPlayerHitSpace = false;
-        while (!_hasPlayerHitSpace)
-        {
-            yield return new WaitForEndOfFrame();
-        }
+        //_hasPlayerHitSpace = false;
+        //while (!_hasPlayerHitSpace)
+        //{
+        //    yield return new WaitForEndOfFrame();
+        //}
+
+        yield return new WaitForSeconds(_advanceDialogueTime);
 
         _textModifier.Fade(false);
         yield return new WaitForSeconds(.5f);
 
         _textModifier.UpdateTextTrio(DialogueStrings[5], TextColors[5], FontStyles[5]);
         _textModifier.Fade();
-        _hasPlayerHitSpace = false;
-        while (!_hasPlayerHitSpace)
-        {
-            yield return new WaitForEndOfFrame();
-        }
+        //_hasPlayerHitSpace = false;
+        //while (!_hasPlayerHitSpace)
+        //{
+        //    yield return new WaitForEndOfFrame();
+        //}
+
+        yield return new WaitForSeconds(_advanceDialogueTime);
 
         _textModifier.Fade(false);
         yield return new WaitForSeconds(.5f);
 
         _textModifier.UpdateTextTrio(DialogueStrings[6], TextColors[6], FontStyles[6]);
         _textModifier.Fade();
-        _hasPlayerHitSpace = false;
-        while (!_hasPlayerHitSpace)
-        {
-            yield return new WaitForEndOfFrame();
-        }
+        //_hasPlayerHitSpace = false;
+        //while (!_hasPlayerHitSpace)
+        //{
+        //    yield return new WaitForEndOfFrame();
+        //}
+
+        yield return new WaitForSeconds(2);
 
         _textModifier.Fade(false);
         yield return new WaitForSeconds(.5f);
 
         _textModifier.UpdateTextTrio(DialogueStrings[7], TextColors[7], FontStyles[7]);
         _textModifier.Fade();
-        _hasPlayerHitSpace = false;
-        while (!_hasPlayerHitSpace)
-        {
-            yield return new WaitForEndOfFrame();
-        }
+        //_hasPlayerHitSpace = false;
+        //while (!_hasPlayerHitSpace)
+        //{
+        //    yield return new WaitForEndOfFrame();
+        //}
+
+        yield return new WaitForSeconds(_advanceDialogueTime);
 
         _textModifier.Fade(false);
         yield return new WaitForSeconds(.5f);
 
         _textModifier.UpdateTextTrio(DialogueStrings[8], TextColors[8], FontStyles[8]);
         _textModifier.Fade();
-        _hasPlayerHitSpace = false;
-        while (!_hasPlayerHitSpace)
-        {
-            yield return new WaitForEndOfFrame();
-        }
+        //_hasPlayerHitSpace = false;
+        //while (!_hasPlayerHitSpace)
+        //{
+        //    yield return new WaitForEndOfFrame();
+        //}
+
+        yield return new WaitForSeconds(_advanceDialogueTime);
 
         _textModifier.Fade(false);
 

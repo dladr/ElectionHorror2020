@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,8 +14,5 @@ public class SetActiveOnAwake : MonoBehaviour {
 		gameObject.SetActive(IsActiveOnAwake);
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
 }

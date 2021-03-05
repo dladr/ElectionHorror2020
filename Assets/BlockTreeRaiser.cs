@@ -8,6 +8,7 @@ public class BlockTreeRaiser : MonoBehaviour
     [SerializeField] private MoveTreeVertical _moveTreeVertical;
     [SerializeField] private Collider _collider;
    [SerializeField] private bool _hasTriggered;
+   [SerializeField] private AudioSource _audioSource;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -16,6 +17,7 @@ public class BlockTreeRaiser : MonoBehaviour
             _hasTriggered = true;
             _moveTreeVertical.MoveVertical(true);
             _collider.enabled = true;
+            _audioSource.Play();
         }
     }
 

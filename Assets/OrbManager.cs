@@ -29,6 +29,9 @@ public class OrbManager : MonoBehaviour
     public Ghost CowardlyGhost;
     public bool IsCowardlyGhostNear;
     public bool IsCowardlyGhostWaiting;
+    public float IdleOrbDistance;
+    public bool IsIdleRotating;
+    public Vector3 DefaultOrbScale;
 
     // Start is called before the first frame update
     void Awake()
@@ -37,12 +40,19 @@ public class OrbManager : MonoBehaviour
         _canAttack = _externalCanAttack = true;
         _playerController = GetComponentInParent<PlayerController>();
         _audioSource = GetComponent<AudioSource>();
+
+        foreach (Transform orbTransform in _orbTransforms)
+        {
+            //orbTransform.localPosition = Vector3.zero;
+            orbTransform.localPosition = orbTransform.forward * IdleOrbDistance;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(IsIdleRotating)
+            IdleRotation();
     }
 
     [Button]
@@ -157,8 +167,15 @@ public class OrbManager : MonoBehaviour
         return _canAttack;
     }
 
+    void IdleRotation()
+    {
+        transform.Rotate(0, _spinSpeed * _numberOfRotations * Time.deltaTime, 0);
+    }
+
     IEnumerator Attack(bool isDroppingBag = true)
     {
+        IsIdleRotating = false;
+
         _audioSource.Play();
 
         if (isDroppingBag)
@@ -218,7 +235,8 @@ public class OrbManager : MonoBehaviour
 
         foreach (Transform orbTransform in _orbTransforms)
         {
-            orbTransform.localPosition = Vector3.zero;
+            //orbTransform.localPosition = Vector3.zero;
+            orbTransform.localPosition = orbTransform.forward * IdleOrbDistance;
         }
 
         foreach (Orb orb in _orbs)
@@ -243,6 +261,11 @@ public class OrbManager : MonoBehaviour
            orb.Reactivate();
            orb.Disarm();
         }
+
+        if(!_playerController.IsActive)
+            HideOrbs(true);
+
+        IsIdleRotating = true;
 
         yield return null;
     }

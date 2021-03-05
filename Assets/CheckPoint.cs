@@ -50,6 +50,8 @@ public class CheckPoint : MonoBehaviour
     public GameObject[] ObjectsToSetActiveOnCheckpointSet;
     public GameObject[] ObjectsToDeactivateOnCheckPointSet;
 
+    public bool IsRitualReset;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -73,7 +75,16 @@ public class CheckPoint : MonoBehaviour
     [Button]
     public void Reset()
     {
-        StartCoroutine(ResetSequence());
+        if (IsRitualReset)
+        {
+            StartCoroutine(ResetSequenceRitual());
+        }
+
+        else
+        {
+            StartCoroutine(ResetSequence());
+        }
+        
     }
 
     public void InitializeCheckpoint()
@@ -81,6 +92,98 @@ public class CheckPoint : MonoBehaviour
         StartCoroutine(InitializeSequence());
     }
 
+    IEnumerator ResetSequenceRitual()
+    {
+        _textModifier.Islocked = true;
+        PlayerObject.GetComponentInChildren<PlayerController>().Deactivate();
+
+
+        if (!InstantFade)
+            _screenFader.Fade(isFadingIn: false);
+        else
+        {
+            _screenFader.Fade(15, false);
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        //foreach (GameObject o in ObjectsToSetActive)
+        //{
+        //    o.SetActive(true);
+        //}
+
+        ResetCheckPoint.Invoke();
+
+        PlayerObject.transform.position = PlayerPosition.position;
+
+        //if (!TruckPosition.SafeIsUnityNull())
+        //{
+        //    TruckMovement truckMovement = SingletonManager.Get<TruckMovement>();
+        //    truckMovement.transform.position = TruckPosition.position;
+        //    truckMovement.transform.rotation = TruckPosition.rotation;
+        //}
+
+        SingletonManager.Get<OrbManager>().SetNumberOfOrbs(NumberOfOrbs);
+
+        //if (Ghosts.IsNullOrEmpty())
+        //    Ghosts = GetComponentsInChildren<Ghost>();
+
+        //if (!Ghosts.IsNullOrEmpty())
+        //{
+        //    foreach (Ghost ghost in Ghosts)
+        //    {
+        //        ghost.Reset();
+        //    }
+        //}
+
+
+        //if (PostalBoxes.IsNullOrEmpty())
+        //{
+        //    PostalBoxes = GetComponentsInChildren<PostalBox>();
+        //}
+
+        //if (!PostalBoxes.IsNullOrEmpty())
+        //{
+        //    foreach (PostalBox postalBox in PostalBoxes)
+        //    {
+        //        postalBox.Reset();
+        //    }
+        //}
+
+        //if (!Mimics.IsNullOrEmpty())
+        //{
+        //    foreach (Mimic mimic in Mimics)
+        //    {
+        //        mimic.Reset();
+        //    }
+        //}
+
+
+        //if (!DialogueTriggers.IsNullOrEmpty())
+        //    foreach (DialogueTrigger dialogueTrigger in DialogueTriggers)
+        //    {
+        //        dialogueTrigger.Reset();
+            //}
+
+        //PlayerObject.GetComponent<PlayerController>().Reset();
+
+
+        // _textModifier.Fade(false, 10);
+
+        PlayerObject.GetComponentInChildren<PlayerController>().SetActive();
+        _orbManager.SetCanAttack(true);
+        _screenFader.Fade();
+
+        //SingletonManager.Get<RearDoor>().Reset(IsTruckDoorOpen, EmptyBagIndex, FullBagIndex, IsMailToCollect, IsMailBagNearby);
+
+        if (_textModifier.Islocked)
+        {
+            _textModifier.Islocked = false;
+            // _textModifier.Fade(false, 10);
+        }
+
+        yield return null;
+    }
     IEnumerator ResetSequence()
     {
         _textModifier.Islocked = true;

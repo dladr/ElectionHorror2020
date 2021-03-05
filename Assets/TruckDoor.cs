@@ -30,7 +30,7 @@ public class TruckDoor : MonoBehaviour
     {
         if (_isPlayerPresent && Input.GetButtonDown("Action") && !_isCoolingDown)
         {
-            if (_rearDoor.IsOpen)
+            if (_rearDoor.IsOpen && !_rearDoor.IsDrivingWithBackOpen)
             {
                 _textModifier.UpdateTextTrio("I shouldn't drive with the back door open...", Color.white, FontStyles.Normal);
             }
@@ -39,10 +39,17 @@ public class TruckDoor : MonoBehaviour
             {
                 _isPlayerPresent = false;
                 EnterTruck();
+
+                if (_rearDoor.IsDrivingWithBackOpen)
+                {
+                    _textModifier.DelayMessage("Pedal to the metal from here on out...", Color.cyan, FontStyles.Bold, 1);
+                    SingletonManager.Get<MusicManager>().PlayTrack(5);
+                }
             }
             
         }
     }
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -75,6 +82,9 @@ public class TruckDoor : MonoBehaviour
     {
         _isCoolingDown = true;
         _textModifier.Fade(false, 10f);
+
+            //TRYING new rotation fix!
+        //_playerObject.GetComponent<PlayerController>().ResetRotation();
 
         _playerObject.GetComponent<PlayerController>().ToggleIsActive();
         _mainCamera.transform.SetParent(_drivingCameraTransform);

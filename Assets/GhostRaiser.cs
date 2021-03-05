@@ -124,8 +124,8 @@ Quaternion[] GetCurrentQuaternions()
             }
         }
 
-        //transform.position += PositionOffset;
-        transform.position += new Vector3(.001f, 0, -.003f);
+        transform.position += PositionOffset;
+        //transform.position += new Vector3(.001f, 0, -.003f);
     }
 
     IEnumerator LerpEulersToGhostPosition(float lerpTime, float delayTime)
@@ -156,7 +156,8 @@ Quaternion[] GetCurrentQuaternions()
         LerpInitialEulers(1);
 
         GetComponentInChildren<Animator>().enabled = true;
-        GetComponent<Ghost>().ToggleIsActive();
+      //  GetComponent<Ghost>().ToggleIsActive();
+      GetComponent<Ghost>().SetActive(true);
 
         yield return null;
     }

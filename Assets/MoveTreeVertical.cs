@@ -12,6 +12,10 @@ public class MoveTreeVertical : MonoBehaviour
 
     public float Speed;
 
+    public float UpSpeed;
+
+    public float DownSpeed;
+
     public bool IsMoving;
 
     // Start is called before the first frame update
@@ -31,6 +35,7 @@ public class MoveTreeVertical : MonoBehaviour
     {
         var localPosition = transform.localPosition;
         YTargetCurrent = isUp ? new Vector3(localPosition.x, YTargetUp, localPosition.z): new Vector3(localPosition.x, YTargetDown, localPosition.z);
+        Speed = isUp ? UpSpeed : DownSpeed;
         IsMoving = true;
     }
 

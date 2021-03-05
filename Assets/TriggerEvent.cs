@@ -10,6 +10,8 @@ public class TriggerEvent : MonoBehaviour
 
     public bool HasTriggered;
 
+    public bool IsPlayerTriggered;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +27,12 @@ public class TriggerEvent : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Truck") && !HasTriggered)
+        {
+            HasTriggered = true;
+            TheEvent.Invoke();
+        }
+
+        if (IsPlayerTriggered && !HasTriggered && other.CompareTag("Player"))
         {
             HasTriggered = true;
             TheEvent.Invoke();

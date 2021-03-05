@@ -9,6 +9,7 @@ public class BlockTreeSinker : MonoBehaviour
     [SerializeField] private Collider _collider;
     private bool _hasTriggered;
     private bool _isWaiting;
+    [SerializeField] private AudioSource _audioSource;
 
 
     private void Update()
@@ -30,6 +31,7 @@ public class BlockTreeSinker : MonoBehaviour
             _hasTriggered = true;
             _moveTreeVertical.MoveVertical(false);
             _isWaiting = true;
+            _audioSource.Play();
         }
     }
 

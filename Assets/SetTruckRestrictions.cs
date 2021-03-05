@@ -24,7 +24,7 @@ public class SetTruckRestrictions : MonoBehaviour
     {
         if (other.CompareTag("Truck"))
         {
-            Debug.Log("Setting truck restrictions");
+          //  Debug.Log("Setting truck restrictions");
             SingletonManager.Get<RearDoor>().IsMailToCollectNearby = true;
             TriggerEvent.Invoke();
         }

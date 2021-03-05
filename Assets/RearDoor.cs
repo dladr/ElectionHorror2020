@@ -30,7 +30,16 @@ public class RearDoor : MonoBehaviour
     private int _fullBagIndex;
 
     [SerializeField] private GameObject _strangerGameObject;
+    [SerializeField] private GameObject _strangerCorpseGameObject;
     [SerializeField] private Animator _strangerAnim;
+
+    public bool IsDrivingWithBackOpen;
+
+    [SerializeField] private String[] _strangerPickupStrings;
+    [SerializeField] private String[] _strangerDropOffStrings;
+    [SerializeField] private Color _strangerDialogueColor;
+    [SerializeField] private FontStyles[] _strangerPickupFontStyles;
+    [SerializeField] private FontStyles[] _strangerDropOffFontStyles;
 
     // Start is called before the first frame update
     void Awake()
@@ -71,7 +80,17 @@ public class RearDoor : MonoBehaviour
             
             else
             {
-                _textModifier.UpdateTextTrio("I don't need a bag right now...", Color.white, FontStyles.Normal);
+                if (IsDrivingWithBackOpen)
+                {
+                    _textModifier.UpdateTextTrio("Maybe I should keep it open...", Color.white, FontStyles.Normal);
+                    OpenDoor();
+                }
+
+                else
+                {
+                    _textModifier.UpdateTextTrio("I don't need a bag right now...", Color.white, FontStyles.Normal);
+                }
+                
             }
         }
             
@@ -88,6 +107,7 @@ public class RearDoor : MonoBehaviour
                 _playerController.GetBag();
                 IsMailBagNearby = true;
                 RemoveEmptyBag();
+                AttemptPickupLine();
                 _textModifier.UpdateTextTrio(GetLabel(), Color.white, FontStyles.Normal);
             }
            
@@ -99,6 +119,7 @@ public class RearDoor : MonoBehaviour
             {
                 _playerController.DepositBag();
                 AddFullBag();
+                AttemptDropOffLine();
                 IsMailToCollectNearby = false;
                 IsMailBagNearby = false;
                 _textModifier.UpdateTextTrio(GetLabel(), Color.white, FontStyles.Normal);
@@ -112,11 +133,38 @@ public class RearDoor : MonoBehaviour
 
         else if (IsOpen && !_playerController.HasBag && !IsMailToCollectNearby)
         {
-            CloseDoor();
-            _textModifier.UpdateTextTrio(GetLabel(), Color.white, FontStyles.Normal);
+            if (IsDrivingWithBackOpen)
+            {
+                _textModifier.UpdateTextTrio("Maybe I should leave it open...", Color.white, FontStyles.Normal);
+            }
+
+            else
+            {
+                CloseDoor();
+                _textModifier.UpdateTextTrio(GetLabel(), Color.white, FontStyles.Normal);
+            }
+          
         }
 
         _textModifier.Fade(true, 10);
+    }
+
+    void AttemptPickupLine()
+    {
+        if (_emptyBagIndex > 1 && _emptyBagIndex < 6)
+        {
+            int pickupLineIndex = _emptyBagIndex - 2;
+            _textModifier.DisplayImmutableMessage(_strangerPickupStrings[pickupLineIndex], _strangerDialogueColor, _strangerPickupFontStyles[pickupLineIndex]);
+        }
+    }
+
+    void AttemptDropOffLine()
+    {
+        if (_fullBagIndex > 2 && _fullBagIndex < 6)
+        {
+            int dropOffIndex = _fullBagIndex - 3;
+            _textModifier.DisplayImmutableMessage(_strangerDropOffStrings[dropOffIndex], _strangerDialogueColor, _strangerDropOffFontStyles[dropOffIndex]);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -245,5 +293,14 @@ public class RearDoor : MonoBehaviour
     public void ActivateStranger(bool isActivating)
     {
         _strangerGameObject.SetActive(isActivating);
+    }
+
+    [Button]
+    public void KillStranger()
+    {
+        _strangerGameObject.SetActive(false);
+        _strangerCorpseGameObject.SetActive(true);
+        IsDrivingWithBackOpen = true;
+        SingletonManager.Get<TruckMovement>().IsDrivingWithDoorOpen = true;
     }
 }

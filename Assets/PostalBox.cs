@@ -127,4 +127,20 @@ public class PostalBox : MonoBehaviour
         }
         
     }
+
+    public void TurnOnGlow()
+    {
+        foreach (MaterialSetter materialSetter in _materialSetters)
+        {
+            materialSetter.TurnOnGlow();
+        }
+    }
+
+    public void TurnOffGlow()
+    {
+        foreach (MaterialSetter materialSetter in _materialSetters)
+        {
+            materialSetter.TurnOffGlow();
+        }
+    }
 }

@@ -2138,11 +2138,30 @@ MonoBehaviour:
   IsUsingAlternateDestination: 0
   _health: 1
   _damage: 0
-  DyingEvent:
+  OnDieEvent:
     m_PersistentCalls:
       m_Calls: []
   _isStartingActive: 0
   _deathAudioSource: {fileID: 2350258648368558876}
+  IsCowardly: 0
+  CowardlyRunDistance: 0
+  CowardlyWatchDistance: 0
+  IsRunning: 0
+  IsAdvancing: 0
+  CowardlyParticleSystem: {fileID: 0}
+  IsBoss: 0
+  _bossDamageColor: {r: 0, g: 0, b: 0, a: 0}
+  _bossNormalColor: {r: 0, g: 0, b: 0, a: 0}
+  IsEndingGhost: 0
+  LookTargetTransform: {fileID: 0}
+  IsLookingAtLookTarget: 0
+  FollowTargetTransform: {fileID: 0}
+  IsPlayerGhost: 0
+  IsPlayerGhostLooking: 0
+  IsLookingUp: 0
+  HasPlayerSetDirection: 0
+  PlayerGhostRotationOffset: 0
+  IsStill: 0
 --- !u!114 &8115259258023054667
 MonoBehaviour:
   m_ObjectHideFlags: 0
